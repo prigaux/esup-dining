@@ -30,6 +30,19 @@
 		  }
 		  google.maps.event.addDomListener(window, 'load', initialize);
 		</script>	
+		
+		<h3>Menus</h3>
+		
+		
+		<c:forEach var="meal" items="${meals}">
+			<ul>
+				<li>${meal.type}</li>
+				<li>${meal.date}</li>
+				<li>${meal.diningHallId}</li>
+				<li>${meal.foodCategory}</li>
+			</ul>
+		</c:forEach>
+		
 	</c:when>
 	<c:otherwise>
 		<h1>Oops on dirait que ce restaurant n'existe pas.</h1>

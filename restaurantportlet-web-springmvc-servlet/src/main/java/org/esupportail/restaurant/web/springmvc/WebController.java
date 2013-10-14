@@ -83,6 +83,7 @@ public class WebController extends AbastractExceptionController {
     public ModelAndView renderRestaurant(@RequestParam(value = "id") int id) throws Exception {
     	ModelMap model = new ModelMap();
     	model.put("restaurant", flux.getRestaurantById(id));
+    	model.put("meals", flux.getMealByRestaurant(id));
     	return new ModelAndView("restaurant", model);
     }
 

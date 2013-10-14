@@ -32,8 +32,12 @@
 
         <portlet-preferences>
             <preference>
-                <name>usernamepref</name>
-                <value>PortletWorld</value>
+                <name>userArea</name>
+                <value></value>
+            </preference>
+            <preference>
+                <name>adminArea</name>
+                <value>LA ROCHELLE</value>
             </preference>
         </portlet-preferences>
 

@@ -124,6 +124,11 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+        	<groupId>org.json</groupId>
+        	<artifactId>org.json</artifactId>
+        	<version>chargebee-1.0</version>
+        </dependency>
     </dependencies>
     <properties>
         <portlet.name>${project.artifactId}</portlet.name>
