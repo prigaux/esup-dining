@@ -8,11 +8,11 @@
 	
 	<c:if test="${!user.admin}">
 		<h2>
-			<portlet:actionURL var="adminSettings">
+			<portlet:renderURL var="adminSettings">
   				<portlet:param name="action" value="adminSettings"/>
-			</portlet:actionURL>
+			</portlet:renderURL>
 		
-			<a href="/">
+			<a href="${adminSettings}">
 				<spring:message code="menu.editadmin"/>
 			</a>
 		</h2>
