@@ -1,5 +1,6 @@
 package org.esupportail.restaurant.web.springmvc;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,10 +28,13 @@ public class WebController extends AbastractExceptionController {
 	
     @Autowired
 	private Authenticator authenticator;    @Autowired
-	private static RestaurantFlux flux = new RestaurantFlux("https://dl.dropboxusercontent.com/u/14925931/flux.json");
+	private static RestaurantFlux flux;
     
     @RequestMapping("VIEW")
     public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {
+    	
+    	// Shouldn't be here, temporary solution
+    	flux = new RestaurantFlux(new URL("http://www.souquet.eu/flux.json"));
     	
     	ModelMap model = new ModelMap();
     	

@@ -3,6 +3,7 @@ package org.esupportail.restaurant.web.flux;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -13,13 +14,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RestaurantFlux {
+//#TODO CLEAN THAT CODE ! 
+//#TODO CLEAN THAT CODE ! 
+//#TODO CLEAN THAT CODE ! 
+//#TODO CLEAN THAT CODE ! 
+//#TODO CLEAN THAT CODE ! 
+//#TODO CLEAN THAT CODE ! 
+
+// #TODO : JAXB ?! Regarder la génération de classe automatique dans la CampusLifePortlet et les possibilités
+
+public class RestaurantFlux implements Serializable {
 
 	private JSONObject flux;
 	private JSONArray restaurantList;
 	private JSONArray mealList;
 	
-	public RestaurantFlux(String urlFlux) {
+	public RestaurantFlux(URL urlFlux) {
 		this.flux = this.getAndCreateJson(urlFlux);		
 		try {
 			this.restaurantList = flux.getJSONArray("dining-halls");
@@ -33,16 +43,10 @@ public class RestaurantFlux {
 		return this.flux;
 	}
 	
-	public JSONObject getAndCreateJson(String path) {
+	public JSONObject getAndCreateJson(URL path) {
 		
 
-		URL fluxURL=null;
-		try {
-			fluxURL = new URL(path);
-		} catch (MalformedURLException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
+		URL fluxURL=path;
 		URLConnection yc=null;
 		try {
 			yc = fluxURL.openConnection();
@@ -53,7 +57,7 @@ public class RestaurantFlux {
 		
 		BufferedReader in=null;
 		try {
-			in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+			in = new BufferedReader(new InputStreamReader(yc.getInputStream(), "UTF-8"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -128,5 +132,15 @@ public class RestaurantFlux {
 		}
 		return meals;
 	}
-		
+	
+	public boolean equals(Object o) {
+		boolean retour = false;
+		if(o instanceof RestaurantFlux) {
+			System.out.println("instance");
+			RestaurantFlux rf = (RestaurantFlux) o;
+			if(rf.getFlux().toString().equals(this.flux.toString()))
+				retour = true;
+		}
+		return retour;
+	}
 }
