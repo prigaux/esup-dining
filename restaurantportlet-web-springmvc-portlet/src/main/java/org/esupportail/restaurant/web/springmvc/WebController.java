@@ -32,11 +32,17 @@ public class WebController extends AbastractExceptionController {
     @RequestMapping("VIEW")
     public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {
     	
+    	ModelMap model = new ModelMap();
+    	
     	PortletSession sess = request.getPortletSession();
     	sess.setMaxInactiveInterval(-1);
     	
-    	ModelMap model = new ModelMap();
-    	String areaToDisplay = "LA ROCHELLE";
+    	PortletPreferences prefs = request.getPreferences();
+    	
+    	String areaToDisplay = (String) sess.getAttribute("userArea");
+    	if(areaToDisplay == null || areaToDisplay.length() == 0)
+    		areaToDisplay = prefs.getValue("defaultArea", "");
+    	
     	model.put("area", areaToDisplay);
     	model.put("restaurantList", flux.getRestaurantList(areaToDisplay));
     	
@@ -170,5 +176,4 @@ public class WebController extends AbastractExceptionController {
     	return new ModelAndView("help", model);
     }
     
-
 }

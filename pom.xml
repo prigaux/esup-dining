@@ -110,9 +110,6 @@
     <module>restaurantportlet-utils</module>
     <module>restaurantportlet-domain-beans</module>
     <module>restaurantportlet-domain-services</module>
-    <module>restaurantportlet-web-jsf-mixed</module>
-    <module>restaurantportlet-web-jsf-servlet</module>
-    <module>restaurantportlet-web-springmvc-servlet</module>
     <module>restaurantportlet-web-springmvc-portlet</module>
   </modules>
 </project>
