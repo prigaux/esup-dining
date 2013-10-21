@@ -79,7 +79,7 @@
                     </additionalProjectnatures>
                     <additionalBuildcommands>
                         <buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
-                    </additionalBuildcommands>
+                    </additionalBuildcommands>z
                     <downloadSources>true</downloadSources>
                     <downloadJavadocs>true</downloadJavadocs>
                     <wtpversion>2.0</wtpversion>

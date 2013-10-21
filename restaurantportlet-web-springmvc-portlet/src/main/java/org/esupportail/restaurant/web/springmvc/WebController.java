@@ -17,7 +17,7 @@ import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.flux.RestaurantCache;
 import org.esupportail.restaurant.web.flux.RestaurantFlux;
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +28,10 @@ import org.springframework.web.portlet.ModelAndView;
 public class WebController extends AbastractExceptionController {
 
 	
-    @Autowired
+    //@Autowired
 	private Authenticator authenticator;
-	private RestaurantCache cache = RestaurantCache.getInstance();   
+    //@Autowired
+	private RestaurantCache restaurantCache = RestaurantCache.getInstance();   
     
     @RequestMapping("VIEW")
     public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {
@@ -38,7 +39,7 @@ public class WebController extends AbastractExceptionController {
     	ModelMap model = new ModelMap();
     	
     	try {
-        	RestaurantFlux flux = cache.getCachedElement();
+        	RestaurantFlux flux = restaurantCache.getCachedElement();
         	
         	PortletSession sess = request.getPortletSession();
         	sess.setMaxInactiveInterval(-1);
@@ -54,9 +55,10 @@ public class WebController extends AbastractExceptionController {
         	
     		String[] favList = (String[]) sess.getAttribute("favorite");
     		if(favList!=null && favList.length > 0) 
-    			model.put("favList", favList);    		
+    			model.put("favList", favList);
+    		
     	} catch(NullPointerException e) {
-    		model.put("nothingToDisplay", "true");
+    		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
     	}
     	
     	return new ModelAndView("view", model);
@@ -65,7 +67,7 @@ public class WebController extends AbastractExceptionController {
     @RequestMapping(value = {"VIEW"}, params = {"action=showRestaurant"})
     public ModelAndView renderRestaurantView(RenderRequest request, RenderRequest reponse, @RequestParam(value = "id", required = true) String id) throws Exception {
     	
-    	RestaurantFlux flux = cache.getCachedElement();
+    	RestaurantFlux flux = restaurantCache.getCachedElement();
     	
     	ModelMap model = new ModelMap();
     	
@@ -116,7 +118,7 @@ public class WebController extends AbastractExceptionController {
     	model.put("user", user);
     	
     	try {
-        	RestaurantFlux flux = cache.getCachedElement();
+        	RestaurantFlux flux = restaurantCache.getCachedElement();
         	
         	
         	List<String> areaList = new ArrayList<String>();
@@ -138,7 +140,7 @@ public class WebController extends AbastractExceptionController {
         		model.put("favList", favList);	
         	
     	} catch(NullPointerException e) {
-    		model.put("nothingToDisplay", "true");
+    		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
     	}
     	
     	return new ModelAndView("edit", model);
@@ -171,7 +173,7 @@ public class WebController extends AbastractExceptionController {
     	model.put("user", user);
     	
     	try {
-        	RestaurantFlux flux = cache.getCachedElement();
+        	RestaurantFlux flux = restaurantCache.getCachedElement();
         	
         	model.put("areas", flux.getAreas());
         	
@@ -180,15 +182,15 @@ public class WebController extends AbastractExceptionController {
         	model.put("defaultArea", area);
         	
     	} catch(NullPointerException e) {
-    		model.put("nothingToDisplay", "true");
+    		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
     	}
     	
     	String hasError = request.getParameter("urlError");
     	if(hasError != null)
     		model.put("urlError", "Incorrect URL");
     	
-    	if(cache.getUrl()!=null)
-    		model.put("urlFluxCache", cache.getUrl());
+    	if(restaurantCache.getUrl()!=null)
+    		model.put("urlFluxCache", restaurantCache.getUrl());
     	
     	return new ModelAndView("edit-admin", model);
     }
@@ -209,8 +211,8 @@ public class WebController extends AbastractExceptionController {
 		response.setRenderParameter("action", "adminSettings");
     	try {
     		URL urlFlux = new URL(url);	
-    		cache.setUrl(urlFlux);
-    		cache.init();
+    		restaurantCache.setUrl(urlFlux);
+    		restaurantCache.init();
     		
     	} catch(MalformedURLException e) {
     		response.setRenderParameter("urlError", "true");
