@@ -30,26 +30,35 @@ public class RestaurantCache {
 		return instance;
 	}
 	
+	public void init() {
+		RestaurantFlux flux = new RestaurantFlux(this.url);	
+		Element elFlux = new Element("restaurantFlux", flux);	
+		this.fluxCache.put(elFlux);		
+	}
+	
 	public void setUrl(URL url) {
 		this.url = url;
 	}
 	
-	public URL getURL() {
+	public URL getUrl() {
 		return this.url;
 	}
 	
-	public Cache getCache() {
-		return this.fluxCache;
+	public Element getCachedElement() {
+		return this.fluxCache.get("restaurantFlux");
 	}
 	
-	public void updateCache() throws Exception {
+	public void update() throws Exception {
+		// Get cached JSON File
+		Element elCache = fluxCache.get("restaurantFlux");
+		RestaurantFlux fluxFromCache = (RestaurantFlux) elCache.getValue();
 		
-		Element el = fluxCache.get("restaurantFlux");
-		RestaurantFlux fluxFromCache = (RestaurantFlux) el.getValue();
-		RestaurantFlux fluxFromUrl = new RestaurantFlux(new URL("http://www.souquet.eu/test/flux2.json"));
+		// Access the non-cached JSON File
+		RestaurantFlux fluxFromUrl = new RestaurantFlux(this.url);	
 		
+		// If content is != we put the non-cached version to the cache.
 		if(!fluxFromCache.equals(fluxFromUrl)) {
-			Element newEl = new Element("restaurantFlux", fluxFromUrl.getFlux());
+			Element newEl = new Element("restaurantFlux", fluxFromUrl);
 			this.fluxCache.put(newEl);
 		}
 		

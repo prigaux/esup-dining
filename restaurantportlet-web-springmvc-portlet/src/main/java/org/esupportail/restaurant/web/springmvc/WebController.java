@@ -1,5 +1,6 @@
 package org.esupportail.restaurant.web.springmvc;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +15,7 @@ import javax.portlet.RenderResponse;
 
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
+import org.esupportail.restaurant.web.flux.RestaurantCache;
 import org.esupportail.restaurant.web.flux.RestaurantFlux;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,14 +29,13 @@ public class WebController extends AbastractExceptionController {
 
 	
     @Autowired
-	private Authenticator authenticator;    @Autowired
-	private static RestaurantFlux flux;
+	private Authenticator authenticator;
+	private RestaurantCache cache = RestaurantCache.getInstance();
+    private static RestaurantFlux flux = new RestaurantFlux("http://www.souquet.eu/test/flux.json");
+    
     
     @RequestMapping("VIEW")
     public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {
-    	
-    	// Shouldn't be here, temporary solution
-    	flux = new RestaurantFlux(new URL("http://www.souquet.eu/flux.json"));
     	
     	ModelMap model = new ModelMap();
     	
@@ -158,14 +159,39 @@ public class WebController extends AbastractExceptionController {
     	String area = prefs.getValue("defaultArea", null);
     	model.put("defaultArea", area);
     	
+    	String hasError = request.getParameter("urlError");
+    	if(hasError != null)
+    		model.put("urlError", "Incorrect URL");
+    	
+    	RestaurantCache cache = RestaurantCache.getInstance();    	
+    	if(cache.getUrl()!=null)
+    		model.put("urlFluxCache", cache.getUrl());
+    	
     	return new ModelAndView("edit-admin", model);
     }
     
     @RequestMapping(value = {"EDIT"}, params = {"action=setDefaultArea"})
     public void setDefaultArea(ActionRequest request, ActionResponse response, @RequestParam(value = "zone", required = true) String area) throws Exception {
+
+		response.setRenderParameter("action", "adminSettings");
+		
     	PortletPreferences prefs = request.getPreferences();
     	prefs.setValue("defaultArea", area);
     	prefs.store();
+    }
+    
+    @RequestMapping(value = {"EDIT"}, params = {"action=urlFlux"})
+    public void setURLFlux(ActionRequest request, ActionResponse response, @RequestParam(value = "url", required = true) String url) throws Exception { 
+  
+		response.setRenderParameter("action", "adminSettings");
+    	try {
+    		URL urlFlux = new URL(url);	
+    		cache.setUrl(urlFlux);
+    		cache.init();
+    		
+    	} catch(MalformedURLException e) {
+    		response.setRenderParameter("urlError", "true");
+    	}
     }
     
     @RequestMapping("ABOUT")

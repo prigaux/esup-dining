@@ -15,11 +15,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 //#TODO CLEAN THAT CODE ! 
-//#TODO CLEAN THAT CODE ! 
-//#TODO CLEAN THAT CODE ! 
-//#TODO CLEAN THAT CODE ! 
-//#TODO CLEAN THAT CODE ! 
-//#TODO CLEAN THAT CODE ! 
 
 // #TODO : JAXB ?! Regarder la génération de classe automatique dans la CampusLifePortlet et les possibilités
 
@@ -30,6 +25,22 @@ public class RestaurantFlux implements Serializable {
 	private JSONArray mealList;
 	
 	public RestaurantFlux(URL urlFlux) {
+		this.flux = this.getAndCreateJson(urlFlux);		
+		try {
+			this.restaurantList = flux.getJSONArray("dining-halls");
+			this.mealList = flux.getJSONArray("meals");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public RestaurantFlux(String url) {
+		URL urlFlux=null;
+		try {
+			urlFlux = new URL(url);
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
+		}
 		this.flux = this.getAndCreateJson(urlFlux);		
 		try {
 			this.restaurantList = flux.getJSONArray("dining-halls");

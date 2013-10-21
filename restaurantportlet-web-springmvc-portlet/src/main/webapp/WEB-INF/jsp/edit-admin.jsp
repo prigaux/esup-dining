@@ -31,7 +31,22 @@
 				<input type="submit" value="Valider"/>
 			</fieldset>
 		</form>
+
+		<portlet:actionURL var="urlFlux">
+		  <portlet:param name="action" value="urlFlux"/>
+		</portlet:actionURL>
 	
+		<form method="post" action="${urlFlux}">
+			<fieldset>
+				<legend>URL du flux</legend>
+				<label for="field-url">URL : </label>
+				<input type="text" id="field-url" name="url" value="${urlFluxCache}"/>
+				<c:if test="${not empty urlError}">
+					<label style="color: #FF0000; font-weight: bold;">${urlError}</label>
+				</c:if>
+				<input type="submit" value="Valider" />
+			</fieldset>
+		</form>
 	</c:if>
 	<c:if test="${!user.admin}">
 		Vous n'avez pas accès à cette page car vous n'êtes pas administrateur
