@@ -30,36 +30,43 @@ public class WebController extends AbastractExceptionController {
 	
     @Autowired
 	private Authenticator authenticator;
-	private RestaurantCache cache = RestaurantCache.getInstance();
-    private static RestaurantFlux flux = new RestaurantFlux("http://www.souquet.eu/test/flux.json");
-    
+	private RestaurantCache cache = RestaurantCache.getInstance();   
     
     @RequestMapping("VIEW")
     public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {
     	
     	ModelMap model = new ModelMap();
     	
-    	PortletSession sess = request.getPortletSession();
-    	sess.setMaxInactiveInterval(-1);
-    	
-    	PortletPreferences prefs = request.getPreferences();
-    	
-    	String areaToDisplay = (String) sess.getAttribute("userArea");
-    	if(areaToDisplay == null || areaToDisplay.length() == 0)
-    		areaToDisplay = prefs.getValue("defaultArea", "");
-    	
-    	model.put("area", areaToDisplay);
-    	model.put("restaurantList", flux.getRestaurantList(areaToDisplay));
-    	
-		String[] favList = (String[]) sess.getAttribute("favorite");
-		if(favList!=null && favList.length > 0) 
-			model.put("favList", favList);
+    	try {
+        	RestaurantFlux flux = cache.getCachedElement();
+        	
+        	PortletSession sess = request.getPortletSession();
+        	sess.setMaxInactiveInterval(-1);
+        	
+        	PortletPreferences prefs = request.getPreferences();
+        	
+        	String areaToDisplay = (String) sess.getAttribute("userArea");
+        	if(areaToDisplay == null || areaToDisplay.length() == 0)
+        		areaToDisplay = prefs.getValue("defaultArea", "");
+        	
+        	model.put("area", areaToDisplay);
+        	model.put("restaurantList", flux.getRestaurantList(areaToDisplay));
+        	
+    		String[] favList = (String[]) sess.getAttribute("favorite");
+    		if(favList!=null && favList.length > 0) 
+    			model.put("favList", favList);    		
+    	} catch(NullPointerException e) {
+    		model.put("nothingToDisplay", "true");
+    	}
     	
     	return new ModelAndView("view", model);
     }
     
     @RequestMapping(value = {"VIEW"}, params = {"action=showRestaurant"})
     public ModelAndView renderRestaurantView(RenderRequest request, RenderRequest reponse, @RequestParam(value = "id", required = true) String id) throws Exception {
+    	
+    	RestaurantFlux flux = cache.getCachedElement();
+    	
     	ModelMap model = new ModelMap();
     	
     	int restaurantId = Integer.parseInt(id, 10);
@@ -102,30 +109,38 @@ public class WebController extends AbastractExceptionController {
     
     @RequestMapping("EDIT")
     public ModelAndView renderEditView(RenderRequest request, RenderResponse response) throws Exception {
-        	
+        
     	ModelMap model = new ModelMap();
-    	
-    	List<String> areaList = new ArrayList<String>();
-    	areaList = flux.getAreas();
-    	model.put("areas", areaList);
     	
     	User user = authenticator.getUser();
     	model.put("user", user);
     	
-    	PortletPreferences prefs = request.getPreferences();
-    	PortletSession sess = request.getPortletSession();
-    	String userArea = (String) sess.getAttribute("userArea");
-    	
-    	if(userArea != null && userArea.length() != 0) {
-    		model.put("defaultArea", userArea);
-    	} else {
-    		model.put("defaultArea", prefs.getValue("userArea", null));
+    	try {
+        	RestaurantFlux flux = cache.getCachedElement();
+        	
+        	
+        	List<String> areaList = new ArrayList<String>();
+        	areaList = flux.getAreas();
+        	model.put("areas", areaList);
+        	
+        	PortletPreferences prefs = request.getPreferences();
+        	PortletSession sess = request.getPortletSession();
+        	String userArea = (String) sess.getAttribute("userArea");
+        	
+        	if(userArea != null && userArea.length() != 0) {
+        		model.put("defaultArea", userArea);
+        	} else {
+        		model.put("defaultArea", prefs.getValue("userArea", null));
+        	}
+        	
+        	String[] favList = (String[]) sess.getAttribute("favorite");
+        	if(favList != null && favList.length > 0)
+        		model.put("favList", favList);	
+        	
+    	} catch(NullPointerException e) {
+    		model.put("nothingToDisplay", "true");
     	}
     	
-    	String[] favList = (String[]) sess.getAttribute("favorite");
-    	if(favList != null && favList.length > 0)
-    		model.put("favList", favList);
-   
     	return new ModelAndView("edit", model);
     }    
     
@@ -148,22 +163,30 @@ public class WebController extends AbastractExceptionController {
     
     @RequestMapping(value = {"EDIT"}, params = {"action=adminSettings"})
     public ModelAndView renderEditAdminView(RenderRequest request, RenderResponse response) throws Exception {
+    	
+    	
     	ModelMap model = new ModelMap();
     	
     	User user = authenticator.getUser();
     	model.put("user", user);
     	
-    	model.put("areas", flux.getAreas());
-    	
-    	PortletPreferences prefs = request.getPreferences();
-    	String area = prefs.getValue("defaultArea", null);
-    	model.put("defaultArea", area);
+    	try {
+        	RestaurantFlux flux = cache.getCachedElement();
+        	
+        	model.put("areas", flux.getAreas());
+        	
+        	PortletPreferences prefs = request.getPreferences();
+        	String area = prefs.getValue("defaultArea", null);
+        	model.put("defaultArea", area);
+        	
+    	} catch(NullPointerException e) {
+    		model.put("nothingToDisplay", "true");
+    	}
     	
     	String hasError = request.getParameter("urlError");
     	if(hasError != null)
     		model.put("urlError", "Incorrect URL");
     	
-    	RestaurantCache cache = RestaurantCache.getInstance();    	
     	if(cache.getUrl()!=null)
     		model.put("urlFluxCache", cache.getUrl());
     	

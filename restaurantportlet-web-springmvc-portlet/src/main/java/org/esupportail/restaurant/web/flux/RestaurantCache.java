@@ -44,8 +44,8 @@ public class RestaurantCache {
 		return this.url;
 	}
 	
-	public Element getCachedElement() {
-		return this.fluxCache.get("restaurantFlux");
+	public RestaurantFlux getCachedElement() {
+		return (RestaurantFlux) this.fluxCache.get("restaurantFlux").getValue();
 	}
 	
 	public void update() throws Exception {

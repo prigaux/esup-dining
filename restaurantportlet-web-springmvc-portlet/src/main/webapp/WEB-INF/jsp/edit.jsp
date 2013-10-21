@@ -17,7 +17,10 @@
 			</a>
 		</h2>
 	</c:if>
+	
+${nothingToDisplay}
 
+<c:if test="${empty nothingToDisplay}">
 <portlet:actionURL var="setUserArea">
   <portlet:param name="action" value="setUserArea"/>
 </portlet:actionURL>
@@ -62,7 +65,7 @@
 	</fieldset>
 </form>
 </c:if>
-
+</c:if>
 	
 </div>
 

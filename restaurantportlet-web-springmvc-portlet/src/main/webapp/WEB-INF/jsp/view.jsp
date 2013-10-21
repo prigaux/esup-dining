@@ -4,6 +4,9 @@
 
 <div class="restaurant-portlet">
 
+${nothingToDisplay}
+
+<c:if test="${empty nothingToDisplay}">
 	<h1>Restaurant de la zone : ${area}</h1>
 
 	<c:if test="${not empty restaurantList}">
@@ -33,6 +36,6 @@
 		</c:forEach>
 		</ul>
 	</c:if>
-	
+</c:if>
 </div>
 

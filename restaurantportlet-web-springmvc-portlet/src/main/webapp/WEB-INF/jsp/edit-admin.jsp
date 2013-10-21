@@ -8,7 +8,10 @@
 	
 	<!-- On met une négation dans le test pour faire les tests en local -->
 	<c:if test="${!user.admin}">
-		
+
+${nothingToDisplay}
+
+<c:if test="${empty nothingToDisplay}">		
 		<portlet:actionURL var="setDefaultArea">
 		  <portlet:param name="action" value="setDefaultArea"/>
 		</portlet:actionURL>
@@ -31,6 +34,7 @@
 				<input type="submit" value="Valider"/>
 			</fieldset>
 		</form>
+</c:if>
 
 		<portlet:actionURL var="urlFlux">
 		  <portlet:param name="action" value="urlFlux"/>
