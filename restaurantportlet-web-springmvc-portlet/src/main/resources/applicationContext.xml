@@ -35,34 +35,28 @@
     	<!-- 
 	| Quartz Cron Task Scheduler : Start
 	 -->
-
-	<bean id="restaurantCache" 
-		  class="org.esupportail.restaurant.web.flux.RestaurantCache"
-		  scope="singleton"/>
 	
-	<bean id="quartzCacheUpdateJob" class="org.esupportail.restaurant.web.quartz.QuartzCacheUpdateJob">
-		<property name="restaurantCache" ref="restaurantCache"/>
+	
+	<!-- 
+	<bean id="restaurantCache" class="org.esupportail.restaurant.web.flux.RestaurantCache" />
+	
+	<bean id="JobDetailBean" name="JobDetailBean" class="org.springframework.scheduling.quartz.JobDetailBean">
+	    <property name="jobClass" value="org.esupportail.restaurant.web.quartz.QuartzCacheUpdateJob" />
 	</bean>
 	
-	<bean name="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="quartzCacheUpdateJob"/>
-		<property name="targetMethod" value="execute"/>
-	</bean>
-	
-	<bean id="jobCronScheduler" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="jobDetail"/>
+	<bean id="CronTriggerBean" name="CronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="JobDetailBean"/>
 		<property name="cronExpression" value="10 * * ? * *"/>
 	</bean>
 	
-	<bean id="schedulerBean" 
-		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
-		lazy-init="false">
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="jobCronScheduler"/>
+				<ref bean="CronTriggerBean"/>
 			</list>
 		</property>
 	</bean>
+	 -->
 	
 	<!-- 
 	| Quartz Cron Task Scheduler : End

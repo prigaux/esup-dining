@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.portlet.ModelAndView;
 
 
-public abstract class AbastractExceptionController {
+public abstract class AbstractExceptionController {
 
 	private final Logger logger = new LoggerImpl(this.getClass());
 

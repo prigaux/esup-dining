@@ -17,7 +17,7 @@ import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.flux.RestaurantCache;
 import org.esupportail.restaurant.web.flux.RestaurantFlux;
-//import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,12 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.ModelAndView;
 
 @Controller
-public class WebController extends AbastractExceptionController {
+public class WebController extends AbstractExceptionController {
 
 	
-    //@Autowired
+    @Autowired
 	private Authenticator authenticator;
-    //@Autowired
 	private RestaurantCache restaurantCache = RestaurantCache.getInstance();   
     
     @RequestMapping("VIEW")

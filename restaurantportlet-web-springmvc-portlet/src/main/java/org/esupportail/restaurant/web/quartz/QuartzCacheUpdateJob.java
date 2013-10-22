@@ -12,7 +12,7 @@ public class QuartzCacheUpdateJob {
 	}
  
 	public void setRestaurantCache(RestaurantCache restaurantCache) {
-		this.rc = restaurantCache;
+		this.rc = RestaurantCache.getInstance();
 	}
 	
 }
