@@ -12,6 +12,8 @@
 		</property>
 	</bean>
 
+	<bean id="POJOGenerator" class="org.esupportail.restaurant.web.dao.POJOGenerator"/>
+
     <!--
      | Message source for this context, loaded from localized "messages_xx" files
      +-->

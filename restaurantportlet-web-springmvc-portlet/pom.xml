@@ -58,7 +58,11 @@
         </plugins>
     </build>
     <dependencies>
-    
+    	<dependency>
+          <groupId>com.googlecode.jsonschema2pojo</groupId>
+          <artifactId>jsonschema2pojo-core</artifactId>
+          <version>0.3.7</version>
+        </dependency>
     	<!--  Added lines  -->
 		<dependency>
 			 <groupId>opensymphony</groupId>

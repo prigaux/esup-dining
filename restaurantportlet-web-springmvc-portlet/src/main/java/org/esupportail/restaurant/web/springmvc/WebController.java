@@ -15,6 +15,7 @@ import javax.portlet.RenderResponse;
 
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
+import org.esupportail.restaurant.web.dao.POJOGenerator;
 import org.esupportail.restaurant.web.flux.RestaurantCache;
 import org.esupportail.restaurant.web.flux.RestaurantFlux;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,12 @@ public class WebController extends AbstractExceptionController {
     @Autowired
 	private Authenticator authenticator;
 	private RestaurantCache restaurantCache = RestaurantCache.getInstance();   
+	
+	@Autowired
+	private POJOGenerator pojog;
     
     @RequestMapping("VIEW")
-    public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {
+    public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {	
     	
     	ModelMap model = new ModelMap();
     	
