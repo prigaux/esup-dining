@@ -12,7 +12,6 @@
 		</property>
 	</bean>
 
-    
     <!--
      | Message source for this context, loaded from localized "messages_xx" files
      +-->
@@ -33,10 +32,38 @@
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
-    
-
+    	<!-- 
+	| Quartz Cron Task Scheduler : Start
+	 -->
+	
+	
+	<!-- 
+	<bean id="restaurantCache" class="org.esupportail.restaurant.web.flux.RestaurantCache" />
+	
+	<bean id="JobDetailBean" name="JobDetailBean" class="org.springframework.scheduling.quartz.JobDetailBean">
+	    <property name="jobClass" value="org.esupportail.restaurant.web.quartz.QuartzCacheUpdateJob" />
+	</bean>
+	
+	<bean id="CronTriggerBean" name="CronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="JobDetailBean"/>
+		<property name="cronExpression" value="10 * * ? * *"/>
+	</bean>
+	
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="CronTriggerBean"/>
+			</list>
+		</property>
+	</bean>
+	 -->
+	
+	<!-- 
+	| Quartz Cron Task Scheduler : End
+	 -->	
+	 
     <bean id="requiredAnnotationBeanPostProcessor" class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
-
+	
 	<import resource="classpath*:META-INF/restaurantportlet-domain-services-auth.xml" />
 
 </beans>

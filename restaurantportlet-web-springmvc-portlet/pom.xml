@@ -58,16 +58,20 @@
         </plugins>
     </build>
     <dependencies>
-	    <dependency>
-		    <groupId>org.quartz-scheduler</groupId>
-		    <artifactId>quartz</artifactId>
-		    <version>2.2.1</version>
+    
+    	<!--  Added lines  -->
+		<dependency>
+			 <groupId>opensymphony</groupId>
+            <artifactId>quartz</artifactId>
+            <version>1.6.3</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.quartz-scheduler</groupId>
-		    <artifactId>quartz-jobs</artifactId>
-		    <version>2.2.1</version>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.1</version>
 		</dependency>
+		
+    	<!--  End added lines  -->
         <dependency>
             <groupId>org.esupportail</groupId>
             <artifactId>esup-commons2-springmvc-portlet</artifactId>
@@ -79,6 +83,7 @@
             <artifactId>esup-commons2-web</artifactId>
             <version>${esupcommons.version}</version>
         </dependency>
+
         <!-- ===== Compile Time Dependencies ============================== -->
         <dependency>
             <groupId>javax.servlet</groupId>

@@ -6,10 +6,7 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
-// # WARNING !!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Not finished. 
-// updateCache() not working
-// #todo : refactor code, rename variable, make update work
+import org.springframework.context.annotation.Scope;
 
 public class RestaurantCache {
 	
@@ -18,10 +15,14 @@ public class RestaurantCache {
 	private Cache fluxCache;
 	private CacheManager singletonManager;
 	
-	private RestaurantCache() {		
+	public RestaurantCache() {
 		singletonManager = CacheManager.create();
 		singletonManager.addCache("restaurantFlux");
 		fluxCache = singletonManager.getCache("restaurantFlux");
+		// Spring create the object using the constructor
+		// So when we use getInstance for the first this, the variable instance == null
+		// so it creates a second object RestaurantCache and throw and expcetion because the cache already exist.
+		instance = this;
 	}
 	
 	public static RestaurantCache getInstance() {
@@ -45,21 +46,31 @@ public class RestaurantCache {
 	}
 	
 	public RestaurantFlux getCachedElement() {
-		return (RestaurantFlux) this.fluxCache.get("restaurantFlux").getValue();
+		return (RestaurantFlux) this.fluxCache.get("restaurantFlux").getObjectValue();
 	}
 	
-	public void update() throws Exception {
-		// Get cached JSON File
-		Element elCache = fluxCache.get("restaurantFlux");
-		RestaurantFlux fluxFromCache = (RestaurantFlux) elCache.getValue();
+	public void update() {
 		
-		// Access the non-cached JSON File
-		RestaurantFlux fluxFromUrl = new RestaurantFlux(this.url);	
+		System.out.println("In Business manager, I Call the business action.");
 		
-		// If content is != we put the non-cached version to the cache.
-		if(!fluxFromCache.equals(fluxFromUrl)) {
-			Element newEl = new Element("restaurantFlux", fluxFromUrl);
-			this.fluxCache.put(newEl);
+		if(this.url != null) {
+			
+			// Get cached JSON File
+			Element elCache = fluxCache.get("restaurantFlux");
+			RestaurantFlux fluxFromCache = (RestaurantFlux) elCache.getObjectValue();
+			
+			// Access the non-cached JSON File
+			RestaurantFlux fluxFromUrl = new RestaurantFlux(this.url);	
+			
+			// If content is != we put the non-cached version to the cache.
+			if(!fluxFromCache.equals(fluxFromUrl)) {
+				Element newEl = new Element("restaurantFlux", fluxFromUrl);
+				this.fluxCache.put(newEl);
+			}
+			
+			System.out.println("Url != null");
+		} else {
+			System.out.println("Url == null, we don't proceed to cache update, because it doesn't exist yet");
 		}
 		
 	}
