@@ -7,7 +7,6 @@ public class QuartzCacheUpdateJob {
 	private RestaurantCache rc;
 
 	public void execute(){
-		System.out.println("In quartz job, I call the business manager") ;
 		rc.update();
 	}
  

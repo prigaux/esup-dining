@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
+     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd"
+	 xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
+   
 >
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -11,6 +15,21 @@
 			</list>
 		</property>
 	</bean>
+	
+	<!-- EhCache : Start -->
+	
+	<ehcache:annotation-driven/>
+	<bean id="cacheManager"
+	    scope="singleton"
+	    class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+	    <description>
+	        This bean is used to configure EhCache.
+	    </description>
+	    <property name="configLocation" value="classpath:cache/ehcache.xml" />
+	</bean>
+	
+	<!-- EhCache : End -->
+
 
 	<bean id="POJOGenerator" class="org.esupportail.restaurant.web.dao.POJOGenerator"/>
 

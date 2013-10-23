@@ -1,6 +1,7 @@
 package org.esupportail.restaurant.web.springmvc;
 
 import java.net.MalformedURLException;
+import org.esupportail.restaurant.web.model.bindings.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +42,11 @@ public class WebController extends AbstractExceptionController {
     	
     	ModelMap model = new ModelMap();
     	
+    	
+    	// does not work, why ?
+    	//BindingsRestaurant resto = pojog.mapJson();
+    	
+    	
     	try {
         	RestaurantFlux flux = restaurantCache.getCachedElement();
         	
@@ -54,7 +60,7 @@ public class WebController extends AbstractExceptionController {
         		areaToDisplay = prefs.getValue("defaultArea", "");
         	
         	model.put("area", areaToDisplay);
-        	model.put("restaurantList", flux.getRestaurantList(areaToDisplay));
+        	//model.put("restaurantList", flux.getRestaurantList(areaToDisplay));
         	
     		String[] favList = (String[]) sess.getAttribute("favorite");
     		if(favList!=null && favList.length > 0) 
@@ -75,7 +81,7 @@ public class WebController extends AbstractExceptionController {
     	ModelMap model = new ModelMap();
     	
     	int restaurantId = Integer.parseInt(id, 10);
-    	model.put("restaurant", flux.getRestaurantById(restaurantId));
+    	//model.put("restaurant", flux.getRestaurantById(restaurantId));
     	
     	return new ModelAndView("restaurant", model);
     }
@@ -233,5 +239,4 @@ public class WebController extends AbstractExceptionController {
     	ModelMap model = new ModelMap();
     	return new ModelAndView("help", model);
     }
-    
 }

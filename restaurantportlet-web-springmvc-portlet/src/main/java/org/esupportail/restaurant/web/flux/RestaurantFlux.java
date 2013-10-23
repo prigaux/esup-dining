@@ -14,9 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-//#TODO CLEAN THAT CODE ! 
-
-// #TODO : JAXB ?! Regarder la génération de classe automatique dans la CampusLifePortlet et les possibilités
+import com.googlecode.ehcache.annotations.Cacheable;
 
 public class RestaurantFlux implements Serializable {
 
@@ -50,6 +48,7 @@ public class RestaurantFlux implements Serializable {
 		}
 	}
 	
+	//@Cacheable(cacheName = CacheModelConst.RESTAURANT_FLUX)
 	public JSONObject getFlux() {
 		return this.flux;
 	}
@@ -114,7 +113,7 @@ public class RestaurantFlux implements Serializable {
 		return areas;
 	}
 	
-	public List<Restaurant> getRestaurantList(String area) throws JSONException {
+/*	public List<Restaurant> getRestaurantList(String area) throws JSONException {
 		List<Restaurant> list = new ArrayList<Restaurant>();
 		for(int i=0; i<restaurantList.length(); i++) {
 			JSONObject restaurant = restaurantList.getJSONObject(i);
@@ -143,7 +142,7 @@ public class RestaurantFlux implements Serializable {
 		}
 		return meals;
 	}
-	
+*/	
 	public boolean equals(Object o) {
 		boolean retour = false;
 		if(o instanceof RestaurantFlux) {
