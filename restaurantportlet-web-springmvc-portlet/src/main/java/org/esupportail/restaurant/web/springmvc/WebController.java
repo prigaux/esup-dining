@@ -14,14 +14,13 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.dao.POJOGenerator;
 import org.esupportail.restaurant.web.flux.RestaurantCache;
 import org.esupportail.restaurant.web.flux.RestaurantFlux;
+import org.esupportail.restaurant.web.model.bindings.Area;
 import org.esupportail.restaurant.web.model.bindings.BindingsRestaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -57,11 +56,17 @@ public class WebController extends AbstractExceptionController {
     	
     	BindingsRestaurant br = mapper.readValue(jsonStringified, BindingsRestaurant.class);
     	
-    	System.out.println(br);
+    	model.put("areas", br.getAreas());
     	
-    	/*
+    	model.put("meals", br.getMeals());
+    	
+    	List<Area> ls = br.getAreas();
+    	System.out.println(ls.contains("LA ROCHELLE"));
+    	
+    	
+    	
     	try {
-        	RestaurantFlux flux = restaurantCache.getCachedElement();
+        	flux = restaurantCache.getCachedElement();
         	
         	PortletSession sess = request.getPortletSession();
         	sess.setMaxInactiveInterval(-1);
@@ -82,7 +87,6 @@ public class WebController extends AbstractExceptionController {
     	} catch(NullPointerException e) {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
     	}
-    	*/
     	return new ModelAndView("view", model);
     }
     
