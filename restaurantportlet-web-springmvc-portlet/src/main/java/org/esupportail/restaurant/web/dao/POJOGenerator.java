@@ -21,20 +21,11 @@ public class POJOGenerator {
 	private final String schemaLocation;
 	private final String outputDir;
 	
-	private ObjectMapper mapper;
-	
 	public POJOGenerator() throws Exception {
-	
-	   this.schemaLocation = "http://www.souquet.eu/test/schema.json";
-	   
-	   File f = new File(new File(".").getAbsolutePath());
-	   
+		this.schemaLocation = "http://www.souquet.eu/test/schema.json";   
+		File f = new File(new File(".").getAbsolutePath());
 		this.outputDir =  f.getCanonicalPath() + "/src/main/java";
-
-		this.mapper = new ObjectMapper();
-		
-	   this.generatePOJO();
-	    
+		//this.generatePOJO();  
 	}
 	
 	private void generatePOJO() {
@@ -60,39 +51,4 @@ public class POJOGenerator {
 			e.printStackTrace();
 		}
 	}
-	
-	public BindingsRestaurant mapJson() {		
-	
-	InputStream inputstream = null;
-	try {
-		inputstream = new FileInputStream("http://www.souquet.eu/test/flux.json");
-	} catch (FileNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	
-	BindingsRestaurant resto = null;
-	try {
-		resto = mapper.readValue(inputstream, BindingsRestaurant.class);
-	} catch (JsonParseException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (JsonMappingException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	
-	return resto;
-	}
-	
-	// Create Area zone
-	/*JsonNode areas = rootNode.path("areas");
-	ArrayList<Area> listeArea = new ArrayList<Area>();
-	for(JsonNode area : areas) {
-		listeArea.add(mapper.readValue(area.toString(), Area.class));
-	}*/
-	
 }

@@ -13,12 +13,12 @@ public class RestaurantCache {
 	private static RestaurantCache instance;
 	private URL url;
 	private Cache fluxCache;
-	private CacheManager singletonManager;
+	private CacheManager cacheManager;
 	
 	public RestaurantCache() {
-		singletonManager = CacheManager.create();
-		singletonManager.addCache("restaurantFlux");
-		fluxCache = singletonManager.getCache("restaurantFlux");
+		cacheManager = CacheManager.getInstance();
+		cacheManager.addCache("restaurantFlux");
+		fluxCache = cacheManager.getCache("restaurantFlux");
 		// Spring create the object using the constructor
 		// So when we use getInstance for the first this, the variable instance == null
 		// so it creates a second object RestaurantCache and throw and expcetion because the cache already exist.
@@ -46,7 +46,14 @@ public class RestaurantCache {
 	}
 	
 	public RestaurantFlux getCachedElement() {
-		return (RestaurantFlux) this.fluxCache.get("restaurantFlux").getObjectValue();
+		if( this.fluxCache.get("restaurantFlux").getObjectValue() != null)
+			return (RestaurantFlux) this.fluxCache.get("restaurantFlux").getObjectValue();
+		else
+			return null;
+	}
+	
+	public Element getCacheByKey(String key) {
+		return fluxCache.get(key);
 	}
 	
 	public void update() {
@@ -74,4 +81,5 @@ public class RestaurantCache {
 		}
 		
 	}
+	
 }

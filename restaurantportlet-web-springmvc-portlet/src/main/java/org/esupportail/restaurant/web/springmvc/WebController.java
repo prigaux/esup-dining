@@ -1,7 +1,7 @@
 package org.esupportail.restaurant.web.springmvc;
 
+
 import java.net.MalformedURLException;
-import org.esupportail.restaurant.web.model.bindings.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,11 +14,15 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.dao.POJOGenerator;
 import org.esupportail.restaurant.web.flux.RestaurantCache;
 import org.esupportail.restaurant.web.flux.RestaurantFlux;
+import org.esupportail.restaurant.web.model.bindings.BindingsRestaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -42,11 +46,20 @@ public class WebController extends AbstractExceptionController {
     	
     	ModelMap model = new ModelMap();
     	
+    	//RestaurantFlux flux = restaurantCache.getCachedElement();
     	
-    	// does not work, why ?
-    	//BindingsRestaurant resto = pojog.mapJson();
+    	//model.put("areas", flux.getAreas());		
     	
+    	RestaurantFlux flux = new RestaurantFlux("http://www.souquet.eu/test/flux.json");
+    	String jsonStringified = flux.getFlux().toString();
     	
+    	ObjectMapper mapper = new ObjectMapper();
+    	
+    	BindingsRestaurant br = mapper.readValue(jsonStringified, BindingsRestaurant.class);
+    	
+    	System.out.println(br);
+    	
+    	/*
     	try {
         	RestaurantFlux flux = restaurantCache.getCachedElement();
         	
@@ -69,7 +82,7 @@ public class WebController extends AbstractExceptionController {
     	} catch(NullPointerException e) {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
     	}
-    	
+    	*/
     	return new ModelAndView("view", model);
     }
     
@@ -129,10 +142,7 @@ public class WebController extends AbstractExceptionController {
     	try {
         	RestaurantFlux flux = restaurantCache.getCachedElement();
         	
-        	
-        	List<String> areaList = new ArrayList<String>();
-        	areaList = flux.getAreas();
-        	model.put("areas", areaList);
+        	//model.put("areas", flux.getAreas());
         	
         	PortletPreferences prefs = request.getPreferences();
         	PortletSession sess = request.getPortletSession();

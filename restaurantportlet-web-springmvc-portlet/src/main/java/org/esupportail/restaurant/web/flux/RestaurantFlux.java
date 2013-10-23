@@ -8,19 +8,28 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.List;
 
+import net.sf.ehcache.Element;
+
+import org.codehaus.jackson.map.ObjectMapper;
+import org.esupportail.restaurant.web.model.bindings.Area;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.googlecode.ehcache.annotations.Cacheable;
 
+
+
 public class RestaurantFlux implements Serializable {
 
 	private JSONObject flux;
 	private JSONArray restaurantList;
 	private JSONArray mealList;
+	
+	private ArrayList<Area> areaList;
+	
+	private ObjectMapper mapper;
 	
 	public RestaurantFlux(URL urlFlux) {
 		this.flux = this.getAndCreateJson(urlFlux);		
@@ -30,6 +39,14 @@ public class RestaurantFlux implements Serializable {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		
+		try {
+			this.areaList = this.getAreas();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 	public RestaurantFlux(String url) {
@@ -48,7 +65,6 @@ public class RestaurantFlux implements Serializable {
 		}
 	}
 	
-	//@Cacheable(cacheName = CacheModelConst.RESTAURANT_FLUX)
 	public JSONObject getFlux() {
 		return this.flux;
 	}
@@ -99,50 +115,32 @@ public class RestaurantFlux implements Serializable {
 		return jsonObj;
 	}
 	
-	public List<String> getAreas() {
-		List<String> areas = new ArrayList<String>();
-		try {
-			JSONArray tab = (JSONArray)flux.get("areas");
-			for(int i=0; i<tab.length(); i++) {
-				JSONObject obj = (JSONObject)tab.get(i);
-				areas.add((String)obj.get("name"));
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}		
-		return areas;
-	}
 	
-/*	public List<Restaurant> getRestaurantList(String area) throws JSONException {
-		List<Restaurant> list = new ArrayList<Restaurant>();
-		for(int i=0; i<restaurantList.length(); i++) {
-			JSONObject restaurant = restaurantList.getJSONObject(i);
-			if(area.equals(restaurant.get("area")))
-				list.add(new Restaurant(restaurant));
-		}
-		return list;
-	}
-	
-	public Restaurant getRestaurantById(int id) throws JSONException {
-		for(int i=0; i<restaurantList.length(); i++) {
-			JSONObject restaurant = restaurantList.getJSONObject(i);
-			if(restaurant.getInt("id") == id)
-				return new Restaurant(restaurant);
-		}
-		return null;
-	}
-	
-	public List<Meal> getMealByRestaurant(int id) throws JSONException {
+	public ArrayList<Area> getAreas() {
+		ArrayList<Area> listeArea = new ArrayList<Area>();
 		
-		List<Meal> meals = new ArrayList<Meal>();
-		for(int i=0; i<mealList.length(); i++) {
-			JSONObject meal = mealList.getJSONObject(i);
-			if(meal.getInt("dining-hall") == id)
-				meals.add(new Meal(meal));
+		try {
+			JSONArray areas = flux.getJSONArray("areas");
+			System.out.println(areas);
+			for(int i=0; i<areas.length(); i++) {
+				JSONObject area = areas.getJSONObject(i);
+				System.out.println(area);
+				listeArea.add(mapper.readValue(area.toString(), Area.class));
+			}
+			
+			RestaurantCache rc = RestaurantCache.getInstance();
+			Element el = rc.getCacheByKey(CacheModelConst.AREAS);
+			ArrayList<Area> la = (ArrayList<Area>) el.getObjectValue();
+			System.out.println(la);	
+		} catch(Exception e) {
+			// lol
 		}
-		return meals;
+		
+		return listeArea;
 	}
-*/	
+	
+	
+
 	public boolean equals(Object o) {
 		boolean retour = false;
 		if(o instanceof RestaurantFlux) {

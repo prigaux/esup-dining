@@ -6,4 +6,6 @@ public class CacheModelConst {
 	
 	public static final String RESTAURANT_FLUX = "fluxRestaurant";
 	
+	public static final String AREAS = "areas";
+	
 }

@@ -16,9 +16,35 @@
 		</property>
 	</bean>
 	
-	<!-- EhCache : Start -->
+	<!--
+     | Message source for this context, loaded from localized "messages_xx" files
+     +-->
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>messages</value>
+            </list>
+        </property>                                     
+    </bean>
 	
-	<ehcache:annotation-driven/>
+       <!-- 
+     | Standard JSP view resolver
+     +-->
+    <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="cache" value="true"/>
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+	
+	<bean id="requiredAnnotationBeanPostProcessor" class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
+	
+	<import resource="classpath*:META-INF/restaurantportlet-domain-services-auth.xml" />
+	
+	
+	<bean id="POJOGenerator" class="org.esupportail.restaurant.web.dao.POJOGenerator"/>
+	
+	<!-- EhCache : Start -->
 	<bean id="cacheManager"
 	    scope="singleton"
 	    class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
@@ -31,28 +57,6 @@
 	<!-- EhCache : End -->
 
 
-	<bean id="POJOGenerator" class="org.esupportail.restaurant.web.dao.POJOGenerator"/>
-
-    <!--
-     | Message source for this context, loaded from localized "messages_xx" files
-     +-->
-    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-        <property name="basenames">
-            <list>
-                <value>messages</value>
-            </list>
-        </property>                                     
-    </bean>
-
-    <!-- 
-     | Standard JSP view resolver
-     +-->
-    <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="cache" value="true"/>
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="prefix" value="/WEB-INF/jsp/"/>
-        <property name="suffix" value=".jsp"/>
-    </bean>
     	<!-- 
 	| Quartz Cron Task Scheduler : Start
 	 -->
@@ -83,8 +87,4 @@
 	| Quartz Cron Task Scheduler : End
 	 -->	
 	 
-    <bean id="requiredAnnotationBeanPostProcessor" class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
-	
-	<import resource="classpath*:META-INF/restaurantportlet-domain-services-auth.xml" />
-
 </beans>
