@@ -5,7 +5,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -17,8 +19,8 @@ import javax.portlet.RenderResponse;
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.flux.RestaurantFlux;
-import org.esupportail.restaurant.web.model.bindings.BindingsRestaurant;
-import org.esupportail.restaurant.web.model.bindings.Dininghall;
+import org.esupportail.restaurant.web.json.Restaurant;
+import org.esupportail.restaurant.web.json.RestaurantFeedRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,7 +40,7 @@ public class WebController extends AbstractExceptionController {
 	@Autowired
 	private RestaurantFlux flux;
 	
-	private BindingsRestaurant restaurants;
+	private RestaurantFeedRoot restaurants;
     
     @RequestMapping("VIEW")
     public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {	
@@ -61,17 +63,19 @@ public class WebController extends AbstractExceptionController {
 			model.put("favList", favList);
 		
     	try {
-        	
-    		BindingsRestaurant restaurants = flux.getFlux();
     		
-    		List<Dininghall> dininghallList = new ArrayList<Dininghall>();
-    		for(Dininghall dininghall : restaurants.getDininghalls()) {
-    			if(dininghall.getArea().equalsIgnoreCase(areaToDisplay))
-    				dininghallList.add(dininghall);
+    		restaurants = flux.getFlux();
+    		
+        
+        	List<Restaurant> dininghallList = new ArrayList<Restaurant>();   	
+        	
+    		for(Restaurant restaurant : restaurants.getRestaurants()) {
+    			if(restaurant.getArea().equalsIgnoreCase(areaToDisplay))
+    				dininghallList.add(restaurant);
     		}
     		
     		model.put("dininghalls", dininghallList);
-    		
+
     	} catch(NullPointerException e) {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
     	}
@@ -82,7 +86,7 @@ public class WebController extends AbstractExceptionController {
     
     @RequestMapping(value = {"VIEW"}, params = {"action=viewDiningHall"})
     public ModelAndView renderRestaurantView(RenderRequest request, RenderRequest reponse, @RequestParam(value = "id", required = true) String id) throws Exception {
-    	
+   
     	//RestaurantFlux flux = restaurantCache.getCachedElement();
     	
     	ModelMap model = new ModelMap();
@@ -187,9 +191,11 @@ public class WebController extends AbstractExceptionController {
     	
     	try {
         	
-    		BindingsRestaurant br = flux.getFlux();
-    		
-        	model.put("areas", br.getAreas());
+    		Set<String> areaList = new HashSet<String>();
+    		for(Restaurant r : flux.getFlux().getRestaurants()) {
+    			areaList.add(r.getArea());
+    		}
+    		model.put("areas", areaList);
         	
         	PortletPreferences prefs = request.getPreferences();
         	String area = prefs.getValue("defaultArea", null);

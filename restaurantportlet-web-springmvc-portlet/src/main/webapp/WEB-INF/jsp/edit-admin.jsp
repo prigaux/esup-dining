@@ -22,12 +22,12 @@ ${nothingToDisplay}
 				<label for="field-zone">Zones : </label>
 				<select id="field-zone" name="zone">
 					<c:forEach var="area" items="${areas}">
-						<option value="${area.name}"
-							<c:if test="${area.name == defaultArea}">
+						<option value="${area}"
+							<c:if test="${area == defaultArea}">
 								selected="selected"
 							</c:if>
 						>
-							${area.name}
+							${area}
 						</option>
 					</c:forEach>
 				</select>

@@ -11,12 +11,12 @@ import java.net.URLConnection;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.esupportail.restaurant.web.model.bindings.BindingsRestaurant;
+import org.esupportail.restaurant.web.json.RestaurantFeedRoot;
 
 public class RestaurantFlux implements Serializable {
 	
 	private String jsonStringified;
-	private BindingsRestaurant flux;
+	private RestaurantFeedRoot flux;
 	private ObjectMapper mapper;
 	private URL path;
 	
@@ -24,10 +24,10 @@ public class RestaurantFlux implements Serializable {
 		this.jsonStringified = new String();
 		this.mapper = new ObjectMapper();
 	}
-	private BindingsRestaurant mapJson() {
-		BindingsRestaurant br = null;
+	private RestaurantFeedRoot mapJson() {
+		RestaurantFeedRoot br = null;
 		try {
-			br = mapper.readValue(this.jsonStringified, BindingsRestaurant.class);
+			br = mapper.readValue(this.jsonStringified, RestaurantFeedRoot.class);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -98,11 +98,10 @@ public class RestaurantFlux implements Serializable {
 		return jsonText;
 	}
 	
-	
-	public BindingsRestaurant getFlux() {
+	public RestaurantFeedRoot getFlux() {
 		return this.flux;
 	}
-	public void setFlux(BindingsRestaurant flux) {
+	public void setFlux(RestaurantFeedRoot flux) {
 		this.flux = flux;
 	}
 	
