@@ -14,13 +14,11 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
-import org.esupportail.restaurant.web.dao.POJOGenerator;
+//import org.esupportail.restaurant.web.dao.POJOGenerator;
 import org.esupportail.restaurant.web.flux.RestaurantCache;
 import org.esupportail.restaurant.web.flux.RestaurantFlux;
-import org.esupportail.restaurant.web.model.bindings.Area;
 import org.esupportail.restaurant.web.model.bindings.BindingsRestaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,39 +33,26 @@ public class WebController extends AbstractExceptionController {
 	
     @Autowired
 	private Authenticator authenticator;
-	private RestaurantCache restaurantCache = RestaurantCache.getInstance();   
+	//private RestaurantCache restaurantCache = RestaurantCache.getInstance();   
 	
 	@Autowired
-	private POJOGenerator pojog;
+	private RestaurantFlux flux;
+	
+	private BindingsRestaurant restaurants;
     
     @RequestMapping("VIEW")
     public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {	
     	
     	ModelMap model = new ModelMap();
     	
-    	//RestaurantFlux flux = restaurantCache.getCachedElement();
-    	
-    	//model.put("areas", flux.getAreas());		
-    	
-    	RestaurantFlux flux = new RestaurantFlux("http://www.souquet.eu/test/flux.json");
-    	String jsonStringified = flux.getFlux().toString();
-    	
-    	ObjectMapper mapper = new ObjectMapper();
-    	
-    	BindingsRestaurant br = mapper.readValue(jsonStringified, BindingsRestaurant.class);
-    	
-    	model.put("areas", br.getAreas());
-    	
-    	model.put("meals", br.getMeals());
-    	
-    	List<Area> ls = br.getAreas();
-    	System.out.println(ls.contains("LA ROCHELLE"));
-    	
-    	
-    	
     	try {
-        	flux = restaurantCache.getCachedElement();
         	
+    		BindingsRestaurant restaurants = flux.getFlux();
+
+    		model.put("areas", restaurants.getAreas());
+    		model.put("dininghall", restaurants.getDininghalls());
+    		model.put("meals", restaurants.getMeals());
+    		
         	PortletSession sess = request.getPortletSession();
         	sess.setMaxInactiveInterval(-1);
         	
@@ -78,7 +63,6 @@ public class WebController extends AbstractExceptionController {
         		areaToDisplay = prefs.getValue("defaultArea", "");
         	
         	model.put("area", areaToDisplay);
-        	//model.put("restaurantList", flux.getRestaurantList(areaToDisplay));
         	
     		String[] favList = (String[]) sess.getAttribute("favorite");
     		if(favList!=null && favList.length > 0) 
@@ -93,7 +77,7 @@ public class WebController extends AbstractExceptionController {
     @RequestMapping(value = {"VIEW"}, params = {"action=showRestaurant"})
     public ModelAndView renderRestaurantView(RenderRequest request, RenderRequest reponse, @RequestParam(value = "id", required = true) String id) throws Exception {
     	
-    	RestaurantFlux flux = restaurantCache.getCachedElement();
+    	//RestaurantFlux flux = restaurantCache.getCachedElement();
     	
     	ModelMap model = new ModelMap();
     	
@@ -144,7 +128,7 @@ public class WebController extends AbstractExceptionController {
     	model.put("user", user);
     	
     	try {
-        	RestaurantFlux flux = restaurantCache.getCachedElement();
+        	//RestaurantFlux flux = restaurantCache.getCachedElement();
         	
         	//model.put("areas", flux.getAreas());
         	
@@ -196,9 +180,9 @@ public class WebController extends AbstractExceptionController {
     	model.put("user", user);
     	
     	try {
-        	RestaurantFlux flux = restaurantCache.getCachedElement();
+        	//RestaurantFlux flux = restaurantCache.getCachedElement();
         	
-        	model.put("areas", flux.getAreas());
+        	//model.put("areas", flux.getAreas());
         	
         	PortletPreferences prefs = request.getPreferences();
         	String area = prefs.getValue("defaultArea", null);
@@ -212,8 +196,8 @@ public class WebController extends AbstractExceptionController {
     	if(hasError != null)
     		model.put("urlError", "Incorrect URL");
     	
-    	if(restaurantCache.getUrl()!=null)
-    		model.put("urlFluxCache", restaurantCache.getUrl());
+ //   	if(restaurantCache.getUrl()!=null)
+ //   		model.put("urlFluxCache", restaurantCache.getUrl());
     	
     	return new ModelAndView("edit-admin", model);
     }
@@ -234,9 +218,7 @@ public class WebController extends AbstractExceptionController {
 		response.setRenderParameter("action", "adminSettings");
     	try {
     		URL urlFlux = new URL(url);	
-    		restaurantCache.setUrl(urlFlux);
-    		restaurantCache.init();
-    		
+    		flux.setPath(urlFlux);
     	} catch(MalformedURLException e) {
     		response.setRenderParameter("urlError", "true");
     	}

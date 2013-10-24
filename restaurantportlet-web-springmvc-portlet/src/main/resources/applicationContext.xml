@@ -44,6 +44,8 @@
 	
 	<bean id="POJOGenerator" class="org.esupportail.restaurant.web.dao.POJOGenerator"/>
 	
+	<bean id="flux" class="org.esupportail.restaurant.web.flux.RestaurantFlux"/>
+	
 	<!-- EhCache : Start -->
 	<bean id="cacheManager"
 	    scope="singleton"

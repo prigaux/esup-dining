@@ -21,7 +21,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
     "code",
     "ingredients",
     "name",
-    "nutrition-items"
+    "nutritionitems"
 })
 public class Dish {
 
@@ -45,8 +45,8 @@ public class Dish {
     /**
      * 
      */
-    @JsonProperty("nutrition-items")
-    private List<Nutrition_item> nutrition_items = new ArrayList<Nutrition_item>();
+    @JsonProperty("nutritionitems")
+    private List<Nutritionitem> nutritionitems = new ArrayList<Nutritionitem>();
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
@@ -104,17 +104,17 @@ public class Dish {
     /**
      * 
      */
-    @JsonProperty("nutrition-items")
-    public List<Nutrition_item> getNutrition_items() {
-        return nutrition_items;
+    @JsonProperty("nutritionitems")
+    public List<Nutritionitem> getNutritionitems() {
+        return nutritionitems;
     }
 
     /**
      * 
      */
-    @JsonProperty("nutrition-items")
-    public void setNutrition_items(List<Nutrition_item> nutrition_items) {
-        this.nutrition_items = nutrition_items;
+    @JsonProperty("nutritionitems")
+    public void setNutritionitems(List<Nutritionitem> nutritionitems) {
+        this.nutritionitems = nutritionitems;
     }
 
     @Override

@@ -27,7 +27,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
     "short-desc",
     "title"
 })
-public class Dining_hall {
+public class Dininghall {
 
     /**
      * 

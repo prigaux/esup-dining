@@ -32,9 +32,9 @@ public class RestaurantCache {
 	}
 	
 	public void init() {
-		RestaurantFlux flux = new RestaurantFlux(this.url);	
-		Element elFlux = new Element("restaurantFlux", flux);	
-		this.fluxCache.put(elFlux);		
+		//RestaurantFlux flux = new RestaurantFlux(this.url);	
+		//Element elFlux = new Element("restaurantFlux", flux);	
+		//this.fluxCache.put(elFlux);		
 	}
 	
 	public void setUrl(URL url) {
@@ -67,13 +67,13 @@ public class RestaurantCache {
 			RestaurantFlux fluxFromCache = (RestaurantFlux) elCache.getObjectValue();
 			
 			// Access the non-cached JSON File
-			RestaurantFlux fluxFromUrl = new RestaurantFlux(this.url);	
+			//RestaurantFlux fluxFromUrl = new RestaurantFlux(this.url);	
 			
 			// If content is != we put the non-cached version to the cache.
-			if(!fluxFromCache.equals(fluxFromUrl)) {
+			/*if(!fluxFromCache.equals(fluxFromUrl)) {
 				Element newEl = new Element("restaurantFlux", fluxFromUrl);
 				this.fluxCache.put(newEl);
-			}
+			}*/
 			
 			System.out.println("Url != null");
 		} else {

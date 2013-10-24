@@ -4,90 +4,86 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.net.MalformedURLException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 
-import net.sf.ehcache.Element;
-
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.esupportail.restaurant.web.model.bindings.Area;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.googlecode.ehcache.annotations.Cacheable;
-
-
+import org.esupportail.restaurant.web.model.bindings.BindingsRestaurant;
 
 public class RestaurantFlux implements Serializable {
-
-	private JSONObject flux;
-	private JSONArray restaurantList;
-	private JSONArray mealList;
 	
-	private ArrayList<Area> areaList;
-	
+	private String jsonStringified;
+	private BindingsRestaurant flux;
 	private ObjectMapper mapper;
+	private URL path;
 	
-	public RestaurantFlux(URL urlFlux) {
-		this.flux = this.getAndCreateJson(urlFlux);		
+	public RestaurantFlux() {
+		this.jsonStringified = new String();
+		this.mapper = new ObjectMapper();
+	}
+	private BindingsRestaurant mapJson() {
+		BindingsRestaurant br = null;
 		try {
-			this.restaurantList = flux.getJSONArray("dining-halls");
-			this.mealList = flux.getJSONArray("meals");
-		} catch (JSONException e) {
+			br = mapper.readValue(this.jsonStringified, BindingsRestaurant.class);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		try {
-			this.areaList = this.getAreas();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
+		return br;
 	}
-	
-	public RestaurantFlux(String url) {
-		URL urlFlux=null;
-		try {
-			urlFlux = new URL(url);
-		} catch (MalformedURLException e1) {
-			e1.printStackTrace();
-		}
-		this.flux = this.getAndCreateJson(urlFlux);		
-		try {
-			this.restaurantList = flux.getJSONArray("dining-halls");
-			this.mealList = flux.getJSONArray("meals");
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public JSONObject getFlux() {
-		return this.flux;
-	}
-	
-	public JSONObject getAndCreateJson(URL path) {
-		
 
-		URL fluxURL=path;
-		URLConnection yc=null;
-		try {
-			yc = fluxURL.openConnection();
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
+	public URL getPath() {
+		return this.path;
+	}
+	
+	public void setPath(URL path) {
+		this.path = path;
 		
-		BufferedReader in=null;
+		// If the user sets a new path, we have to update json string and re-map the all json file.
+		this.updateJson();
+	}
+	
+	public String getJsonStringified() {
+		return this.jsonStringified;
+	}
+	
+	public void updateJson() {
+		URLConnection yc = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(yc.getInputStream(), "UTF-8"));
-		} catch (Exception e) {
+			yc = this.path.openConnection();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(yc.getInputStream(), "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
+		// get a stringified version of the flux to help equality comparison
+		this.jsonStringified = this.getJsonContent(br);		
+		
+		try {
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// Init flux by mapping JSON to POJO
+		this.flux = this.mapJson();
+	}
+	
+	
+	private String getJsonContent(BufferedReader in) {
 		String jsonText = new String();
 		while(true) {
 			String str = null;
@@ -99,56 +95,31 @@ public class RestaurantFlux implements Serializable {
 				e.printStackTrace();
 			}
 		}
-		JSONObject jsonObj=null;
-		try {
-			in.close();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			jsonObj = new JSONObject(jsonText);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-		return jsonObj;
+		System.out.println(jsonText);
+		return jsonText;
 	}
 	
 	
-	public ArrayList<Area> getAreas() {
-		ArrayList<Area> listeArea = new ArrayList<Area>();
-		
-		try {
-			JSONArray areas = flux.getJSONArray("areas");
-			System.out.println(areas);
-			for(int i=0; i<areas.length(); i++) {
-				JSONObject area = areas.getJSONObject(i);
-				System.out.println(area);
-				listeArea.add(mapper.readValue(area.toString(), Area.class));
-			}
-			
-			RestaurantCache rc = RestaurantCache.getInstance();
-			Element el = rc.getCacheByKey(CacheModelConst.AREAS);
-			ArrayList<Area> la = (ArrayList<Area>) el.getObjectValue();
-			System.out.println(la);	
-		} catch(Exception e) {
-			// lol
-		}
-		
-		return listeArea;
+	public BindingsRestaurant getFlux() {
+		return this.flux;
+	}
+	public void setFlux(BindingsRestaurant flux) {
+		this.flux = flux;
 	}
 	
-	
-
 	public boolean equals(Object o) {
 		boolean retour = false;
 		if(o instanceof RestaurantFlux) {
 			System.out.println("instance");
 			RestaurantFlux rf = (RestaurantFlux) o;
-			if(rf.getFlux().toString().equals(this.flux.toString()))
+			if(rf.getJsonStringified().equals(this.jsonStringified))
 				retour = true;
 		}
 		return retour;
 	}
+	
+	public String toString() {
+		return this.jsonStringified;
+	}
+	
 }

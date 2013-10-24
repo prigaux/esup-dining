@@ -15,6 +15,15 @@ ${nothingToDisplay}
 </c:forEach>
 </ul>
 </c:if>
+<c:if test="${not empty dininghalls}">
+<ul>
+<c:forEach var="dininghall" items="${dininghalls}">
+	<li>
+		${dininghall.title}
+	</li>
+</c:forEach>
+</ul>
+</c:if>
 <c:if test="${not empty meals}">
 <ul>
 <c:forEach var="meal" items="${meals}">

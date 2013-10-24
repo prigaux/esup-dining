@@ -5,27 +5,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Generated;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "date",
-    "food-category",
-    "dining-hall",
+    "foodcategory",
+    "dininghall",
     "type"
 })
 public class Meal {
@@ -42,15 +37,15 @@ public class Meal {
      * (Required)
      * 
      */
-    @JsonProperty("food-category")
-    private List<Food_category> food_category = new ArrayList<Food_category>();
+    @JsonProperty("foodcategory")
+    private List<Foodcategory> foodcategory = new ArrayList<Foodcategory>();
     /**
      * 
      * (Required)
      * 
      */
-    @JsonProperty("dining-hall")
-    private Integer dining_hall;
+    @JsonProperty("dininghall")
+    private Integer dininghall;
     /**
      * 
      * (Required)
@@ -85,9 +80,9 @@ public class Meal {
      * (Required)
      * 
      */
-    @JsonProperty("food-category")
-    public List<Food_category> getFood_category() {
-        return food_category;
+    @JsonProperty("foodcategory")
+    public List<Foodcategory> getFoodcategory() {
+        return foodcategory;
     }
 
     /**
@@ -95,9 +90,9 @@ public class Meal {
      * (Required)
      * 
      */
-    @JsonProperty("food-category")
-    public void setFood_category(List<Food_category> food_category) {
-        this.food_category = food_category;
+    @JsonProperty("foodcategory")
+    public void setFoodcategory(List<Foodcategory> foodcategory) {
+        this.foodcategory = foodcategory;
     }
 
     /**
@@ -105,9 +100,9 @@ public class Meal {
      * (Required)
      * 
      */
-    @JsonProperty("dining-hall")
-    public Integer getDining_hall() {
-        return dining_hall;
+    @JsonProperty("dininghall")
+    public Integer getDininghall() {
+        return dininghall;
     }
 
     /**
@@ -115,9 +110,9 @@ public class Meal {
      * (Required)
      * 
      */
-    @JsonProperty("dining-hall")
-    public void setDining_hall(Integer dining_hall) {
-        this.dining_hall = dining_hall;
+    @JsonProperty("dininghall")
+    public void setDininghall(Integer dininghall) {
+        this.dininghall = dininghall;
     }
 
     /**

@@ -1,39 +1,26 @@
 
 package org.esupportail.restaurant.web.model.bindings;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Generated;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "dishes",
-    "name"
+    "name",
+    "value"
 })
-public class Food_category {
+public class Nutritionitem {
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("dishes")
-    private List<Dish> dishes = new ArrayList<Dish>();
     /**
      * 
      * (Required)
@@ -41,27 +28,14 @@ public class Food_category {
      */
     @JsonProperty("name")
     private String name;
+    /**
+     * 
+     * (Required)
+     * 
+     */
+    @JsonProperty("value")
+    private String value;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("dishes")
-    public List<Dish> getDishes() {
-        return dishes;
-    }
-
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("dishes")
-    public void setDishes(List<Dish> dishes) {
-        this.dishes = dishes;
-    }
 
     /**
      * 
@@ -81,6 +55,26 @@ public class Food_category {
     @JsonProperty("name")
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * 
+     * (Required)
+     * 
+     */
+    @JsonProperty("value")
+    public String getValue() {
+        return value;
+    }
+
+    /**
+     * 
+     * (Required)
+     * 
+     */
+    @JsonProperty("value")
+    public void setValue(String value) {
+        this.value = value;
     }
 
     @Override
