@@ -15,18 +15,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
-@JsonPropertyOrder({
-    "area",
-    "closing",
-    "contact",
-    "id",
-    "infos",
-    "lat",
-    "lon",
-    "opening",
-    "short-desc",
-    "title"
-})
+@JsonPropertyOrder(alphabetic=false)
 public class Dininghall {
 
     /**
@@ -76,8 +65,8 @@ public class Dininghall {
     /**
      * 
      */
-    @JsonProperty("short-desc")
-    private String short_desc;
+    @JsonProperty("shortdesc")
+    private String shortdesc;
     /**
      * 
      * (Required)
@@ -226,17 +215,17 @@ public class Dininghall {
     /**
      * 
      */
-    @JsonProperty("short-desc")
-    public String getShort_desc() {
-        return short_desc;
+    @JsonProperty("shortdesc")
+    public String getShortdesc() {
+        return shortdesc;
     }
 
     /**
      * 
      */
-    @JsonProperty("short-desc")
-    public void setShort_desc(String short_desc) {
-        this.short_desc = short_desc;
+    @JsonProperty("shortdesc")
+    public void setShortdesc(String shortdesc) {
+        this.shortdesc = shortdesc;
     }
 
     /**

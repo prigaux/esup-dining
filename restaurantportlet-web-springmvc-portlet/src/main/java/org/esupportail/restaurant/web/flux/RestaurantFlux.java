@@ -95,7 +95,6 @@ public class RestaurantFlux implements Serializable {
 				e.printStackTrace();
 			}
 		}
-		System.out.println(jsonText);
 		return jsonText;
 	}
 	
@@ -110,7 +109,6 @@ public class RestaurantFlux implements Serializable {
 	public boolean equals(Object o) {
 		boolean retour = false;
 		if(o instanceof RestaurantFlux) {
-			System.out.println("instance");
 			RestaurantFlux rf = (RestaurantFlux) o;
 			if(rf.getJsonStringified().equals(this.jsonStringified))
 				retour = true;

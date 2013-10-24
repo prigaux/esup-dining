@@ -16,16 +16,16 @@ import javax.portlet.RenderResponse;
 
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
-//import org.esupportail.restaurant.web.dao.POJOGenerator;
-import org.esupportail.restaurant.web.flux.RestaurantCache;
 import org.esupportail.restaurant.web.flux.RestaurantFlux;
 import org.esupportail.restaurant.web.model.bindings.BindingsRestaurant;
+import org.esupportail.restaurant.web.model.bindings.Dininghall;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.ModelAndView;
+//import org.esupportail.restaurant.web.dao.POJOGenerator;
 
 @Controller
 public class WebController extends AbstractExceptionController {
@@ -45,28 +45,32 @@ public class WebController extends AbstractExceptionController {
     	
     	ModelMap model = new ModelMap();
     	
+    	PortletSession sess = request.getPortletSession();
+    	sess.setMaxInactiveInterval(-1);
+    	
+    	PortletPreferences prefs = request.getPreferences();
+    	
+    	String areaToDisplay = (String) sess.getAttribute("userArea");
+    	if(areaToDisplay == null || areaToDisplay.length() == 0)
+    		areaToDisplay = prefs.getValue("defaultArea", "");
+    	
+    	model.put("area", areaToDisplay);
+    	
+    	String[] favList = (String[]) sess.getAttribute("favorite");
+		if(favList!=null && favList.length > 0) 
+			model.put("favList", favList);
+		
     	try {
         	
     		BindingsRestaurant restaurants = flux.getFlux();
-
-    		model.put("areas", restaurants.getAreas());
-    		model.put("dininghall", restaurants.getDininghalls());
-    		model.put("meals", restaurants.getMeals());
     		
-        	PortletSession sess = request.getPortletSession();
-        	sess.setMaxInactiveInterval(-1);
-        	
-        	PortletPreferences prefs = request.getPreferences();
-        	
-        	String areaToDisplay = (String) sess.getAttribute("userArea");
-        	if(areaToDisplay == null || areaToDisplay.length() == 0)
-        		areaToDisplay = prefs.getValue("defaultArea", "");
-        	
-        	model.put("area", areaToDisplay);
-        	
-    		String[] favList = (String[]) sess.getAttribute("favorite");
-    		if(favList!=null && favList.length > 0) 
-    			model.put("favList", favList);
+    		List<Dininghall> dininghallList = new ArrayList<Dininghall>();
+    		for(Dininghall dininghall : restaurants.getDininghalls()) {
+    			if(dininghall.getArea().equalsIgnoreCase(areaToDisplay))
+    				dininghallList.add(dininghall);
+    		}
+    		
+    		model.put("dininghalls", dininghallList);
     		
     	} catch(NullPointerException e) {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
@@ -74,14 +78,16 @@ public class WebController extends AbstractExceptionController {
     	return new ModelAndView("view", model);
     }
     
-    @RequestMapping(value = {"VIEW"}, params = {"action=showRestaurant"})
+    
+    
+    @RequestMapping(value = {"VIEW"}, params = {"action=viewDiningHall"})
     public ModelAndView renderRestaurantView(RenderRequest request, RenderRequest reponse, @RequestParam(value = "id", required = true) String id) throws Exception {
     	
     	//RestaurantFlux flux = restaurantCache.getCachedElement();
     	
     	ModelMap model = new ModelMap();
     	
-    	int restaurantId = Integer.parseInt(id, 10);
+    	//int restaurantId = Integer.parseInt(id, 10);
     	//model.put("restaurant", flux.getRestaurantById(restaurantId));
     	
     	return new ModelAndView("restaurant", model);
@@ -180,9 +186,10 @@ public class WebController extends AbstractExceptionController {
     	model.put("user", user);
     	
     	try {
-        	//RestaurantFlux flux = restaurantCache.getCachedElement();
         	
-        	//model.put("areas", flux.getAreas());
+    		BindingsRestaurant br = flux.getFlux();
+    		
+        	model.put("areas", br.getAreas());
         	
         	PortletPreferences prefs = request.getPreferences();
         	String area = prefs.getValue("defaultArea", null);
