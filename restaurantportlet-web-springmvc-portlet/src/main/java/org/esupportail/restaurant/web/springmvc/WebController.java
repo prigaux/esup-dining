@@ -87,14 +87,25 @@ public class WebController extends AbstractExceptionController {
     public ModelAndView renderRestaurantView(RenderRequest request, RenderRequest reponse, @RequestParam(value = "id", required = true) int id) throws Exception {
     	
     	ModelMap model = new ModelMap();
-    	
-    	System.out.println(id);
-    	    	
+    	    	    	
     	try {
     		restaurants = flux.getFlux();
     		for(Restaurant r : restaurants.getRestaurants()) {
-    			if(r.getId() == id)
+    			if(r.getId() == id) {
     				model.put("restaurant", r);
+    				
+    				PortletSession sess = request.getPortletSession();
+    		    	
+    				String[] favList = (String[]) sess.getAttribute("favorite");
+    				if(favList!=null && favList.length > 0) {
+    					for(int i=0; i<favList.length; i++) {
+    						// Check if the current Restaurant is in the favorite list or not
+    						// (to display add or remove link)
+    						if(Integer.parseInt(favList[i], 10) == id)
+    							model.put("isFavorite", true);
+    					}
+    				}
+    			}
     		}
     		
     	} catch(NullPointerException e) {
@@ -176,7 +187,7 @@ public class WebController extends AbstractExceptionController {
     	sess.setAttribute("userArea", area);    	
     }
     
-    @RequestMapping(value = {"EDIT"}, params = {"action=removeFavorite"})
+    @RequestMapping(value = {"EDIT", "VIEW"}, params = {"action=removeFavorite"})
     public void removeFavorite(ActionRequest request, ActionResponse response, @RequestParam(value = "restaurant-id", required = true) String id) throws Exception {
     	PortletSession sess = request.getPortletSession();
     	String[] favoriteList = (String[]) sess.getAttribute("favorite");

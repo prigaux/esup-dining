@@ -34,14 +34,28 @@
 		<h1>${restaurant.title}</h1>
 		
 		<p>
-			<portlet:actionURL var="addToFavorite">
-				<portlet:param name="action" value="setFavorite" />
-				<portlet:param name="id" value="${restaurant.id}" />
-			</portlet:actionURL>
-			<a href="${addToFavorite}">
-				<spring:message code="restaurant.link.addToFavorite"/>
-			</a>
-			
+			<c:choose>
+				<c:when test="${isFavorite}">
+					<portlet:actionURL var="removeFromFavorite">
+						<portlet:param name="action" value="removeFavorite" />
+						<portlet:param name="restaurant-id" value="${restaurant.id}" />
+					</portlet:actionURL>
+					<a href="${removeFromFavorite}">
+						<spring:message code="restaurant.link.removeFromFavorite"/>
+					</a>
+				</c:when>
+				<c:otherwise>
+
+					<portlet:actionURL var="addToFavorite">
+						<portlet:param name="action" value="setFavorite" />
+						<portlet:param name="id" value="${restaurant.id}" />
+					</portlet:actionURL>
+					<a href="${addToFavorite}">
+						<spring:message code="restaurant.link.addToFavorite"/>
+					</a>
+					
+				</c:otherwise>
+			</c:choose>
 			-
 			
 			<portlet:actionURL var="viewMeals">
