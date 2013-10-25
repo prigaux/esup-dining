@@ -18,6 +18,12 @@
 </style>
 
 <div class="restaurant-portlet">
+
+<p>
+	<a href="${renderRefreshUrl}">
+		<spring:message code="go.back.home" />
+	</a>
+</p>
 	
 	<c:if test="${empty restaurant}">
 		<h1>
@@ -58,10 +64,10 @@
 			</c:choose>
 			-
 			
-			<portlet:actionURL var="viewMeals">
+			<portlet:renderURL var="viewMeals">
 				<portlet:param name="action" value="viewMeals" />
 				<portlet:param name="id" value="${restaurant.id}" />
-			</portlet:actionURL>
+			</portlet:renderURL>
 			
 			<a href="${viewMeals}">
 				<spring:message code="restaurant.link.viewMeals"/>
@@ -204,6 +210,9 @@
 			        map: map,
 			        title:"${restaurant.title}"
 			    });
+    			window.onresize = function() {
+					map.setCenter(myLatlng);
+				}
 			  }
 			  google.maps.event.addDomListener(window, 'load', initialize);
 			</script>

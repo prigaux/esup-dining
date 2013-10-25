@@ -21,28 +21,31 @@
 ${nothingToDisplay}
 
 <c:if test="${empty nothingToDisplay}">
-<portlet:actionURL var="setUserArea">
-  <portlet:param name="action" value="setUserArea"/>
-</portlet:actionURL>
+<c:if test="${not empty areas}">
+	
+	<portlet:actionURL var="setUserArea">
+	  <portlet:param name="action" value="setUserArea"/>
+	</portlet:actionURL>
 
-<form method="post" action="${setUserArea}">
-	<fieldset>
-		<legend>Choisir une zone par défaut</legend>
-		<label for="field-zone">Zones : </label>
-		<select id="field-zone" name="zone">
-			<c:forEach var="area" items="${areas}">
-				<option value="${area}"
-					<c:if test="${area == defaultArea}">
-						selected="selected"
-					</c:if>
-				>
-					${area}
-				</option>
-			</c:forEach>
-		</select>
-		<input type="submit" value="Valider"/>
-	</fieldset>
-</form>
+	<form method="post" action="${setUserArea}">
+		<fieldset>
+			<legend>Choisir une zone par défaut</legend>
+			<label for="field-zone">Zones : </label>
+			<select id="field-zone" name="zone">
+				<c:forEach var="area" items="${areas}">
+					<option value="${area}"
+						<c:if test="${area == defaultArea}">
+							selected="selected"
+						</c:if>
+					>
+						${area}
+					</option>
+				</c:forEach>
+			</select>
+			<input type="submit" value="Valider"/>
+		</fieldset>
+	</form>
+</c:if>
 
 <c:if test="${not empty favList}">
 	<portlet:actionURL var="removeFavorite">

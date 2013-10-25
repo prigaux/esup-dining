@@ -3,8 +3,10 @@ package org.esupportail.restaurant.web.springmvc;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +21,7 @@ import javax.portlet.RenderResponse;
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.flux.RestaurantFlux;
+import org.esupportail.restaurant.web.json.Manus;
 import org.esupportail.restaurant.web.json.Restaurant;
 import org.esupportail.restaurant.web.json.RestaurantFeedRoot;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.ModelAndView;
-//import org.esupportail.restaurant.web.dao.POJOGenerator;
 
 @Controller
 public class WebController extends AbstractExceptionController {
@@ -73,8 +75,8 @@ public class WebController extends AbstractExceptionController {
     			if(restaurant.getArea().equalsIgnoreCase(areaToDisplay))
     				dininghallList.add(restaurant);
     		}
-    		model.put("dininghalls", dininghallList);
-
+ 			model.put("dininghalls", dininghallList);
+   
     	} catch(NullPointerException e) {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
     	}
@@ -84,7 +86,7 @@ public class WebController extends AbstractExceptionController {
     
     
     @RequestMapping(value = {"VIEW"}, params = {"action=viewRestaurant"})
-    public ModelAndView renderRestaurantView(RenderRequest request, RenderRequest reponse, @RequestParam(value = "id", required = true) int id) throws Exception {
+    public ModelAndView renderRestaurantView(RenderRequest request, RenderResponse response, @RequestParam(value = "id", required = true) int id) throws Exception {
     	
     	ModelMap model = new ModelMap();
     	    	    	
@@ -107,12 +109,44 @@ public class WebController extends AbstractExceptionController {
     				}
     			}
     		}
-    		
+    	
     	} catch(NullPointerException e) {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
     	}
 
     	return new ModelAndView("restaurant", model);
+    }
+    
+    @RequestMapping(value = {"VIEW"}, params = {"action=viewMeals"})
+    public ModelAndView renderMealsView(RenderRequest request, RenderResponse response, @RequestParam(value = "id", required=true) int id) throws Exception {
+    	ModelMap model = new ModelMap();
+    	
+    	try {
+    		restaurants = flux.getFlux();
+    		for(Restaurant r : restaurants.getRestaurants()) {
+    			if(r.getId() == id) {
+    				model.put("restaurant", r);
+    				
+    				List<Manus> menuList = new ArrayList<Manus>();
+    				Date dateNow = new Date();
+    				for(Manus m : r.getMenus())  {
+    					Date dateMenu = new SimpleDateFormat("yyyy-MM-dd").parse(m.getDate());
+    					// We only send upcomings menu to the view
+    					if(dateMenu.compareTo(dateNow) >= 0) {
+    						menuList.add(m);
+    					}
+    				}
+    				
+    				model.put("menus", menuList);
+    				
+    			}
+    		}
+    	
+    	} catch(Exception e) {
+    		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
+    	}
+    	
+    	return new ModelAndView("meals", model);
     }
     
     @RequestMapping(value = {"VIEW"}, params = {"action=setFavorite"})
@@ -156,9 +190,11 @@ public class WebController extends AbstractExceptionController {
     	model.put("user", user);
     	
     	try {
-        	//RestaurantFlux flux = restaurantCache.getCachedElement();
-        	
-        	//model.put("areas", flux.getAreas());
+    		Set<String> areaList = new HashSet<String>();
+    		for(Restaurant r : flux.getFlux().getRestaurants()) {
+    			areaList.add(r.getArea());
+    		}
+    		model.put("areas", areaList);
         	
         	PortletPreferences prefs = request.getPreferences();
         	PortletSession sess = request.getPortletSession();
@@ -173,7 +209,7 @@ public class WebController extends AbstractExceptionController {
         	String[] favList = (String[]) sess.getAttribute("favorite");
         	if(favList != null && favList.length > 0)
         		model.put("favList", favList);	
-        	
+       	
     	} catch(NullPointerException e) {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
     	}
@@ -206,8 +242,7 @@ public class WebController extends AbstractExceptionController {
     	
     	User user = authenticator.getUser();
     	model.put("user", user);
-    	
-    	
+    	    	
     	try {
         	
     		Set<String> areaList = new HashSet<String>();

@@ -29,7 +29,7 @@ ${nothingToDisplay}
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true">s</script>
 	<script type="text/javascript">
 		var map;
-		console.log(map);
+
 		
 		var diningHalls = new Array();
 		<c:forEach var="dininghall" items="${dininghalls}">
@@ -47,7 +47,6 @@ ${nothingToDisplay}
 			     mapTypeId: google.maps.MapTypeId.ROADMAP
 		    };
 		    map = new google.maps.Map(document.getElementById("gmaps-container"), mapOptions);
-		    console.log(map);
 		    var markers = new Array();
 		    
 		    for(var i=0; i<diningHalls.length; i++) {
@@ -59,8 +58,6 @@ ${nothingToDisplay}
 		    }
 			window.onresize = function() {
 				map.setCenter(myLatlng);
-				console.log("resize");
-				console.log(map);
 			}
 		}
 	</script>

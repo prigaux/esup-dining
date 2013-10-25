@@ -5,6 +5,10 @@
 <div class="restaurant-portlet">
 	
 	<h1>Paramètres</h1>
+
+	<a href="${renderRefreshUrl}">
+		<spring:message code="edit.admin.back"/>
+	</a>
 	
 	<!-- On met une négation dans le test pour faire les tests en local -->
 	<c:if test="${!user.admin}">
@@ -56,6 +60,5 @@ ${nothingToDisplay}
 		Vous n'avez pas accès à cette page car vous n'êtes pas administrateur
 	</c:if>
 
-	
 </div>
 

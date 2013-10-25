@@ -29,7 +29,7 @@ public class Dish {
      * 
      */
     @JsonProperty("code")
-    private List<Double> code = new ArrayList<Double>();
+    private List<Integer> code = new ArrayList<Integer>();
     /**
      * 
      */
@@ -51,7 +51,7 @@ public class Dish {
      * 
      */
     @JsonProperty("code")
-    public List<Double> getCode() {
+    public List<Integer> getCode() {
         return code;
     }
 
@@ -59,7 +59,7 @@ public class Dish {
      * 
      */
     @JsonProperty("code")
-    public void setCode(List<Double> code) {
+    public void setCode(List<Integer> code) {
         this.code = code;
     }
 

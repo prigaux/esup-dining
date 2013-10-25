@@ -1,7 +1,9 @@
 
 package org.esupportail.restaurant.web.json;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -26,7 +28,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
     "id",
     "lat",
     "lon",
-    "menuslist",
+    "menus",
     "opening",
     "operationalhours",
     "photo",
@@ -93,8 +95,8 @@ public class Restaurant {
     /**
      * 
      */
-    @JsonProperty("menuslist")
-    private Menuslist menuslist;
+    @JsonProperty("menus")
+    private List<Manus> menus = new ArrayList<Manus>();
     /**
      * 
      */
@@ -300,17 +302,17 @@ public class Restaurant {
     /**
      * 
      */
-    @JsonProperty("menuslist")
-    public Menuslist getMenuslist() {
-        return menuslist;
+    @JsonProperty("menus")
+    public List<Manus> getMenus() {
+        return menus;
     }
 
     /**
      * 
      */
-    @JsonProperty("menuslist")
-    public void setMenuslist(Menuslist menuslist) {
-        this.menuslist = menuslist;
+    @JsonProperty("menus")
+    public void setMenus(List<Manus> menus) {
+        this.menus = menus;
     }
 
     /**
