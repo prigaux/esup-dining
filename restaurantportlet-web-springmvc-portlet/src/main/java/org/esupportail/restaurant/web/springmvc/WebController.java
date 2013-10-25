@@ -73,7 +73,6 @@ public class WebController extends AbstractExceptionController {
     			if(restaurant.getArea().equalsIgnoreCase(areaToDisplay))
     				dininghallList.add(restaurant);
     		}
-    		
     		model.put("dininghalls", dininghallList);
 
     	} catch(NullPointerException e) {
@@ -84,16 +83,24 @@ public class WebController extends AbstractExceptionController {
     
     
     
-    @RequestMapping(value = {"VIEW"}, params = {"action=viewDiningHall"})
-    public ModelAndView renderRestaurantView(RenderRequest request, RenderRequest reponse, @RequestParam(value = "id", required = true) String id) throws Exception {
-   
-    	//RestaurantFlux flux = restaurantCache.getCachedElement();
+    @RequestMapping(value = {"VIEW"}, params = {"action=viewRestaurant"})
+    public ModelAndView renderRestaurantView(RenderRequest request, RenderRequest reponse, @RequestParam(value = "id", required = true) int id) throws Exception {
     	
     	ModelMap model = new ModelMap();
     	
-    	//int restaurantId = Integer.parseInt(id, 10);
-    	//model.put("restaurant", flux.getRestaurantById(restaurantId));
-    	
+    	System.out.println(id);
+    	    	
+    	try {
+    		restaurants = flux.getFlux();
+    		for(Restaurant r : restaurants.getRestaurants()) {
+    			if(r.getId() == id)
+    				model.put("restaurant", r);
+    		}
+    		
+    	} catch(NullPointerException e) {
+    		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
+    	}
+
     	return new ModelAndView("restaurant", model);
     }
     
@@ -188,6 +195,7 @@ public class WebController extends AbstractExceptionController {
     	
     	User user = authenticator.getUser();
     	model.put("user", user);
+    	
     	
     	try {
         	
