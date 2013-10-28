@@ -6,6 +6,10 @@
 	
 	<h1>Paramètres</h1>
 	
+	<a href="<portlet:renderURL portletMode="view"/>">
+		<spring:message code="go.back.home"/>
+	</a>
+	
 	<c:if test="${!user.admin}">
 		<h2>
 			<portlet:renderURL var="adminSettings">
@@ -42,6 +46,11 @@ ${nothingToDisplay}
 					</option>
 				</c:forEach>
 			</select>
+				<c:if test="${zoneSubmit == 'true'}">
+					<label style="color: #00FF00; font-weight: bold;">
+						<spring:message code="edit.msg.success"/>
+					</label>
+				</c:if>
 			<input type="submit" value="Valider"/>
 		</fieldset>
 	</form>

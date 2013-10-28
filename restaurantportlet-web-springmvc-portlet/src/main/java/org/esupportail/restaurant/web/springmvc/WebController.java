@@ -68,7 +68,6 @@ public class WebController extends AbstractExceptionController {
     		
     		restaurants = flux.getFlux();
     		
-        
         	List<Restaurant> dininghallList = new ArrayList<Restaurant>();   	
         	
     		for(Restaurant restaurant : restaurants.getRestaurants()) {
@@ -214,13 +213,18 @@ public class WebController extends AbstractExceptionController {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
     	}
     	
+    	String zoneSubmit = request.getParameter("zoneSubmit");
+    	if(zoneSubmit != null)
+    		model.put("zoneSubmit", zoneSubmit);
+    	
     	return new ModelAndView("edit", model);
     }    
     
     @RequestMapping(value = {"EDIT"}, params = {"action=setUserArea"})
     public void setUserArea(ActionRequest request, ActionResponse response, @RequestParam(value = "zone", required = true) String area) throws Exception {
     	PortletSession sess = request.getPortletSession();
-    	sess.setAttribute("userArea", area);    	
+    	sess.setAttribute("userArea", area);
+    	response.setRenderParameter("zoneSubmit", "true");
     }
     
     @RequestMapping(value = {"EDIT", "VIEW"}, params = {"action=removeFavorite"})
@@ -261,10 +265,11 @@ public class WebController extends AbstractExceptionController {
     	
     	String hasError = request.getParameter("urlError");
     	if(hasError != null)
-    		model.put("urlError", "Incorrect URL");
+    		model.put("urlError", hasError);
     	
- //   	if(restaurantCache.getUrl()!=null)
- //   		model.put("urlFluxCache", restaurantCache.getUrl());
+    	String zoneSubmit = request.getParameter("zoneSubmit");
+    	if(zoneSubmit != null)
+    		model.put("zoneSubmit", zoneSubmit);
     	
     	return new ModelAndView("edit-admin", model);
     }
@@ -273,7 +278,7 @@ public class WebController extends AbstractExceptionController {
     public void setDefaultArea(ActionRequest request, ActionResponse response, @RequestParam(value = "zone", required = true) String area) throws Exception {
 
 		response.setRenderParameter("action", "adminSettings");
-		
+		response.setRenderParameter("zoneSubmit", "true");
     	PortletPreferences prefs = request.getPreferences();
     	prefs.setValue("defaultArea", area);
     	prefs.store();
@@ -286,6 +291,7 @@ public class WebController extends AbstractExceptionController {
     	try {
     		URL urlFlux = new URL(url);	
     		flux.setPath(urlFlux);
+    		response.setRenderParameter("urlError", "false");
     	} catch(MalformedURLException e) {
     		response.setRenderParameter("urlError", "true");
     	}

@@ -29,11 +29,14 @@ ${nothingToDisplay}
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true">s</script>
 	<script type="text/javascript">
 		var map;
-
-		
+			
 		var diningHalls = new Array();
 		<c:forEach var="dininghall" items="${dininghalls}">
-			diningHalls.push(["${dininghall.title}", ${dininghall.lat}, ${dininghall.lon}]);
+			<portlet:renderURL var="viewRestaurantFromMaker">
+  				<portlet:param name="action" value="viewRestaurant"/>
+  				<portlet:param name="id" value="${dininghall.id}"/>
+			</portlet:renderURL>
+			diningHalls.push(["${dininghall.title}", ${dininghall.lat}, ${dininghall.lon}, "${viewRestaurantFromMaker}"]);
 		</c:forEach>
 
 		google.maps.event.addDomListener(window, 'load', initialize);
@@ -47,14 +50,21 @@ ${nothingToDisplay}
 			     mapTypeId: google.maps.MapTypeId.ROADMAP
 		    };
 		    map = new google.maps.Map(document.getElementById("gmaps-container"), mapOptions);
-		    var markers = new Array();
-		    
+		   
 		    for(var i=0; i<diningHalls.length; i++) {
-		    	markers.push(new google.maps.Marker({
+		    	var mark = new google.maps.Marker({
 			        position: new google.maps.LatLng(diningHalls[i][1],diningHalls[i][2]),
 			        map: map,
 			        title:diningHalls[i][0]
-			    }));
+			    });
+
+		    	google.maps.event.addListener(mark, 'click', function() {
+		    		for(var j=0; j<diningHalls.length; j++) {
+		    			if(diningHalls[j][0] == this.getTitle())
+		    				location.href=diningHalls[j][3];
+		    		}
+		    	});
+
 		    }
 			window.onresize = function() {
 				map.setCenter(myLatlng);

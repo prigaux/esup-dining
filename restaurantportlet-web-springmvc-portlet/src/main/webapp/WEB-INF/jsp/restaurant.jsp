@@ -20,7 +20,7 @@
 <div class="restaurant-portlet">
 
 <p>
-	<a href="${renderRefreshUrl}">
+	<a href="<portlet:renderURL portletMode="view"/>">
 		<spring:message code="go.back.home" />
 	</a>
 </p>

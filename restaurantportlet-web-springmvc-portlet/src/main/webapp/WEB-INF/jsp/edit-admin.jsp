@@ -6,8 +6,11 @@
 	
 	<h1>Paramètres</h1>
 
-	<a href="${renderRefreshUrl}">
+	<a href="<portlet:renderURL portletMode="edit"/>">
 		<spring:message code="edit.admin.back"/>
+	</a> - 	
+	<a href="<portlet:renderURL portletMode="view"/>">
+		<spring:message code="go.back.home"/>
 	</a>
 	
 	<!-- On met une négation dans le test pour faire les tests en local -->
@@ -35,6 +38,11 @@ ${nothingToDisplay}
 						</option>
 					</c:forEach>
 				</select>
+				<c:if test="${zoneSubmit == 'true'}">
+					<label style="color: #00FF00; font-weight: bold;">
+						<spring:message code="edit.msg.success"/>
+					</label>
+				</c:if>
 				<input type="submit" value="Valider"/>
 			</fieldset>
 		</form>
@@ -49,8 +57,15 @@ ${nothingToDisplay}
 				<legend>URL du flux</legend>
 				<label for="field-url">URL : </label>
 				<input type="text" id="field-url" name="url" value="${urlFluxCache}"/>
-				<c:if test="${not empty urlError}">
-					<label style="color: #FF0000; font-weight: bold;">${urlError}</label>
+				<c:if test="${urlError == 'true'}">
+					<label style="color: #FF0000; font-weight: bold;">
+						<spring:message code="edit.msg.urlerror"/>
+					</label>
+				</c:if>				
+				<c:if test="${urlError == 'false'}">
+					<label style="color: #00FF00; font-weight: bold;">
+						<spring:message code="edit.msg.success"/>
+					</label>
 				</c:if>
 				<input type="submit" value="Valider" />
 			</fieldset>
