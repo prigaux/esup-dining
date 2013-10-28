@@ -16,6 +16,9 @@
 		</property>
 	</bean>
 	
+	<bean id="DatabaseConnector" class="org.esupportail.restaurant.web.dao.DatabaseConnector"
+		  scope="singleton" />
+	
 	<!--
      | Message source for this context, loaded from localized "messages_xx" files
      +-->
@@ -62,28 +65,26 @@
     	<!-- 
 	| Quartz Cron Task Scheduler : Start
 	 -->
-	
-	
 	<!-- 
-	<bean id="restaurantCache" class="org.esupportail.restaurant.web.flux.RestaurantCache" />
+	<bean id="QuartzCacheUpdateJob" class="org.esupportail.restaurant.web.quartz.QuartzCacheUpdateJob"/>
 	
-	<bean id="JobDetailBean" name="JobDetailBean" class="org.springframework.scheduling.quartz.JobDetailBean">
-	    <property name="jobClass" value="org.esupportail.restaurant.web.quartz.QuartzCacheUpdateJob" />
-	</bean>
+	<bean name="JobDetailBean" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="QuartzCacheUpdateJob"/>
+        <property name="targetMethod" value="execute"/>
+    </bean>
 	
-	<bean id="CronTriggerBean" name="CronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="JobDetailBean"/>
-		<property name="cronExpression" value="10 * * ? * *"/>
-	</bean>
-	
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	 <bean id="triggerBean" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail" ref="JobDetailBean"/>
+        <property name="startDelay" value="10000"/>
+        <property name="repeatInterval" value="5000"/>
+    </bean>
+		<bean class="org.springframework.scheduling.quartz.TaskScheduler">
 		<property name="triggers">
 			<list>
-				<ref bean="CronTriggerBean"/>
+				<ref bean="triggerBean"/>
 			</list>
 		</property>
-	</bean>
-	 -->
+	</bean>-->
 	
 	<!-- 
 	| Quartz Cron Task Scheduler : End

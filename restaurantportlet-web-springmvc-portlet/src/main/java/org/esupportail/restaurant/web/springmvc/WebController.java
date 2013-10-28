@@ -3,6 +3,8 @@ package org.esupportail.restaurant.web.springmvc;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Array;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +22,7 @@ import javax.portlet.RenderResponse;
 
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
+import org.esupportail.restaurant.web.dao.DatabaseConnector;
 import org.esupportail.restaurant.web.flux.RestaurantFlux;
 import org.esupportail.restaurant.web.json.Manus;
 import org.esupportail.restaurant.web.json.Restaurant;
@@ -37,11 +40,10 @@ public class WebController extends AbstractExceptionController {
 	
     @Autowired
 	private Authenticator authenticator;
-	//private RestaurantCache restaurantCache = RestaurantCache.getInstance();   
-	
+	@Autowired
+	private DatabaseConnector dc;
 	@Autowired
 	private RestaurantFlux flux;
-	
 	private RestaurantFeedRoot restaurants;
     
     @RequestMapping("VIEW")
@@ -88,24 +90,19 @@ public class WebController extends AbstractExceptionController {
     public ModelAndView renderRestaurantView(RenderRequest request, RenderResponse response, @RequestParam(value = "id", required = true) int id) throws Exception {
     	
     	ModelMap model = new ModelMap();
-    	    	    	
+    	
+    	User user = authenticator.getUser();
+    	
     	try {
     		restaurants = flux.getFlux();
     		for(Restaurant r : restaurants.getRestaurants()) {
     			if(r.getId() == id) {
     				model.put("restaurant", r);
     				
-    				PortletSession sess = request.getPortletSession();
-    		    	
-    				String[] favList = (String[]) sess.getAttribute("favorite");
-    				if(favList!=null && favList.length > 0) {
-    					for(int i=0; i<favList.length; i++) {
-    						// Check if the current Restaurant is in the favorite list or not
-    						// (to display add or remove link)
-    						if(Integer.parseInt(favList[i], 10) == id)
-    							model.put("isFavorite", true);
-    					}
-    				}
+    				ResultSet results = dc.executeQuery("SELECT user FROM favoriteRestaurant WHERE user='" + user.getLogin() +"' AND restaurantId =" + id);
+    				
+    				if(results.next())
+    					 model.put("isFavorite", true);
     			}
     		}
     	
@@ -150,35 +147,11 @@ public class WebController extends AbstractExceptionController {
     
     @RequestMapping(value = {"VIEW"}, params = {"action=setFavorite"})
     public void setFavorite(ActionRequest request, ActionResponse response, @RequestParam(value = "id", required = true) String id) throws Exception {
-
-    	PortletSession sess = request.getPortletSession();
-    	String[] favoriteList = (String[]) sess.getAttribute("favorite");
-    	
-    	if(favoriteList != null && favoriteList.length > 0) {
-    		String[] newFavoriteList = new String[favoriteList.length + 1];
-    		
-    		// Check if the array already contains the ID we try to add
-    		boolean alreadyFavorite = false;
-    		for(int i=0; i<favoriteList.length; i++) { 
-    			if(favoriteList[i].equalsIgnoreCase(id))
-    				alreadyFavorite = true;
-    		}
-    		
-    		// if it is not in, then we can update the array and set it to the portlet preferences
-    		if(!alreadyFavorite) {
-        		newFavoriteList[0] = id;
-        		for(int i=1; i<=favoriteList.length; i++) {
-        			newFavoriteList[i] = favoriteList[i-1];
-        		}    	
-        		sess.setAttribute("favorite", newFavoriteList);	
-    		}
-    		
-    	} else {
-    		sess.setAttribute("favorite", new String[]{id});
-    	}
-    	
-    }
-    
+    	dc.executeUpdate("INSERT INTO favoriteRestaurant (user, restaurantId) "
+    				   + "VALUES('" + authenticator.getUser().getLogin() +"', '"+ id +"')");
+    	response.setRenderParameter("id", id);
+    	response.setRenderParameter("action", "viewRestaurant");    	
+    }    
     
     @RequestMapping("EDIT")
     public ModelAndView renderEditView(RenderRequest request, RenderResponse response) throws Exception {
@@ -205,9 +178,17 @@ public class WebController extends AbstractExceptionController {
         		model.put("defaultArea", prefs.getValue("userArea", null));
         	}
         	
-        	String[] favList = (String[]) sess.getAttribute("favorite");
-        	if(favList != null && favList.length > 0)
-        		model.put("favList", favList);	
+        	Set<String> favResults = new HashSet<String>();
+        	try {
+        		ResultSet results = dc.executeQuery("SELECT restaurantId FROM favoriteRestaurant WHERE user='"+ user.getLogin() +"'");
+        		while(results.next()) {
+        			favResults.add(results.getString("restaurantId"));
+        		}
+        		results.close();
+        	} catch(Exception e) {
+        		System.out.println("On passe dans le Catch, la colonne demandé n'existe pas ???");
+        	}
+        	model.put("favList", favResults);	
        	
     	} catch(NullPointerException e) {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
@@ -229,13 +210,9 @@ public class WebController extends AbstractExceptionController {
     
     @RequestMapping(value = {"EDIT", "VIEW"}, params = {"action=removeFavorite"})
     public void removeFavorite(ActionRequest request, ActionResponse response, @RequestParam(value = "restaurant-id", required = true) String id) throws Exception {
-    	PortletSession sess = request.getPortletSession();
-    	String[] favoriteList = (String[]) sess.getAttribute("favorite");
-    	// Cast String[] to ArrayList<String>
-    	List<String> newFavoriteList = new ArrayList<String>(Arrays.asList(favoriteList));
-    	newFavoriteList.remove(id);
-    	// Cast back the ArrayList<String> to String[] in order to store it
-    	sess.setAttribute("favorite", (String[]) newFavoriteList.toArray(new String[newFavoriteList.size()]));
+    	dc.executeUpdate("DELETE FROM favoriteRestaurant "
+    				   + "WHERE restaurantId=" + id 
+    				   +" AND user='"+ authenticator.getUser().getLogin() +"'");
     }
     
     @RequestMapping(value = {"EDIT"}, params = {"action=adminSettings"})
@@ -291,6 +268,7 @@ public class WebController extends AbstractExceptionController {
     	try {
     		URL urlFlux = new URL(url);	
     		flux.setPath(urlFlux);
+    		flux.cacheJsonString();
     		response.setRenderParameter("urlError", "false");
     	} catch(MalformedURLException e) {
     		response.setRenderParameter("urlError", "true");

@@ -13,6 +13,8 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.esupportail.restaurant.web.json.RestaurantFeedRoot;
 
+import net.sf.ehcache.Element;
+
 public class RestaurantFlux implements Serializable {
 	
 	private String jsonStringified;
@@ -80,6 +82,11 @@ public class RestaurantFlux implements Serializable {
 		
 		// Init flux by mapping JSON to POJO
 		this.flux = this.mapJson();
+	}
+	
+	public void cacheJsonString() {
+		RestaurantCache rc = RestaurantCache.getInstance();
+		rc.setCacheElement(new Element(CacheModelConst.RESTAURANT_FLUX, this.jsonStringified));
 	}
 	
 	

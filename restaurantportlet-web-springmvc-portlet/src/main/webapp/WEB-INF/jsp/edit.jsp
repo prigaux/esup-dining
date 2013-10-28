@@ -2,6 +2,8 @@
 
 <portlet:renderURL var="renderRefreshUrl" />
 
+${results}
+
 <div class="restaurant-portlet">
 	
 	<h1>Paramètres</h1>

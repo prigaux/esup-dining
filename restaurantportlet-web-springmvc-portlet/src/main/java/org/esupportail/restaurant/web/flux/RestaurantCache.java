@@ -31,18 +31,8 @@ public class RestaurantCache {
 		return instance;
 	}
 	
-	public void init() {
-		//RestaurantFlux flux = new RestaurantFlux(this.url);	
-		//Element elFlux = new Element("restaurantFlux", flux);	
-		//this.fluxCache.put(elFlux);		
-	}
-	
-	public void setUrl(URL url) {
-		this.url = url;
-	}
-	
-	public URL getUrl() {
-		return this.url;
+	public void setCacheElement(Element el) {
+		this.fluxCache.put(el);
 	}
 	
 	public RestaurantFlux getCachedElement() {
@@ -55,31 +45,4 @@ public class RestaurantCache {
 	public Element getCacheByKey(String key) {
 		return fluxCache.get(key);
 	}
-	
-	public void update() {
-		
-		System.out.println("In Business manager, I Call the business action.");
-		
-		if(this.url != null) {
-			
-			// Get cached JSON File
-			Element elCache = fluxCache.get("restaurantFlux");
-			RestaurantFlux fluxFromCache = (RestaurantFlux) elCache.getObjectValue();
-			
-			// Access the non-cached JSON File
-			//RestaurantFlux fluxFromUrl = new RestaurantFlux(this.url);	
-			
-			// If content is != we put the non-cached version to the cache.
-			/*if(!fluxFromCache.equals(fluxFromUrl)) {
-				Element newEl = new Element("restaurantFlux", fluxFromUrl);
-				this.fluxCache.put(newEl);
-			}*/
-			
-			System.out.println("Url != null");
-		} else {
-			System.out.println("Url == null, we don't proceed to cache update, because it doesn't exist yet");
-		}
-		
-	}
-	
 }
