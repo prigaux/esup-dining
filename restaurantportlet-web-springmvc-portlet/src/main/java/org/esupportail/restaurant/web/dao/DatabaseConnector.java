@@ -32,7 +32,7 @@ public class DatabaseConnector {
 		}
 		try {
 			this.connection.setAutoCommit(true);
-			this.statement = connection.createStatement();
+			this.statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -48,32 +48,23 @@ public class DatabaseConnector {
 	
 	public void createTables() {
 		try {
-			statement.executeUpdate("CREATE TABLE favoriteRestaurant(user VARCHAR(100), restaurantId INT)");
-			statement.executeUpdate("CREATE TABLE defaultArea(user VARCHAR(100), areaName VARCHAR(200)");
+			statement.executeUpdate("CREATE TABLE FAVORITERESTAURANT(USER VARCHAR(100), RESTAURANTID INT)");
 		} catch (SQLException e) {
 			System.out.println("[INFO] Table favoriteRestaurant already exist");
 		}
+		try {
+			statement.executeUpdate("CREATE TABLE PATHFLUX (URLFLUX VARCHAR(500), AREANAME VARCHAR(200))");
+		} catch (SQLException e) {
+			System.out.println("[INFO] Table pathFlux already exist");
+		}
 	}
 	
-	public ResultSet executeQuery(String query) {
-		ResultSet results = null;
-		try {
-			// "SELECT restaurantId FROM favoriteRestaurant WHERE user='"+ username +"'"
-			results = statement.executeQuery(query);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return results;
+	public ResultSet executeQuery(String query) throws SQLException {
+		return statement.executeQuery(query);
 	}
 	
-	public void executeUpdate(String update) {
-		try {
-			statement.executeUpdate(update);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void executeUpdate(String update) throws SQLException {
+		statement.executeUpdate(update);
 	}
 	
 }

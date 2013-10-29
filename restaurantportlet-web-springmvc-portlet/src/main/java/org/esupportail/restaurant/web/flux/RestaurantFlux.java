@@ -5,15 +5,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import net.sf.ehcache.Element;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.esupportail.restaurant.web.dao.DatabaseConnector;
 import org.esupportail.restaurant.web.json.RestaurantFeedRoot;
-
-import net.sf.ehcache.Element;
 
 public class RestaurantFlux implements Serializable {
 	
@@ -25,6 +29,28 @@ public class RestaurantFlux implements Serializable {
 	public RestaurantFlux() {
 		this.jsonStringified = new String();
 		this.mapper = new ObjectMapper();
+		
+		DatabaseConnector dc = DatabaseConnector.getInstance();
+		
+		try {
+			ResultSet results = dc.executeQuery("SELECT URLFLUX FROM PATHFLUX");
+			results.next(); // Move the cursor to the first line.
+			// results.getUrl... throw an exception : This function is not supported
+			// When we'll update to postgre or something, try this out : 
+			// URL urlFlux = results.getURL("URLFLUX");
+			// Should be better.
+			URL urlFlux=null;
+			try {
+				urlFlux = new URL(results.getString("URLFLUX"));
+			} catch (MalformedURLException e) {
+				// Nothing to do because normally, we check the URL validity
+				// before the inserting this row.
+			}
+			this.setPath(urlFlux);
+		} catch (SQLException e) {
+			System.out.println("[INFO] No URLFLUX available, the portlet needs to be configured by an admin");
+		}
+		
 	}
 	private RestaurantFeedRoot mapJson() {
 		RestaurantFeedRoot br = null;
@@ -46,7 +72,7 @@ public class RestaurantFlux implements Serializable {
 	
 	public void setPath(URL path) {
 		this.path = path;
-		
+
 		// If the user sets a new path, we have to update json string and re-map the all json file.
 		this.updateJson();
 	}

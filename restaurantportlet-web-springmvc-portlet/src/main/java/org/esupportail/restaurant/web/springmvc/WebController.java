@@ -3,11 +3,10 @@ package org.esupportail.restaurant.web.springmvc;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Array;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -51,11 +50,7 @@ public class WebController extends AbstractExceptionController {
     	
     	ModelMap model = new ModelMap();
     	
-    	PortletSession sess = request.getPortletSession();
-    	sess.setMaxInactiveInterval(-1);
-    	
-    	PortletPreferences prefs = request.getPreferences();
-    	
+    	/*
     	String areaToDisplay = (String) sess.getAttribute("userArea");
     	if(areaToDisplay == null || areaToDisplay.length() == 0)
     		areaToDisplay = prefs.getValue("defaultArea", "");
@@ -65,9 +60,13 @@ public class WebController extends AbstractExceptionController {
     	String[] favList = (String[]) sess.getAttribute("favorite");
 		if(favList!=null && favList.length > 0) 
 			model.put("favList", favList);
-		
+		*/ 
     	try {
     		
+    		ResultSet results = dc.executeQuery("SELECT AREANAME FROM PATHFLUX");
+        	results.next();
+        	String areaToDisplay = results.getString("AREANAME");
+        	
     		restaurants = flux.getFlux();
     		
         	List<Restaurant> dininghallList = new ArrayList<Restaurant>();   	
@@ -78,7 +77,7 @@ public class WebController extends AbstractExceptionController {
     		}
  			model.put("dininghalls", dininghallList);
    
-    	} catch(NullPointerException e) {
+    	} catch(SQLException e) {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
     	}
     	return new ModelAndView("view", model);
@@ -99,7 +98,7 @@ public class WebController extends AbstractExceptionController {
     			if(r.getId() == id) {
     				model.put("restaurant", r);
     				
-    				ResultSet results = dc.executeQuery("SELECT user FROM favoriteRestaurant WHERE user='" + user.getLogin() +"' AND restaurantId =" + id);
+    				ResultSet results = dc.executeQuery("SELECT USER FROM FAVORITERESTAURANT WHERE USER='" + user.getLogin() +"' AND RESTAURANTID =" + id);
     				
     				if(results.next())
     					 model.put("isFavorite", true);
@@ -147,7 +146,7 @@ public class WebController extends AbstractExceptionController {
     
     @RequestMapping(value = {"VIEW"}, params = {"action=setFavorite"})
     public void setFavorite(ActionRequest request, ActionResponse response, @RequestParam(value = "id", required = true) String id) throws Exception {
-    	dc.executeUpdate("INSERT INTO favoriteRestaurant (user, restaurantId) "
+    	dc.executeUpdate("INSERT INTO FAVORITERESTAURANT (USER, RESTAURANTID) "
     				   + "VALUES('" + authenticator.getUser().getLogin() +"', '"+ id +"')");
     	response.setRenderParameter("id", id);
     	response.setRenderParameter("action", "viewRestaurant");    	
@@ -180,7 +179,7 @@ public class WebController extends AbstractExceptionController {
         	
         	Set<String> favResults = new HashSet<String>();
         	try {
-        		ResultSet results = dc.executeQuery("SELECT restaurantId FROM favoriteRestaurant WHERE user='"+ user.getLogin() +"'");
+        		ResultSet results = dc.executeQuery("SELECT RESTAURANTID FROM FAVORITERESTAURANT WHERE USER='"+ user.getLogin() +"'");
         		while(results.next()) {
         			favResults.add(results.getString("restaurantId"));
         		}
@@ -210,9 +209,9 @@ public class WebController extends AbstractExceptionController {
     
     @RequestMapping(value = {"EDIT", "VIEW"}, params = {"action=removeFavorite"})
     public void removeFavorite(ActionRequest request, ActionResponse response, @RequestParam(value = "restaurant-id", required = true) String id) throws Exception {
-    	dc.executeUpdate("DELETE FROM favoriteRestaurant "
-    				   + "WHERE restaurantId=" + id 
-    				   +" AND user='"+ authenticator.getUser().getLogin() +"'");
+    	dc.executeUpdate("DELETE FROM FAVORITERESTAURANT "
+    				   + "WHERE RESTAURANTID=" + id 
+    				   +" AND USER='"+ authenticator.getUser().getLogin() +"'");
     }
     
     @RequestMapping(value = {"EDIT"}, params = {"action=adminSettings"})
@@ -253,12 +252,12 @@ public class WebController extends AbstractExceptionController {
     
     @RequestMapping(value = {"EDIT"}, params = {"action=setDefaultArea"})
     public void setDefaultArea(ActionRequest request, ActionResponse response, @RequestParam(value = "zone", required = true) String area) throws Exception {
-
 		response.setRenderParameter("action", "adminSettings");
 		response.setRenderParameter("zoneSubmit", "true");
-    	PortletPreferences prefs = request.getPreferences();
-    	prefs.setValue("defaultArea", area);
-    	prefs.store();
+		ResultSet results = dc.executeQuery("SELECT AREANAME FROM PATHFLUX");
+		results.next();
+		results.updateString("AREANAME", area);
+		results.updateRow();
     }
     
     @RequestMapping(value = {"EDIT"}, params = {"action=urlFlux"})
@@ -270,6 +269,18 @@ public class WebController extends AbstractExceptionController {
     		flux.setPath(urlFlux);
     		flux.cacheJsonString();
     		response.setRenderParameter("urlError", "false");
+    		
+    		try {
+    			ResultSet results = dc.executeQuery("SELECT URLFLUX FROM PATHFLUX");
+    			results.next();
+    			results.updateString("URLFLUX", url);
+    			results.updateRow();
+    		} catch (SQLException e) {
+    			System.out.println("[INFO] URL isn't set, we insert a new ROW to the PATHFLUX table.");
+    			dc.executeUpdate("INSERT INTO PATHFLUX (URLFLUX) VALUES ('"+ url +"')");
+    		}
+    		
+    		
     	} catch(MalformedURLException e) {
     		response.setRenderParameter("urlError", "true");
     	}
