@@ -44,9 +44,6 @@
 	
 	<import resource="classpath*:META-INF/restaurantportlet-domain-services-auth.xml" />
 	
-	
-	<bean id="POJOGenerator" class="org.esupportail.restaurant.web.dao.POJOGenerator"/>
-
 	<!-- EhCache : Start -->
 	<bean id="cacheManager"
 	    scope="singleton"
@@ -56,37 +53,6 @@
 	    </description>
 	    <property name="configLocation" value="classpath:cache/ehcache.xml" />
 	</bean>
-	
-	<!-- EhCache : End -->
-
-
-    	<!-- 
-	| Quartz Cron Task Scheduler : Start
-	 -->
-	<!-- 
-	<bean id="QuartzCacheUpdateJob" class="org.esupportail.restaurant.web.quartz.QuartzCacheUpdateJob"/>
-	
-	<bean name="JobDetailBean" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="QuartzCacheUpdateJob"/>
-        <property name="targetMethod" value="execute"/>
-    </bean>
-	
-	 <bean id="triggerBean" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
-        <property name="jobDetail" ref="JobDetailBean"/>
-        <property name="startDelay" value="10000"/>
-        <property name="repeatInterval" value="5000"/>
-    </bean>
-		<bean class="org.springframework.scheduling.quartz.TaskScheduler">
-		<property name="triggers">
-			<list>
-				<ref bean="triggerBean"/>
-			</list>
-		</property>
-	</bean>-->
-	
-	<!-- 
-	| Quartz Cron Task Scheduler : End
-	 -->	
 	 
 	 <bean id="flux" class="org.esupportail.restaurant.web.flux.RestaurantFlux"/>
 	 

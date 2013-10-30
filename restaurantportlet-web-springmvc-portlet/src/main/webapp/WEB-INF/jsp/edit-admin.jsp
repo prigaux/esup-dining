@@ -15,9 +15,9 @@
 	
 	<!-- On met une négation dans le test pour faire les tests en local -->
 	<c:if test="${!user.admin}">
-
+<br/>
 ${nothingToDisplay}
-
+<br/>
 <c:if test="${empty nothingToDisplay}">		
 		<portlet:actionURL var="setDefaultArea">
 		  <portlet:param name="action" value="setDefaultArea"/>

@@ -10,6 +10,11 @@ import org.springframework.context.annotation.Scope;
 
 public class RestaurantCache {
 	
+	/*
+	 * #TODO
+	 * Not implemented yet, need to work on this later
+	 */
+	
 	private static RestaurantCache instance;
 	private URL url;
 	private Cache fluxCache;

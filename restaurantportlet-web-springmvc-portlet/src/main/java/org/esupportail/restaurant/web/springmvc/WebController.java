@@ -69,8 +69,9 @@ public class WebController extends AbstractExceptionController {
         		// If there is no default area, then the admin must configure the portlet before.
         		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
         	}
-        	model.put("area", areaToDisplay);
     	}
+
+    	model.put("area", areaToDisplay);
     	
     	try {
     		restaurants = flux.getFlux();
@@ -138,9 +139,7 @@ public class WebController extends AbstractExceptionController {
     						menuList.add(m);
     					}
     				}
-    				
-    				model.put("menus", menuList);
-    				
+    				model.put("menus", menuList);	
     			}
     		}
     	
@@ -153,7 +152,9 @@ public class WebController extends AbstractExceptionController {
     
     @RequestMapping(value = {"VIEW"}, params = {"action=setFavorite"})
     public void setFavorite(ActionRequest request, ActionResponse response, @RequestParam(value = "id", required = true) String id) throws Exception {
+    	
     	User user = authenticator.getUser();
+    	
     	try {
     		dc.executeUpdate("INSERT INTO FAVORITERESTAURANT VALUES ('" + user.getLogin() + "', '" + id + "');");
     	} catch (SQLException e) {
@@ -306,7 +307,10 @@ public class WebController extends AbstractExceptionController {
     
     @RequestMapping(value = {"EDIT"}, params = {"action=urlFlux"})
     public void setURLFlux(ActionRequest request, ActionResponse response, @RequestParam(value = "url", required = true) String url) throws Exception { 
-  
+    	/*
+    	 * #TODO : 
+    	 * Validate feed with the JSON Schema
+    	 */
 		response.setRenderParameter("action", "adminSettings");
     	try {
     		URL urlFlux = new URL(url);	

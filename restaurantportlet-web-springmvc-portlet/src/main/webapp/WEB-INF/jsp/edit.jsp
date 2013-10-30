@@ -61,7 +61,6 @@ ${nothingToDisplay}
 	<form method="POST" action="${removeFavorite}">
 	<fieldset>
 		<legend>Vos restaurant favoris</legend>
-
 		<c:forEach var="restaurant" items="${favList}">
 
 			<label for="field-restaurant-${restaurant}" style="display:block; padding: 10px 0; border-bottom: 1px solid #333;">
@@ -70,7 +69,6 @@ ${nothingToDisplay}
 			</label>
 
 		</c:forEach>
-		
 		<input type="submit" value="Supprimer">
 	</fieldset>
 </form>

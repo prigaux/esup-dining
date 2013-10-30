@@ -173,11 +173,9 @@
 
 					for(var j=0; j<3; j++) {
 						var tableNode = document.createElement("td");
-						if(opening[i].charAt(j) == "1") {
-							tableNode.innerHTML = "O";
-						} else {
-							tableNode.innerHTML = "X";
-						}
+
+						(opening[i].charAt(j) == "1") ? tableNode.innerHTML = "O" : tableNode.innerHTML = "X";
+						
 						ligne.appendChild(tableNode);
 					}					
 					tableOpening.appendChild(ligne);

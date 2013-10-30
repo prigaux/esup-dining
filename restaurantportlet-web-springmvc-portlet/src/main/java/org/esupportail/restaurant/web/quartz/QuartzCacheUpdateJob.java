@@ -7,6 +7,11 @@ import org.esupportail.restaurant.web.flux.*;
 
 public class QuartzCacheUpdateJob {
 
+	/*
+	 * #TODO :
+	 * Not implemented yet, need to work on this later
+	 */
+	
 	private RestaurantFlux restaurantFlux;
 	private RestaurantCache rc;
 

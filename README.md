@@ -7,18 +7,12 @@ Jeu de test JSON disponible à l'adresse : http://www.souquet.eu/test/v2/flux.js
 
 # Howto :
 
-Lancer la portlet avec la commande : 
+Installation de la portlet
 
-* mvn portlet-prototyping:run
+* Déployer la portlet dans un portail
+* Ajouter la portlet à une page
 * Se rendre dans la section "edit"
 * Aller dans paramètres administrateur
 * Inscrire l'URL du jeu de test dans la case prévu et valider
-* Sélectionner la zone par défaut à afficher a vos utilisateurs
+* Choisir une zone par défaut dans la liste déroulante
 * Retourner dans la section "view"
-
-# Todo : 
-
-* Travailler sur les vues
-* Améliorer le jeu de test
-* Mettre en cache le flux
-* Faire fonctionner les tâches CRON
