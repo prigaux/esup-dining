@@ -208,7 +208,8 @@
 			    var marker = new google.maps.Marker({
 			        position: myLatlng,
 			        map: map,
-			        title:"${restaurant.title}"
+			        title:"${restaurant.title}",
+			        icon: "<%= renderRequest.getContextPath() + "/images/pin_resto.png" %>"
 			    });
     			window.onresize = function() {
 					map.setCenter(myLatlng);

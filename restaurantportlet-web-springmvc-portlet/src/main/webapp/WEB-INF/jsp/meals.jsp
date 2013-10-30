@@ -87,13 +87,14 @@
 										</c:if>
 										
 										<c:if test="${not empty dish.code}">
-											<ul>
+											<ul><li>
 												<c:forEach var="codeNumber" items="${dish.code}">
-													<li>
-														<spring:message code="meal.code.${codeNumber}.name" />
-													</li>
+													<img src="<%= renderRequest.getContextPath() %><spring:message code="meal.code.${codeNumber}.img" />"
+													     alt="<spring:message code="meal.code.${codeNumber}.description" />"
+														 title="<spring:message code="meal.code.${codeNumber}.name" />"
+													/>									
 												</c:forEach>
-											</ul>
+											</ul></li>
 										</c:if>
 										
 										<c:if test="${not empty dish.nutritionitems}">

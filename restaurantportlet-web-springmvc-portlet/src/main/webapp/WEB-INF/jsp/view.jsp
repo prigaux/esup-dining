@@ -55,7 +55,8 @@ ${nothingToDisplay}
 		    	var mark = new google.maps.Marker({
 			        position: new google.maps.LatLng(diningHalls[i][1],diningHalls[i][2]),
 			        map: map,
-			        title:diningHalls[i][0]
+			        title:diningHalls[i][0],
+			        icon: "<%= renderRequest.getContextPath() + "/images/pin_resto.png" %>"
 			    });
 
 		    	google.maps.event.addListener(mark, 'click', function() {

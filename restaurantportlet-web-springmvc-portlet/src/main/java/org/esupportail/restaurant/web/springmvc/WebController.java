@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletPreferences;
@@ -50,23 +52,27 @@ public class WebController extends AbstractExceptionController {
     	
     	ModelMap model = new ModelMap();
     	
-    	/*
-    	String areaToDisplay = (String) sess.getAttribute("userArea");
-    	if(areaToDisplay == null || areaToDisplay.length() == 0)
-    		areaToDisplay = prefs.getValue("defaultArea", "");
+    	User user = authenticator.getUser();
+    	String areaToDisplay = new String();
     	
-    	model.put("area", areaToDisplay);
-    	
-    	String[] favList = (String[]) sess.getAttribute("favorite");
-		if(favList!=null && favList.length > 0) 
-			model.put("favList", favList);
-		*/ 
     	try {
-    		
+    		ResultSet results = dc.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='"+user.getLogin()+"';");
+    		results.next();
+    		areaToDisplay = results.getString("AREANAME");
+    	} catch (SQLException e) {
+    		// we are here if the user doesn't set a specific area for himself
     		ResultSet results = dc.executeQuery("SELECT AREANAME FROM PATHFLUX");
         	results.next();
-        	String areaToDisplay = results.getString("AREANAME");
-        	
+        	try {
+        		areaToDisplay = results.getString("AREANAME");
+        	} catch (SQLException e2) {
+        		// If there is no default area, then the admin must configure the portlet before.
+        		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
+        	}
+        	model.put("area", areaToDisplay);
+    	}
+    	
+    	try {
     		restaurants = flux.getFlux();
     		
         	List<Restaurant> dininghallList = new ArrayList<Restaurant>();   	
@@ -77,7 +83,7 @@ public class WebController extends AbstractExceptionController {
     		}
  			model.put("dininghalls", dininghallList);
    
-    	} catch(SQLException e) {
+    	} catch(Exception e) {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
     	}
     	return new ModelAndView("view", model);
@@ -97,11 +103,12 @@ public class WebController extends AbstractExceptionController {
     		for(Restaurant r : restaurants.getRestaurants()) {
     			if(r.getId() == id) {
     				model.put("restaurant", r);
-    				
-    				ResultSet results = dc.executeQuery("SELECT USER FROM FAVORITERESTAURANT WHERE USER='" + user.getLogin() +"' AND RESTAURANTID =" + id);
-    				
-    				if(results.next())
+
+    				ResultSet results = dc.executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='" + user.getLogin() +"' AND RESTAURANTID='" + id + "';");
+     				
+    				if(results.next()) {
     					 model.put("isFavorite", true);
+    				}
     			}
     		}
     	
@@ -146,8 +153,13 @@ public class WebController extends AbstractExceptionController {
     
     @RequestMapping(value = {"VIEW"}, params = {"action=setFavorite"})
     public void setFavorite(ActionRequest request, ActionResponse response, @RequestParam(value = "id", required = true) String id) throws Exception {
-    	dc.executeUpdate("INSERT INTO FAVORITERESTAURANT (USER, RESTAURANTID) "
-    				   + "VALUES('" + authenticator.getUser().getLogin() +"', '"+ id +"')");
+    	User user = authenticator.getUser();
+    	try {
+    		dc.executeUpdate("INSERT INTO FAVORITERESTAURANT VALUES ('" + user.getLogin() + "', '" + id + "');");
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
     	response.setRenderParameter("id", id);
     	response.setRenderParameter("action", "viewRestaurant");    	
     }    
@@ -165,27 +177,36 @@ public class WebController extends AbstractExceptionController {
     		for(Restaurant r : flux.getFlux().getRestaurants()) {
     			areaList.add(r.getArea());
     		}
+    		
     		model.put("areas", areaList);
-        	
-        	PortletPreferences prefs = request.getPreferences();
-        	PortletSession sess = request.getPortletSession();
-        	String userArea = (String) sess.getAttribute("userArea");
-        	
-        	if(userArea != null && userArea.length() != 0) {
-        		model.put("defaultArea", userArea);
-        	} else {
-        		model.put("defaultArea", prefs.getValue("userArea", null));
-        	}
-        	
+    		
+    		String userArea = new String();
+    		try {
+    			ResultSet results = dc.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='"+user.getLogin()+"';");
+    			results.next();
+    			userArea = results.getString("AREANAME");
+    		} catch (SQLException e) {
+    			// here we are if the user doesn't already have a specific area setting.
+    			ResultSet results = dc.executeQuery("SELECT AREANAME FROM PATHFLUX");
+    			results.next();
+    			try {
+    				userArea = results.getString("AREANAME");
+    			} catch (SQLException e2) {
+    				// No default area for all user, admin must configure the portlet. 
+    				// No need to throw an exception
+    			}
+    			
+    		}
+    		model.put("defaultArea", userArea);
+    		
         	Set<String> favResults = new HashSet<String>();
         	try {
-        		ResultSet results = dc.executeQuery("SELECT RESTAURANTID FROM FAVORITERESTAURANT WHERE USER='"+ user.getLogin() +"'");
+        		ResultSet results = dc.executeQuery("SELECT RESTAURANTID FROM FAVORITERESTAURANT WHERE USERNAME='"+ user.getLogin() +"'");
         		while(results.next()) {
         			favResults.add(results.getString("restaurantId"));
         		}
-        		results.close();
         	} catch(Exception e) {
-        		System.out.println("On passe dans le Catch, la colonne demandé n'existe pas ???");
+        		// No data available, doesn't matter 
         	}
         	model.put("favList", favResults);	
        	
@@ -202,8 +223,18 @@ public class WebController extends AbstractExceptionController {
     
     @RequestMapping(value = {"EDIT"}, params = {"action=setUserArea"})
     public void setUserArea(ActionRequest request, ActionResponse response, @RequestParam(value = "zone", required = true) String area) throws Exception {
-    	PortletSession sess = request.getPortletSession();
-    	sess.setAttribute("userArea", area);
+
+    	User user = authenticator.getUser();
+    	
+    	try {
+    		ResultSet results = dc.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='" + user.getLogin() + "';");
+    		results.next();
+    		results.updateString("AREANAME", area);
+    		results.updateRow();
+    	} catch (SQLException e) {
+    		dc.executeUpdate("INSERT INTO USERAREA (USERNAME, AREANAME) VALUES ('"+user.getLogin()+"', '"+area+"');");
+    	}
+    	
     	response.setRenderParameter("zoneSubmit", "true");
     }
     
@@ -211,7 +242,7 @@ public class WebController extends AbstractExceptionController {
     public void removeFavorite(ActionRequest request, ActionResponse response, @RequestParam(value = "restaurant-id", required = true) String id) throws Exception {
     	dc.executeUpdate("DELETE FROM FAVORITERESTAURANT "
     				   + "WHERE RESTAURANTID=" + id 
-    				   +" AND USER='"+ authenticator.getUser().getLogin() +"'");
+    				   +" AND USERNAME='"+ authenticator.getUser().getLogin() +"'");
     }
     
     @RequestMapping(value = {"EDIT"}, params = {"action=adminSettings"})
@@ -222,7 +253,7 @@ public class WebController extends AbstractExceptionController {
     	
     	User user = authenticator.getUser();
     	model.put("user", user);
-    	    	
+    	
     	try {
         	
     		Set<String> areaList = new HashSet<String>();
@@ -231,8 +262,21 @@ public class WebController extends AbstractExceptionController {
     		}
     		model.put("areas", areaList);
         	
-        	PortletPreferences prefs = request.getPreferences();
-        	String area = prefs.getValue("defaultArea", null);
+    		ResultSet results = dc.executeQuery("SELECT URLFLUX, AREANAME FROM PATHFLUX");
+    		results.next();
+    		String area, urlflux;
+    		try {
+    			area = results.getString("AREANAME");
+    		} catch (SQLException e) {
+    			area = null;
+    		}
+    		try {
+    			urlflux = results.getString("URLFLUX");
+    		} catch (SQLException e) {
+    			urlflux = null;
+    		}
+
+        	model.put("urlfluxdb", urlflux);
         	model.put("defaultArea", area);
         	
     	} catch(NullPointerException e) {
@@ -270,6 +314,8 @@ public class WebController extends AbstractExceptionController {
     		flux.cacheJsonString();
     		response.setRenderParameter("urlError", "false");
     		
+    		// If URL is correct, then we can insert this into the database. 
+    		
     		try {
     			ResultSet results = dc.executeQuery("SELECT URLFLUX FROM PATHFLUX");
     			results.next();
@@ -278,9 +324,7 @@ public class WebController extends AbstractExceptionController {
     		} catch (SQLException e) {
     			System.out.println("[INFO] URL isn't set, we insert a new ROW to the PATHFLUX table.");
     			dc.executeUpdate("INSERT INTO PATHFLUX (URLFLUX) VALUES ('"+ url +"')");
-    		}
-    		
-    		
+    		}    		
     	} catch(MalformedURLException e) {
     		response.setRenderParameter("urlError", "true");
     	}

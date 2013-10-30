@@ -17,11 +17,7 @@ public class DatabaseConnector {
 	private DatabaseConnector() {
 		try {
 			Class.forName("org.hsqldb.jdbcDriver").newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		try {
@@ -37,7 +33,7 @@ public class DatabaseConnector {
 			e.printStackTrace();
 		}
 		this.createTables();
-		this.instance = this;
+		DatabaseConnector.instance = this;
 	}
 	
 	public static DatabaseConnector getInstance() {
@@ -46,11 +42,16 @@ public class DatabaseConnector {
 		return instance;
 	}
 	
-	public void createTables() {
+	public void createTables() {		
 		try {
-			statement.executeUpdate("CREATE TABLE FAVORITERESTAURANT(USER VARCHAR(100), RESTAURANTID INT)");
+			statement.executeUpdate("CREATE TABLE FAVORITERESTAURANT(USERNAME VARCHAR(100), RESTAURANTID VARCHAR(100))");
 		} catch (SQLException e) {
 			System.out.println("[INFO] Table favoriteRestaurant already exist");
+		}
+		try {
+			statement.executeUpdate("CREATE TABLE USERAREA (USERNAME VARCHAR(500), AREANAME VARCHAR(200))");
+		} catch (SQLException e) {
+			System.out.println("[INFO] Table USERAREA already exist");
 		}
 		try {
 			statement.executeUpdate("CREATE TABLE PATHFLUX (URLFLUX VARCHAR(500), AREANAME VARCHAR(200))");

@@ -2,8 +2,6 @@
 
 <portlet:renderURL var="renderRefreshUrl" />
 
-${results}
-
 <div class="restaurant-portlet">
 	
 	<h1>Paramètres</h1>
@@ -11,7 +9,6 @@ ${results}
 	<a href="<portlet:renderURL portletMode="view"/>">
 		<spring:message code="go.back.home"/>
 	</a>
-	
 	<c:if test="${!user.admin}">
 		<h2>
 			<portlet:renderURL var="adminSettings">
@@ -23,7 +20,6 @@ ${results}
 			</a>
 		</h2>
 	</c:if>
-	
 ${nothingToDisplay}
 
 <c:if test="${empty nothingToDisplay}">

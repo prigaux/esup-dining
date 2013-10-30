@@ -56,7 +56,7 @@ ${nothingToDisplay}
 			<fieldset>
 				<legend>URL du flux</legend>
 				<label for="field-url">URL : </label>
-				<input type="text" id="field-url" name="url" value="${urlFluxCache}"/>
+				<input type="text" id="field-url" name="url" value="${urlfluxdb}"/>
 				<c:if test="${urlError == 'true'}">
 					<label style="color: #FF0000; font-weight: bold;">
 						<spring:message code="edit.msg.urlerror"/>
