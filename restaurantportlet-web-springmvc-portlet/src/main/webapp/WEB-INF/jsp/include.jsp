@@ -7,6 +7,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
 <portlet:defineObjects/>
 
 <c:set var="n"><portlet:namespace/></c:set>

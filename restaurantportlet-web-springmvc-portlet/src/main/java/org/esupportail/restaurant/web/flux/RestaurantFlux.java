@@ -148,7 +148,7 @@ public class RestaurantFlux implements Serializable {
 	
 		if(this.equals(newRf)) 
 			return false;
-	
+		
 		this.setPath(this.path);
 		return true;
 	}

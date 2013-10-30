@@ -9,11 +9,11 @@ ${nothingToDisplay}
 	<h1>
 		<spring:message code="view.list.title"/> ${area}
 	</h1>
-	
+
 	<div id="gmaps-container" style="width:100%; height:300px;"></div>
 	
 	<c:if test="${not empty dininghalls}">
-	<ul>
+	<ul class="dininghall-list">
 	<c:forEach var="dininghall" items="${dininghalls}">
 		<li>
 			<portlet:renderURL var="viewRestaurant">
@@ -26,11 +26,12 @@ ${nothingToDisplay}
 		</li>
 	</c:forEach>
 	</ul>
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true">s</script>
 	<script type="text/javascript">
 		var map;
 			
 		var diningHalls = new Array();
+		var diningHallsLatLng = new Array();
+
 		<c:forEach var="dininghall" items="${dininghalls}">
 			<portlet:renderURL var="viewRestaurantFromMaker">
   				<portlet:param name="action" value="viewRestaurant"/>
@@ -52,8 +53,12 @@ ${nothingToDisplay}
 		    map = new google.maps.Map(document.getElementById("gmaps-container"), mapOptions);
 		   
 		    for(var i=0; i<diningHalls.length; i++) {
+		    	var diningHallPosition = new google.maps.LatLng(diningHalls[i][1],diningHalls[i][2]);
+
+		    	diningHallsLatLng.push(diningHallPosition);
+
 		    	var mark = new google.maps.Marker({
-			        position: new google.maps.LatLng(diningHalls[i][1],diningHalls[i][2]),
+			        position: diningHallPosition,
 			        map: map,
 			        title:diningHalls[i][0],
 			        icon: "<%= renderRequest.getContextPath() + "/images/pin_resto.png" %>"
@@ -71,6 +76,56 @@ ${nothingToDisplay}
 				map.setCenter(myLatlng);
 			}
 		}
+
+		$(document).ready(function() {
+			if(navigator.geolocation) {
+
+				$("<button class='get-located'>Se localiser</button>").prependTo($(".restaurant-portlet"));
+				$(".get-located").click(function(e) {
+					navigator.geolocation.getCurrentPosition(distanceCalculator, positionUndefined);
+					e.preventDefault();
+				});
+			}
+		});
+
+		function distanceCalculator(position) {
+
+			var origin = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+			var mark = new google.maps.Marker({
+		        position: origin,
+		        map: map,
+		        title:"Ma position actuelle"
+		    });
+
+			map.setCenter(origin);
+			map.setZoom(14);
+
+			var service = new google.maps.DistanceMatrixService();
+
+			service.getDistanceMatrix({
+				origins : [origin],
+				destinations : diningHallsLatLng,
+				travelMode : google.maps.TravelMode.DRIVING,
+				unitSystem : google.maps.UnitSystem.METRIC,
+				durationInTraffic : true,
+				avoidHighways : false,
+				avoidTolls : false
+			}, sortByDistance);
+		}
+
+		function sortByDistance(response, status) {
+			var results = response.rows[0].elements;
+			var $diningHallList = $(".dininghall-list li");
+			for(var i=0; i<results.length; i++) {
+				$diningHallList.eq(i).append("- Distance : " + results[i].distance.text);
+			}
+		}
+
+		function positionUndefined(err) {
+			console.error(err);
+		}
+
 	</script>
 	</c:if>
 	<c:if test="${empty dininghalls}">

@@ -209,17 +209,15 @@ public class WebController extends AbstractExceptionController {
         	}
         	model.put("favList", favResults);
         	
-        	// We have to use an iterator because you can't loop on a list and remove item on it
-        	List<Restaurant> listFavRestaurant = flux.getFlux().getRestaurants();
-        	Iterator<Restaurant> iter = listFavRestaurant.iterator();
-        	while(iter.hasNext()) {
-        		Restaurant r = (Restaurant) iter.next();
-        		boolean isFavorite = false;
+        	List<Restaurant> listRestaurant = flux.getFlux().getRestaurants();
+        	List<Restaurant> listFavRestaurant = new ArrayList<Restaurant>();
+        
+        	for(Restaurant r : listRestaurant) {
         		for(String favId : favResults) {
-        			if(r.getId() == Integer.parseInt(favId, 10)) isFavorite = true;
+        			if(r.getId() == Integer.parseInt(favId, 10)) listFavRestaurant.add(r);
         		}
-        		if(!isFavorite) iter.remove();
         	}
+
         	model.put("listFavRestaurant", listFavRestaurant);
        	
     	} catch(NullPointerException e) {
@@ -244,6 +242,7 @@ public class WebController extends AbstractExceptionController {
     		results.updateString("AREANAME", area);
     		results.updateRow();
     	} catch (SQLException e) {
+    		System.out.println("On est dans le catch -> set User Area");
     		dc.executeUpdate("INSERT INTO USERAREA (USERNAME, AREANAME) VALUES ('"+user.getLogin()+"', '"+area+"');");
     	}
     	
@@ -270,6 +269,7 @@ public class WebController extends AbstractExceptionController {
         	
     		Set<String> areaList = new HashSet<String>();
     		for(Restaurant r : flux.getFlux().getRestaurants()) {
+    			System.out.println(r.getArea());
     			areaList.add(r.getArea());
     		}
     		model.put("areas", areaList);
@@ -302,18 +302,6 @@ public class WebController extends AbstractExceptionController {
     	String zoneSubmit = request.getParameter("zoneSubmit");
     	if(zoneSubmit != null)
     		model.put("zoneSubmit", zoneSubmit);
-    	/*
-    	 * 
-    	 * 
-    	 * 
-    	 * 
-    	 * 
-    	 * #### BUGGY CONDITION
-    	 * 
-    	 * 
-    	 * 
-    	 */
-    	
     	
     	String feedUpdate = request.getParameter("feedUpdate");
     	if(feedUpdate != null) {
@@ -369,9 +357,15 @@ public class WebController extends AbstractExceptionController {
     @RequestMapping(value = {"EDIT"}, params = {"action=forceFeedUpdate"})
     public void feedUpdate(ActionRequest request, ActionResponse response) throws Exception {
     	
-    	String needUpdate = new Boolean(flux.update()).toString();
+    	boolean needUpdate = flux.update();
     	
-    	response.setRenderParameter("feedUpdate", needUpdate);
+    	if(needUpdate) {
+    		
+    	}
+    	
+    	//String needUpdate = new Boolean(flux.update()).toString();
+    	
+    	//response.setRenderParameter("feedUpdate", needUpdate);
     	response.setRenderParameter("action", "adminSettings");
     }
     

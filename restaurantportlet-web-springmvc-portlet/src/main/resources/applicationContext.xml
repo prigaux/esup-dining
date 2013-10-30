@@ -43,17 +43,38 @@
 	<bean id="requiredAnnotationBeanPostProcessor" class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
 	
 	<import resource="classpath*:META-INF/restaurantportlet-domain-services-auth.xml" />
-	
-	<!-- EhCache : Start -->
-	<bean id="cacheManager"
-	    scope="singleton"
-	    class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-	    <description>
-	        This bean is used to configure EhCache.
-	    </description>
-	    <property name="configLocation" value="classpath:cache/ehcache.xml" />
-	</bean>
 	 
 	 <bean id="flux" class="org.esupportail.restaurant.web.flux.RestaurantFlux"/>
+		<!-- SchedulerFactoryBean throw an exception
+			Need to find why, and fix it.	
+		 -->
+		<!--
+	<bean name="QuartzUpdateJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="org.esupportail.restaurant.web.quartz.QuartzUpdateJob" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="flux" value-ref="flux" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="QuartzUpdateJob" />
+		<property name="repeatInterval" value="5000" />
+		<property name="startDelay" value="5000" />
+	</bean>
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+		   <list>
+		      <ref bean="QuartzUpdateJob" />
+		   </list>
+		</property>
+		<property name="triggers">
+		    <list>
+			<ref bean="simpleTrigger" />
+		    </list>
+		</property>
+	</bean>
 	 
+		 -->
 </beans>
