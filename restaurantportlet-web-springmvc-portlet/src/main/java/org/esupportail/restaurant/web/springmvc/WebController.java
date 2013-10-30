@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.lang.Boolean;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -301,6 +302,27 @@ public class WebController extends AbstractExceptionController {
     	String zoneSubmit = request.getParameter("zoneSubmit");
     	if(zoneSubmit != null)
     		model.put("zoneSubmit", zoneSubmit);
+    	/*
+    	 * 
+    	 * 
+    	 * 
+    	 * 
+    	 * 
+    	 * #### BUGGY CONDITION
+    	 * 
+    	 * 
+    	 * 
+    	 */
+    	
+    	
+    	String feedUpdate = request.getParameter("feedUpdate");
+    	if(feedUpdate != null) {
+    		if(Boolean.parseBoolean(feedUpdate)) {
+    			model.put("updateFeed", "The feed has been correctly updated");
+    		} else {
+        		model.put("updateFeed", "The feed is already up to date");
+        	}
+    	} 
     	
     	return new ModelAndView("edit-admin", model);
     }
@@ -342,6 +364,15 @@ public class WebController extends AbstractExceptionController {
     	} catch(MalformedURLException e) {
     		response.setRenderParameter("urlError", "true");
     	}
+    }
+    
+    @RequestMapping(value = {"EDIT"}, params = {"action=forceFeedUpdate"})
+    public void feedUpdate(ActionRequest request, ActionResponse response) throws Exception {
+    	
+    	String needUpdate = new Boolean(flux.update()).toString();
+    	
+    	response.setRenderParameter("feedUpdate", needUpdate);
+    	response.setRenderParameter("action", "adminSettings");
     }
     
     @RequestMapping("ABOUT")

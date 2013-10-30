@@ -138,6 +138,21 @@ public class RestaurantFlux implements Serializable {
 		this.flux = flux;
 	}
 	
+	public boolean update() {
+		
+		if(this.path == null) 
+			return false;
+		
+		RestaurantFlux newRf = new RestaurantFlux();
+		newRf.setPath(this.path);
+	
+		if(this.equals(newRf)) 
+			return false;
+	
+		this.setPath(this.path);
+		return true;
+	}
+	
 	public boolean equals(Object o) {
 		boolean retour = false;
 		if(o instanceof RestaurantFlux) {
@@ -151,5 +166,4 @@ public class RestaurantFlux implements Serializable {
 	public String toString() {
 		return this.jsonStringified;
 	}
-	
 }
