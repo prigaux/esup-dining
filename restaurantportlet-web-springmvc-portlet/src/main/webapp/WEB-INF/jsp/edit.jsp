@@ -54,18 +54,18 @@ ${nothingToDisplay}
 	</form>
 </c:if>
 
-<c:if test="${not empty favList}">
+<c:if test="${not empty listFavRestaurant}">
 	<portlet:actionURL var="removeFavorite">
 	  <portlet:param name="action" value="removeFavorite"/>
 	</portlet:actionURL>
 	<form method="POST" action="${removeFavorite}">
 	<fieldset>
 		<legend>Vos restaurant favoris</legend>
-		<c:forEach var="restaurant" items="${favList}">
+		<c:forEach var="restaurant" items="${listFavRestaurant}">
 
-			<label for="field-restaurant-${restaurant}" style="display:block; padding: 10px 0; border-bottom: 1px solid #333;">
-				${restaurant}
-				<input type="radio" name="restaurant-id" id="field-restaurant-${restaurant}" value="${restaurant}"/>
+			<label for="field-restaurant-${restaurant.id}" style="display:block; padding: 10px 0; border-bottom: 1px solid #333;">
+				${restaurant.title}
+				<input type="radio" name="restaurant-id" id="field-restaurant-${restaurant.id}" value="${restaurant.id}"/>
 			</label>
 
 		</c:forEach>

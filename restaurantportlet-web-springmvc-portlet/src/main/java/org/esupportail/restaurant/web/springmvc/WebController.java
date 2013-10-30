@@ -9,15 +9,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Resource;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletPreferences;
-import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -209,7 +206,20 @@ public class WebController extends AbstractExceptionController {
         	} catch(Exception e) {
         		// No data available, doesn't matter 
         	}
-        	model.put("favList", favResults);	
+        	model.put("favList", favResults);
+        	
+        	// We have to use an iterator because you can't loop on a list and remove item on it
+        	List<Restaurant> listFavRestaurant = flux.getFlux().getRestaurants();
+        	Iterator<Restaurant> iter = listFavRestaurant.iterator();
+        	while(iter.hasNext()) {
+        		Restaurant r = (Restaurant) iter.next();
+        		boolean isFavorite = false;
+        		for(String favId : favResults) {
+        			if(r.getId() == Integer.parseInt(favId, 10)) isFavorite = true;
+        		}
+        		if(!isFavorite) iter.remove();
+        	}
+        	model.put("listFavRestaurant", listFavRestaurant);
        	
     	} catch(NullPointerException e) {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");

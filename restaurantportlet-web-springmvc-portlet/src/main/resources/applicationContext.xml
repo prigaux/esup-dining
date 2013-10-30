@@ -15,7 +15,7 @@
 			</list>
 		</property>
 	</bean>
-	
+		
 	<bean id="DatabaseConnector" class="org.esupportail.restaurant.web.dao.DatabaseConnector"
 		  scope="singleton" />
 	
