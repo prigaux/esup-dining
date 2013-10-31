@@ -87,6 +87,7 @@
 
 												<portlet:renderURL var="viewDish">
 													<portlet:param name="action" value="viewDish"/>
+													<portlet:param name="id" value="${restaurant.id}"/>
 													<portlet:param name="name" value="${dish.name}"/>
 													<portlet:param name="ingredients" value="${dish.ingredients}"/>
 													<portlet:param name="nutritionitems" value="${dish.nutritionitems}"/>

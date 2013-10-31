@@ -2,6 +2,24 @@
 
 <div class="restaurant-portlet">
 
+	<p>
+		<portlet:renderURL var="viewRestaurant">
+			<portlet:param name="action" value="viewRestaurant"/>
+			<portlet:param name="id" value="${restaurantId}"/>
+		</portlet:renderURL>
+		<a href="${viewRestaurant}">
+			<spring:message code="restaurant.link.back"/>
+		</a>
+		|
+		<portlet:renderURL var="viewMeals">
+			<portlet:param name="action" value="viewMeals" />
+			<portlet:param name="id" value="${restaurantId}" />
+		</portlet:renderURL>
+		<a href="${viewMeals}">
+			<spring:message code="restaurant.link.viewMeals"/>
+		</a>
+
+	</p>
 	<h1>
 		${name}
 	</h1>

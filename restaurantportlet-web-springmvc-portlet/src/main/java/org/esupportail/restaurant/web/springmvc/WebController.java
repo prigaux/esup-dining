@@ -141,7 +141,6 @@ public class WebController extends AbstractExceptionController {
     						menuList.add(m);
     					}
     				}
-    				System.out.println(menuList);
     				model.put("menus", menuList);	
     			}
     		}
@@ -173,11 +172,13 @@ public class WebController extends AbstractExceptionController {
 			   @RequestParam(value = "name", required = true) String name,
 			   @RequestParam(value = "ingredients", required = false) String ingredients,
 			   @RequestParam(value = "nutritionitems", required = false) String nutritionitems,
-			   @RequestParam(value = "code", required = false) String code) throws Exception {
+			   @RequestParam(value = "code", required = false) String code,
+			   @RequestParam(value = "id", required=true) int id) throws Exception {
     	
     	
     	ModelMap model = new ModelMap();
     	
+    	model.put("restaurantId", id);
     	model.put("name", name);
     	model.put("ingredients", ingredients);
     	model.put("code", code.substring(1, code.length()-1).split(","));
