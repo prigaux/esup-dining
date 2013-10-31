@@ -8,21 +8,25 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.lang.Boolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
 import org.esupportail.restaurant.web.flux.RestaurantFlux;
+import org.esupportail.restaurant.web.json.Dish;
 import org.esupportail.restaurant.web.json.Manus;
 import org.esupportail.restaurant.web.json.Restaurant;
 import org.esupportail.restaurant.web.json.RestaurantFeedRoot;
@@ -137,6 +141,7 @@ public class WebController extends AbstractExceptionController {
     						menuList.add(m);
     					}
     				}
+    				System.out.println(menuList);
     				model.put("menus", menuList);	
     			}
     		}
@@ -162,6 +167,43 @@ public class WebController extends AbstractExceptionController {
     	response.setRenderParameter("id", id);
     	response.setRenderParameter("action", "viewRestaurant");    	
     }    
+   
+    @RequestMapping(value = {"VIEW"}, params = {"action=viewDish"})
+    public ModelAndView renderDish(RenderRequest request, RenderResponse response, 
+			   @RequestParam(value = "name", required = true) String name,
+			   @RequestParam(value = "ingredients", required = false) String ingredients,
+			   @RequestParam(value = "nutritionitems", required = false) String nutritionitems,
+			   @RequestParam(value = "code", required = false) String code) throws Exception {
+    	
+    	
+    	ModelMap model = new ModelMap();
+    	
+    	model.put("name", name);
+    	model.put("ingredients", ingredients);
+    	model.put("code", code.substring(1, code.length()-1).split(","));
+    	
+    	/* Awful code starts now */
+    	// Need to find an other solution... a cleaner one.
+    	
+    	String str = nutritionitems.substring(1, nutritionitems.length()-1);		
+		List<Map<String, String>> listNutritionItems = new ArrayList<Map<String, String>>();
+		Pattern p = Pattern.compile("\\[(.*?)\\]");
+		Matcher m = p.matcher(str);
+		while(m.find()) {
+			Map<String, String> entry = new HashMap<String, String>();
+			for(String s2 : m.group(1).split(",")) {
+				String[] keyValue = s2.split("=");
+				entry.put(keyValue[0], keyValue[1]);
+			}
+			listNutritionItems.add(entry);
+		}
+			
+		/* Awful code ends now */
+    	
+    	model.put("nutritionitems", listNutritionItems);
+    	
+    	return new ModelAndView("dish", model);
+    }
     
     @RequestMapping("EDIT")
     public ModelAndView renderEditView(RenderRequest request, RenderResponse response) throws Exception {

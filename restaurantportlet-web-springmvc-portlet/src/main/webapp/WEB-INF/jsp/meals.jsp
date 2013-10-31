@@ -84,37 +84,29 @@
 									<ul>
 										<c:forEach var="dish" items="${foodCategory.dishes}">
 											<li>
-												${dish.name}
-												<c:if test="${not empty dish.ingredients}">
-													<ul>
-														<li>
-															<strong>
-																<spring:message code="meal.ingredients"/> :
-															</strong>
-															${dish.ingredients}
-														</li>
-													</ul>
+
+												<portlet:renderURL var="viewDish">
+													<portlet:param name="action" value="viewDish"/>
+													<portlet:param name="name" value="${dish.name}"/>
+													<portlet:param name="ingredients" value="${dish.ingredients}"/>
+													<portlet:param name="nutritionitems" value="${dish.nutritionitems}"/>
+													<portlet:param name="code" value="${dish.code}"/>
+												</portlet:renderURL>
+
+												<c:if test="${not empty dish.code or not empty dish.ingredients or not empty dish.nutritionitems}">
+												<a href="${viewDish}">
 												</c:if>
-												
+													${dish.name}
+												<c:if test="${not empty dish.code or not empty dish.ingredients or not empty dish.nutritionitems}">
+												</a>
+												</c:if>	
 												<c:if test="${not empty dish.code}">
-													<ul><li>
 														<c:forEach var="codeNumber" items="${dish.code}">
 															<img src="<%= renderRequest.getContextPath() %><spring:message code="meal.code.${codeNumber}.img" />"
 															     alt="<spring:message code="meal.code.${codeNumber}.description" />"
 																 title="<spring:message code="meal.code.${codeNumber}.name" />"
 															/>									
 														</c:forEach>
-													</ul></li>
-												</c:if>
-												
-												<c:if test="${not empty dish.nutritionitems}">
-													<ul>
-														<c:forEach var="nutritionitem" items="${dish.nutritionitems}">
-															<li>
-																<strong>${nutritionitem.name}</strong> : ${nutritionitem.value}
-															</li>
-														</c:forEach>
-													</ul>
 												</c:if>
 			
 											</li>
