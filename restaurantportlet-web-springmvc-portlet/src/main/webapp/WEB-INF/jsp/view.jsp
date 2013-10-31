@@ -90,16 +90,23 @@ ${nothingToDisplay}
 
 		function distanceCalculator(position) {
 
+			// If geolocation succeeded, we create a maker to the user position
+
 			var origin = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
 			var mark = new google.maps.Marker({
 		        position: origin,
 		        map: map,
-		        title:"Ma position actuelle"
+		        title:"Ma position actuelle",
+		        zIndex : 99
 		    });
+
+			// We center the map at his place
 
 			map.setCenter(origin);
 			map.setZoom(14);
+
+			// And calculate the distance from his place to all other dining hall in his area
 
 			var service = new google.maps.DistanceMatrixService();
 
@@ -116,10 +123,23 @@ ${nothingToDisplay}
 
 		function sortByDistance(response, status) {
 			var results = response.rows[0].elements;
-			var $diningHallList = $(".dininghall-list li");
-			for(var i=0; i<results.length; i++) {
-				$diningHallList.eq(i).append("- Distance : " + results[i].distance.text);
-			}
+			var $diningHallList = $(".dininghall-list");
+
+			$diningHallList.find('li').each(function(index) {
+				$(this).append("- Distance : " + results[index].distance.text);
+				$(this).attr('data-distance', results[index].distance.value);
+			});
+
+			var listItems = $diningHallList.find('li').sort(function(a,b){ 
+				return $(a).attr('data-distance') - $(b).attr('data-distance'); 
+			});
+			$diningHallList.find('li').remove();
+			$diningHallList.append(listItems);
+
+
+			/*$diningHallList.find('.li').sort(function (a, b) {
+			    return +parseInt(a.getAttribute('data-distance'), 10)- +parseInt(b.getAttribute('data-distance'), 10);
+			}).appendTo( $diningHallList );*/
 		}
 
 		function positionUndefined(err) {

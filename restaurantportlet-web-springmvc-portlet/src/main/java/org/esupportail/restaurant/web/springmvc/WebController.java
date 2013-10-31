@@ -242,7 +242,6 @@ public class WebController extends AbstractExceptionController {
     		results.updateString("AREANAME", area);
     		results.updateRow();
     	} catch (SQLException e) {
-    		System.out.println("On est dans le catch -> set User Area");
     		dc.executeUpdate("INSERT INTO USERAREA (USERNAME, AREANAME) VALUES ('"+user.getLogin()+"', '"+area+"');");
     	}
     	
@@ -269,7 +268,6 @@ public class WebController extends AbstractExceptionController {
         	
     		Set<String> areaList = new HashSet<String>();
     		for(Restaurant r : flux.getFlux().getRestaurants()) {
-    			System.out.println(r.getArea());
     			areaList.add(r.getArea());
     		}
     		model.put("areas", areaList);
@@ -356,7 +354,7 @@ public class WebController extends AbstractExceptionController {
     
     @RequestMapping(value = {"EDIT"}, params = {"action=forceFeedUpdate"})
     public void feedUpdate(ActionRequest request, ActionResponse response) throws Exception {
-    	
+    	/*
     	boolean needUpdate = flux.update();
     	
     	if(needUpdate) {
@@ -366,6 +364,8 @@ public class WebController extends AbstractExceptionController {
     	//String needUpdate = new Boolean(flux.update()).toString();
     	
     	//response.setRenderParameter("feedUpdate", needUpdate);
+    	 * 
+    	 */
     	response.setRenderParameter("action", "adminSettings");
     }
     

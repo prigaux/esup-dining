@@ -190,9 +190,6 @@
 			</h2>
 			
 			<div id="map-canvas" style="width:100%; height: 300px;"></div>
-			<script type="text/javascript"
-			  src="https://maps.googleapis.com/maps/api/js?sensor=true">
-			</script>
 			<script type="text/javascript">
 			function initialize() {
 			    var myLatlng = new google.maps.LatLng(${restaurant.lat}, ${restaurant.lon});

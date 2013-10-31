@@ -21,6 +21,13 @@
 	.tab-header .ui-state-active {
 		background: #FFF;
 	}
+
+	.accordion-title {
+		padding: .5em 1em;
+		background: #DDD;
+		border-bottom: 2px solid #AAA;
+	}
+
 </style>
 
 <div class="restaurant-portlet">
@@ -58,63 +65,65 @@
 					<h2>
 						${menu.date}
 					</h2>
-	
-					<c:forEach var="meal" items="${menu.meal}">
-	
-						<h3>
-							${meal.name}
-						</h3>
-	
-						<c:forEach var="foodCategory" items="${meal.foodcategory}">
-	
-							<h4>
-								${foodCategory.name}
-							</h4>
-							
-							<ul>
-								<c:forEach var="dish" items="${foodCategory.dishes}">
-									<li>
-										${dish.name}
-										<c:if test="${not empty dish.ingredients}">
-											<ul>
-												<li>
-													<strong>
-														<spring:message code="meal.ingredients"/> :
-													</strong>
-													${dish.ingredients}
-												</li>
-											</ul>
-										</c:if>
-										
-										<c:if test="${not empty dish.code}">
-											<ul><li>
-												<c:forEach var="codeNumber" items="${dish.code}">
-													<img src="<%= renderRequest.getContextPath() %><spring:message code="meal.code.${codeNumber}.img" />"
-													     alt="<spring:message code="meal.code.${codeNumber}.description" />"
-														 title="<spring:message code="meal.code.${codeNumber}.name" />"
-													/>									
-												</c:forEach>
-											</ul></li>
-										</c:if>
-										
-										<c:if test="${not empty dish.nutritionitems}">
-											<ul>
-												<c:forEach var="nutritionitem" items="${dish.nutritionitems}">
-													<li>
-														<strong>${nutritionitem.name}</strong> : ${nutritionitem.value}
-													</li>
-												</c:forEach>
-											</ul>
-										</c:if>
-	
-									</li>
+					<div class="meals-accordion">
+						
+						<c:forEach var="meal" items="${menu.meal}">
+		
+							<h3 class="accordion-title">
+								${meal.name}
+							</h3>
+
+							<div class="meal-container" style="height: auto !important;">
+
+								<c:forEach var="foodCategory" items="${meal.foodcategory}">
+			
+									<h4>
+										${foodCategory.name}
+									</h4>
+									
+									<ul>
+										<c:forEach var="dish" items="${foodCategory.dishes}">
+											<li>
+												${dish.name}
+												<c:if test="${not empty dish.ingredients}">
+													<ul>
+														<li>
+															<strong>
+																<spring:message code="meal.ingredients"/> :
+															</strong>
+															${dish.ingredients}
+														</li>
+													</ul>
+												</c:if>
+												
+												<c:if test="${not empty dish.code}">
+													<ul><li>
+														<c:forEach var="codeNumber" items="${dish.code}">
+															<img src="<%= renderRequest.getContextPath() %><spring:message code="meal.code.${codeNumber}.img" />"
+															     alt="<spring:message code="meal.code.${codeNumber}.description" />"
+																 title="<spring:message code="meal.code.${codeNumber}.name" />"
+															/>									
+														</c:forEach>
+													</ul></li>
+												</c:if>
+												
+												<c:if test="${not empty dish.nutritionitems}">
+													<ul>
+														<c:forEach var="nutritionitem" items="${dish.nutritionitems}">
+															<li>
+																<strong>${nutritionitem.name}</strong> : ${nutritionitem.value}
+															</li>
+														</c:forEach>
+													</ul>
+												</c:if>
+			
+											</li>
+										</c:forEach>
+									</ul>
 								</c:forEach>
-							</ul>
-	
+							</div>
 						</c:forEach>
-	
-					</c:forEach>
-	
+					</div>
 				</div>
 	
 			</c:forEach>
@@ -124,9 +133,8 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script type="text/javascript">
-<rs:compressJs>
 	$(document).ready(function() {
 		$(".menus").tabs();
+		$(".meals-accordion").accordion();
 	});
-</rs:compressJs>
 </script>
