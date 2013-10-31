@@ -1,0 +1,14 @@
+/* Theme relative CSS */ 
+
+.icn-fam-back {
+	background-image: url("../images/resultset_previous.png");
+}
+.icn-fam-meal {
+	background-image: url("../images/script.png");
+}
+.icn-fam-fav {
+	background-image: url("../images/star.png");
+}
+.icn-fam-infos {
+	background-image: url("../images/information.png");
+}

@@ -397,9 +397,9 @@ public class WebController extends AbstractExceptionController {
     
     @RequestMapping(value = {"EDIT"}, params = {"action=forceFeedUpdate"})
     public void feedUpdate(ActionRequest request, ActionResponse response) throws Exception {
-    	/*
-    	boolean needUpdate = flux.update();
     	
+    	boolean needUpdate = flux.update();
+    	/*
     	if(needUpdate) {
     		
     	}
@@ -421,6 +421,8 @@ public class WebController extends AbstractExceptionController {
     @RequestMapping("HELP")
     public ModelAndView renderHelpView(RenderRequest request, RenderResponse response) throws Exception {
     	ModelMap model = new ModelMap();
+		int[] code = {1,2,3,4,5,6,7,9,10,11,12,13,14,15};
+		model.put("code", code);
     	return new ModelAndView("help", model);
     }
 }

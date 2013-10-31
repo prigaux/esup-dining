@@ -1,0 +1,64 @@
+/* I. General styles */
+
+	img {
+		max-width: 100%;
+	}
+	#map-canvas img {
+		width: auto !important;
+		max-width: auto;
+	}
+	#map-canvas {
+		width: 100%;
+		height: 350px;
+	}
+	
+	.ta-center {
+		text-align: center;
+	}
+
+/* icon set */
+
+.icn-fam {
+	background-position: 0 center;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+
+
+/* Don't look beyond this point... it looks horrible ! */
+
+#opening {
+	width: 100%;
+	text-align: center;
+}
+#opening th {
+	font-weight: bold;
+}
+
+
+.tab-header {
+	display: table;
+	padding: 0;
+	width: 100%;
+}
+.tab-header li {
+	display: table-cell;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	text-align: center;
+	background: #DDD;
+}
+.tab-header a {
+	padding: .5em 0;
+	display: block;
+}
+.tab-header .ui-state-active {
+	background: #FFF;
+}
+
+.accordion-title {
+	padding: .5em 1em;
+	background: #DDD;
+	border-bottom: 2px solid #AAA;
+}

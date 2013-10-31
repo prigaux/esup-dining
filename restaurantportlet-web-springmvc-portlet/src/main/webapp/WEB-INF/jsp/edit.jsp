@@ -1,12 +1,10 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/header.jsp"%>
 
 <portlet:renderURL var="renderRefreshUrl" />
-
-<div class="restaurant-portlet">
 	
 	<h1>Paramètres</h1>
 	
-	<a href="<portlet:renderURL portletMode="view"/>">
+	<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
 		<spring:message code="go.back.home"/>
 	</a>
 	<c:if test="${!user.admin}">
@@ -75,5 +73,5 @@ ${nothingToDisplay}
 </c:if>
 </c:if>
 	
-</div>
+<%@ include file="/WEB-INF/jsp/footer.jsp"%>
 

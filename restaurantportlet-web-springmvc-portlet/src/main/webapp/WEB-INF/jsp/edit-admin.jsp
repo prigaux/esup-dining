@@ -1,15 +1,13 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/header.jsp"%>
 
 <portlet:renderURL var="renderRefreshUrl" />
-
-<div class="restaurant-portlet">
 	
 	<h1>Paramètres</h1>
 
-	<a href="<portlet:renderURL portletMode="edit"/>">
+	<a href="<portlet:renderURL portletMode="edit"/>" class="icn-fam icn-fam-back">
 		<spring:message code="edit.admin.back"/>
 	</a> - 	
-	<a href="<portlet:renderURL portletMode="view"/>">
+	<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
 		<spring:message code="go.back.home"/>
 	</a>
 	
@@ -88,5 +86,4 @@ ${nothingToDisplay}
 		Vous n'avez pas accès à cette page car vous n'êtes pas administrateur
 	</c:if>
 
-</div>
-
+<%@ include file="/WEB-INF/jsp/footer.jsp"%>

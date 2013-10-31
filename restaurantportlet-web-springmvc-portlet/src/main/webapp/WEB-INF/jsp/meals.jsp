@@ -1,36 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
-
-<style type="text/css">
-	.tab-header {
-		display: table;
-		padding: 0;
-		width: 100%;
-	}
-	.tab-header li {
-		display: table-cell;
-		padding: 0;
-		margin: 0;
-		list-style: none;
-		text-align: center;
-		background: #DDD;
-	}
-	.tab-header a {
-		padding: .5em 0;
-		display: block;
-	}
-	.tab-header .ui-state-active {
-		background: #FFF;
-	}
-
-	.accordion-title {
-		padding: .5em 1em;
-		background: #DDD;
-		border-bottom: 2px solid #AAA;
-	}
-
-</style>
-
-<div class="restaurant-portlet">
+<%@ include file="/WEB-INF/jsp/header.jsp"%>
 	
 	${nothingToDisplay}
 
@@ -45,7 +13,7 @@
 				<portlet:param name="action" value="viewRestaurant"/>
 				<portlet:param name="id" value="${restaurant.id}"/>
 		</portlet:renderURL>
-		<a href="${viewRestaurant}">
+		<a href="${viewRestaurant}" class="icn-fam icn-fam-back">
 			<spring:message code="restaurant.link.back"/>
 		</a>
 	
@@ -95,7 +63,7 @@
 												</portlet:renderURL>
 
 												<c:if test="${not empty dish.code or not empty dish.ingredients or not empty dish.nutritionitems}">
-												<a href="${viewDish}">
+												<a href="${viewDish}" class="icn-fam icn-fam-infos">
 												</c:if>
 													${dish.name}
 												<c:if test="${not empty dish.code or not empty dish.ingredients or not empty dish.nutritionitems}">
@@ -122,12 +90,12 @@
 			</c:forEach>
 		</div>
 	</c:if>	
-</div>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		$(".menus").tabs();
 		$(".meals-accordion").accordion();
 	});
 </script>
+
+<%@ include file="/WEB-INF/jsp/footer.jsp"%>
