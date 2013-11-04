@@ -44,7 +44,21 @@
 	
 	<import resource="classpath*:META-INF/restaurantportlet-domain-services-auth.xml" />
 	 
-	 <bean id="flux" class="org.esupportail.restaurant.web.flux.RestaurantFlux"/>
+	<bean id="flux" class="org.esupportail.restaurant.web.flux.RestaurantFlux"/>
+	
+	<!-- Ehcache : Start -->
+	
+	<!-- <bean id="cacheManager"
+	    scope="singleton"
+	    class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+	    <description>
+	        This bean is used to configure EhCache.
+	    </description>
+	    <property name="configLocation" value="classpath:/properties/cache/ehcache.xml" />
+	</bean>-->
+
+	<!-- Ehcache : End -->
+	
 		<!-- SchedulerFactoryBean throw an exception
 			Need to find why, and fix it.	
 		 -->

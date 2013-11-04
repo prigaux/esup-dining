@@ -60,6 +60,11 @@ public class WebController extends AbstractExceptionController {
     	User user = authenticator.getUser();
     	String areaToDisplay = new String();
     	
+    	if(user.isAdmin())
+    		System.out.println("isAdmin");
+    	else
+    		System.out.println("isNotAdmin");
+    	
     	try {
     		ResultSet results = dc.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='"+user.getLogin()+"';");
     		results.next();

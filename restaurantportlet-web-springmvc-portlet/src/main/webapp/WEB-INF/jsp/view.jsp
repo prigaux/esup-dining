@@ -41,7 +41,6 @@
 				// Event Listener
 				google.maps.event.addDomListener(window, 'load', initialize);
 				
-
 				var map;
 				var diningHallsLatLng = new Array();
 				var myLatlng = new google.maps.LatLng(parseFloat(diningHalls[0][1]).toFixed(6), parseFloat(diningHalls[0][2]).toFixed(6));
@@ -87,7 +86,7 @@
 				    // Geolocation feature
 
 					if(navigator.geolocation) {
-
+						
 						$("<button class='get-located btn btn-primary'>Se localiser <span class='glyphicon glyphicon-map-marker'></span></button>").appendTo($(".main-title"));
 						$(".get-located").click(function(e) {
 							navigator.geolocation.getCurrentPosition(distanceCalculator, positionUndefined);

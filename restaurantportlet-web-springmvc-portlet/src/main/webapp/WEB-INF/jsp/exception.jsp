@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/header.jsp"%>
 	
 	<h2>
     	<spring:message code="exception.title"/>
@@ -18,4 +18,4 @@
 	</div>
 
 
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/footer.jsp"%>

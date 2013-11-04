@@ -28,7 +28,7 @@
 			<img src="<%=renderRequest.getContextPath()%><spring:message code="meal.code.${fn:trim(codeNumber)}.img" />"
 			     alt="<spring:message code="meal.code.${fn:trim(codeNumber)}.description" />"
 				 title="<spring:message code="meal.code.${fn:trim(codeNumber)}.name" />"
-			/>									
+			/>								
 		</c:forEach>
 	</c:if>
 

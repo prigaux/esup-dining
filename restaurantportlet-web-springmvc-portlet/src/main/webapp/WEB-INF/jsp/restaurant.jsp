@@ -182,7 +182,7 @@
 									tableNode.innerHTML = "O";
 									tableNode.className="is-openned";
 								} else {
-									tableNode.innerHTML = "X";
+									tableNode.innerHTML = "X";	
 									tableNode.className="is-closed";
 								}
 								
