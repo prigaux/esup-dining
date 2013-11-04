@@ -21,6 +21,7 @@
 		<h1>${restaurant.title}</h1>
 		
 		<p>
+			<%-- Start favorite --%>
 			<c:choose>
 				<c:when test="${isFavorite}">
 					<portlet:actionURL var="removeFromFavorite">
@@ -43,8 +44,9 @@
 					
 				</c:otherwise>
 			</c:choose>
+			<%-- End favorite --%>
 			-
-			
+			<%-- Start meal link --%>
 			<portlet:renderURL var="viewMeals">
 				<portlet:param name="action" value="viewMeals" />
 				<portlet:param name="id" value="${restaurant.id}" />
@@ -53,72 +55,88 @@
 			<a href="${viewMeals}" class="icn-fam icn-fam-meal">
 				<spring:message code="restaurant.link.viewMeals"/>
 			</a>
+			<%-- End meal link --%>
 			
+			<%-- start Accessibility block --%>
 			<c:if test="${restaurant.accessibility}">
-				- ACCESSIBLE (En attente d'une icône).
+				 - 
+				<span class="icn-fam icn-fam-disability">
+					<spring:message code="restaurant.msg.disability"/>
+				</span>
 			</c:if>
+			<%-- end accessibility block--%>
 		</p>
 		
+		<%-- start short desc --%>
 		<c:if test="${not empty restaurant.shortdesc}">
 			<p c>
 				${restaurant.shortdesc}
 			</p>
 		</c:if>		
+		<%-- end short desc --%>
 
 		<div class="row">
+			<%-- Start photo block --%>
 			<div class="col-xs-12 col-sm-6 col-md-4 ta-center">
 				<c:if test="${not empty restaurant.photo.src}">
 					<img src="${restaurant.photo.src}" alt="${restaurant.photo.alt}" />
 				</c:if>	
 			</div>
+			<%-- end photo block --%>
 			<div class="col-xs-12 col-sm-6 col-md-8">
+				<%-- start description --%>
 				<c:if test="${not empty restaurant.description}">
 					<p>
 						<strong><spring:message code="restaurant.msg.description"/></strong> :
 						${restaurant.description}
 					</p>
 				</c:if>		
-				
+				<%-- end description --%>
+				<%-- start operational hours --%>
 				<c:if test="${not empty restaurant.operationalhours}">
 					<p>
 						<strong><spring:message code="restaurant.msg.operationalhours"/></strong> :
 						${restaurant.operationalhours}
 					</p>
 				</c:if>		
-				
+				<%-- end operational hours --%>
+				<%-- start address --%>
 				<c:if test="${not empty restaurant.address}">
 					<p>
 						<strong><spring:message code="restaurant.msg.address"/></strong> :
 						${restaurant.address}
 					</p>
 				</c:if>
-				
+				<%-- end address --%>
+				<%-- start access --%>
 				<c:if test="${not empty restaurant.access}">
 					<p>
 						<strong><spring:message code="restaurant.msg.access"/></strong> :
 						${restaurant.access}
 					</p>
 				</c:if>		
-				
+				<%-- end access --%>
+				<%-- start tel --%>
 				<c:if test="${not empty restaurant.contact.tel}">
 					<p>
 						<strong><spring:message code="restaurant.msg.tel"/></strong> :
 						${restaurant.contact.tel}
 					</p>
 				</c:if>		
-				
+				<%-- end tel --%>
+				<%-- start email --%>
 				<c:if test="${not empty restaurant.contact.email}">
 					<p>
 						<strong><spring:message code="restaurant.msg.email"/></strong> :
 						${restaurant.contact.email}
 					</p>
-				</c:if>				
+				</c:if>	
+				<%-- end email --%>			
 			</div>
-
 		</div>
 
 		<div class="row">
-			
+			<%-- start table opening --%>			
 			<div class="col-xs-12 col-sm-6 col-md-4">
 				<c:if test="${not empty restaurant.opening}">
 					<table id="opening" class="table table-striped">
@@ -160,7 +178,13 @@
 							for(var j=0; j<3; j++) {
 								var tableNode = document.createElement("td");
 
-								(opening[i].charAt(j) == "1") ? tableNode.innerHTML = "O" : tableNode.innerHTML = "X";
+								if(opening[i].charAt(j) == "1") {
+									tableNode.innerHTML = "O";
+									tableNode.className="is-openned";
+								} else {
+									tableNode.innerHTML = "X";
+									tableNode.className="is-closed";
+								}
 								
 								ligne.appendChild(tableNode);
 							}					
@@ -169,6 +193,8 @@
 					</script>
 				</c:if>				
 			</div>
+			<%-- end table opening --%>
+			<%-- start map --%>
 			<div class="col-xs-12 col-sm-6 col-md-8">
 				<c:if test="${not empty restaurant.lat and not empty restaurant.lon}">
 					<h2>
@@ -200,7 +226,7 @@
 					</script>
 				</c:if>				
 			</div>
-
+			<%-- end map --%>
 		</div>
 
 	</c:if>		

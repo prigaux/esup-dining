@@ -43,7 +43,7 @@ ${nothingToDisplay}
 				</c:forEach>
 			</select>
 				<c:if test="${zoneSubmit == 'true'}">
-					<label style="color: #00FF00; font-weight: bold;">
+					<label class="is-valid icn-fam icn-fam-valid">
 						<spring:message code="edit.msg.success"/>
 					</label>
 				</c:if>

@@ -1,1 +1,19 @@
 /* State CSS */
+
+.is-invalid {
+	color: #F00 !important;
+	font-weight: bold;
+}
+
+.is-valid {
+	color: #0F0 !important;
+	font-weight: bold;
+}
+
+table .is-openned {
+	background: #A6FFDE;
+}
+
+table .is-closed {
+	background: #FFA6AA;
+}

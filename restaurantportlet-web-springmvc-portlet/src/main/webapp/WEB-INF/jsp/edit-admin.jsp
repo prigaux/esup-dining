@@ -12,7 +12,6 @@
 	</a>
 	
 	<!-- On met une négation dans le test pour faire les tests en local -->
-	<c:if test="${!user.admin}">
 <br/>
 ${nothingToDisplay}
 <br/>
@@ -50,7 +49,7 @@ ${nothingToDisplay}
 					</c:forEach>
 				</select>
 				<c:if test="${zoneSubmit == 'true'}">
-					<label style="color: #00FF00; font-weight: bold;">
+					<label class="is-valid icn-fam icn-fam-valid">
 						<spring:message code="edit.msg.success"/>
 					</label>
 				</c:if>
@@ -68,22 +67,20 @@ ${nothingToDisplay}
 				<legend>URL du flux</legend>
 				<label for="field-url">URL : </label>
 				<input type="text" id="field-url" name="url" value="${urlfluxdb}"/>
-				<c:if test="${urlError == 'true'}">
-					<label style="color: #FF0000; font-weight: bold;">
-						<spring:message code="edit.msg.urlerror"/>
+				<c:if test="${not empty urlError}">
+					<label class="icn-fam <c:if test="${urlError == 'true'}">is-invalid icn-fam-invalid</c:if><c:if test="${urlError == 'false'}">is-valid icn-fam-valid</c:if>">
+						<c:choose>
+							<c:when test="${urlError == 'true'}">
+								<spring:message code="edit.msg.urlerror"/>
+							</c:when>
+							<c:otherwise>
+								<spring:message code="edit.msg.success"/>
+							</c:otherwise>
+						</c:choose>
 					</label>
 				</c:if>				
-				<c:if test="${urlError == 'false'}">
-					<label style="color: #00FF00; font-weight: bold;">
-						<spring:message code="edit.msg.success"/>
-					</label>
-				</c:if>
 				<input type="submit" value="Valider" />
 			</fieldset>
 		</form>
-	</c:if>
-	<c:if test="${!user.admin}">
-		Vous n'avez pas accès à cette page car vous n'êtes pas administrateur
-	</c:if>
 
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>
