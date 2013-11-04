@@ -47,32 +47,21 @@ public class RestaurantFlux implements Serializable {
 				// before the inserting this row.
 			}
 			this.setPath(urlFlux);
-		} catch (SQLException e) {
-			System.out.println("[INFO] No URLFLUX available, the portlet needs to be configured by an admin");
+		} catch (Exception e) {
+			System.out.println("[WARN] Couldn't fully instantiate RestaurantFlux, you'll need to configure it manually from admin settings.");
 		}
 		
 	}
-	private RestaurantFeedRoot mapJson() {
-		RestaurantFeedRoot br = null;
-		try {
-			br = mapper.readValue(this.jsonStringified, RestaurantFeedRoot.class);
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return br;
+	private RestaurantFeedRoot mapJson() throws JsonParseException, JsonMappingException, IOException {
+		return mapper.readValue(this.jsonStringified, RestaurantFeedRoot.class);
 	}
 
 	public URL getPath() {
 		return this.path;
 	}
 	
-	public void setPath(URL path) {
+	public void setPath(URL path) throws JsonParseException, JsonMappingException, IOException {
 		this.path = path;
-
 		// If the user sets a new path, we have to update json string and re-map the all json file.
 		this.updateJson();
 	}
@@ -81,7 +70,7 @@ public class RestaurantFlux implements Serializable {
 		return this.jsonStringified;
 	}
 	
-	public void updateJson() {
+	public void updateJson() throws JsonParseException, JsonMappingException, IOException {
 		URLConnection yc = null;
 		try {
 			yc = this.path.openConnection();
@@ -106,7 +95,7 @@ public class RestaurantFlux implements Serializable {
 			e.printStackTrace();
 		}
 		
-		// Init flux by mapping JSON to POJO
+		// Init flux by mapping JSON to POJO	
 		this.flux = this.mapJson();
 	}
 	
@@ -144,12 +133,22 @@ public class RestaurantFlux implements Serializable {
 			return false;
 		
 		RestaurantFlux newRf = new RestaurantFlux();
-		newRf.setPath(this.path);
+		try {
+			newRf.setPath(this.path);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 		if(this.equals(newRf)) 
 			return false;
 		
-		this.setPath(this.path);
+		try {
+			this.setPath(this.path);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return true;
 	}
 	

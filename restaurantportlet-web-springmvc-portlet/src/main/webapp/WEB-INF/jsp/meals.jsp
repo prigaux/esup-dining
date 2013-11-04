@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 	
-	${nothingToDisplay}
+	<p>${nothingToDisplay}</p>
 
 	<c:if test="${not empty restaurant}">
 		
@@ -8,15 +8,16 @@
 			<spring:message code="meal.title" arguments="${restaurant.title}"/>
 		</h1>
 
-
-		<portlet:renderURL var="viewRestaurant">
-				<portlet:param name="action" value="viewRestaurant"/>
-				<portlet:param name="id" value="${restaurant.id}"/>
-		</portlet:renderURL>
-		<a href="${viewRestaurant}" class="icn-fam icn-fam-back">
-			<spring:message code="restaurant.link.back"/>
-		</a>
-	
+		<p>
+			<portlet:renderURL var="viewRestaurant">
+					<portlet:param name="action" value="viewRestaurant"/>
+					<portlet:param name="id" value="${restaurant.id}"/>
+			</portlet:renderURL>
+			<a href="${viewRestaurant}" class="icn-fam icn-fam-back">
+				<spring:message code="restaurant.link.back"/>
+			</a>	
+		</p>
+		
 		<div class="menus">
 			<ul class="tab-header">
 				<c:forEach var="menu" items="${menus}">

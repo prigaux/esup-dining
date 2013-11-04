@@ -1,6 +1,7 @@
 package org.esupportail.restaurant.web.springmvc;
 
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -21,6 +22,8 @@ import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
@@ -313,7 +316,6 @@ public class WebController extends AbstractExceptionController {
     		for(Restaurant r : flux.getFlux().getRestaurants()) {
     			areaList.add(r.getArea());
     		}
-    		model.put("areas", areaList);
         	
     		ResultSet results = dc.executeQuery("SELECT URLFLUX, AREANAME FROM PATHFLUX");
     		results.next();
@@ -328,9 +330,13 @@ public class WebController extends AbstractExceptionController {
     		} catch (SQLException e) {
     			urlflux = null;
     		}
-
-        	model.put("urlfluxdb", urlflux);
-        	model.put("defaultArea", area);
+    		
+    		// Uncomment "IF" when user group will be set.
+    		//if(user.isAdmin()) {
+	    		model.put("areas", areaList);
+	        	model.put("urlfluxdb", urlflux);
+	        	model.put("defaultArea", area);
+    		//}
         	
     	} catch(NullPointerException e) {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
@@ -368,10 +374,6 @@ public class WebController extends AbstractExceptionController {
     
     @RequestMapping(value = {"EDIT"}, params = {"action=urlFlux"})
     public void setURLFlux(ActionRequest request, ActionResponse response, @RequestParam(value = "url", required = true) String url) throws Exception { 
-    	/*
-    	 * #TODO : 
-    	 * Validate feed with the JSON Schema
-    	 */
 		response.setRenderParameter("action", "adminSettings");
     	try {
     		URL urlFlux = new URL(url);	
@@ -381,34 +383,30 @@ public class WebController extends AbstractExceptionController {
     		
     		// If URL is correct, then we can insert this into the database. 
     		
-    		try {
-    			ResultSet results = dc.executeQuery("SELECT URLFLUX FROM PATHFLUX");
-    			results.next();
-    			results.updateString("URLFLUX", url);
-    			results.updateRow();
-    		} catch (SQLException e) {
-    			System.out.println("[INFO] URL isn't set, we insert a new ROW to the PATHFLUX table.");
-    			dc.executeUpdate("INSERT INTO PATHFLUX (URLFLUX) VALUES ('"+ url +"')");
-    		}    		
+			ResultSet results = dc.executeQuery("SELECT URLFLUX FROM PATHFLUX");
+			results.next();
+			results.updateString("URLFLUX", url);
+			results.updateRow();   		
+			
     	} catch(MalformedURLException e) {
+    		response.setRenderParameter("urlError", "true");
+    	} catch(SQLException e) {
+    		System.out.println("[INFO] URL isn't set, we insert a new ROW to the PATHFLUX table.");
+    		dc.executeUpdate("INSERT INTO PATHFLUX (URLFLUX) VALUES ('"+ url +"')");
+    	} catch(JsonParseException e) {
+    		response.setRenderParameter("urlError", "true");
+    	} catch(JsonMappingException e) {
+    		response.setRenderParameter("urlError", "true");
+    	} catch(IOException e) {
+    		response.setRenderParameter("urlError", "true");
+    	} catch(Exception e) {
     		response.setRenderParameter("urlError", "true");
     	}
     }
     
     @RequestMapping(value = {"EDIT"}, params = {"action=forceFeedUpdate"})
     public void feedUpdate(ActionRequest request, ActionResponse response) throws Exception {
-    	
     	boolean needUpdate = flux.update();
-    	/*
-    	if(needUpdate) {
-    		
-    	}
-    	
-    	//String needUpdate = new Boolean(flux.update()).toString();
-    	
-    	//response.setRenderParameter("feedUpdate", needUpdate);
-    	 * 
-    	 */
     	response.setRenderParameter("action", "adminSettings");
     }
     
@@ -421,7 +419,7 @@ public class WebController extends AbstractExceptionController {
     @RequestMapping("HELP")
     public ModelAndView renderHelpView(RenderRequest request, RenderResponse response) throws Exception {
     	ModelMap model = new ModelMap();
-		int[] code = {1,2,3,4,5,6,7,9,10,11,12,13,14,15};
+		int[] code     = {1,2,3,4,5,6,7,9,10,11,12,13,14,15};
 		model.put("code", code);
     	return new ModelAndView("help", model);
     }
