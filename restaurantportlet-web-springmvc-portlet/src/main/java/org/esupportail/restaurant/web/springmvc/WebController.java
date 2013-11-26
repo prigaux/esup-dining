@@ -42,7 +42,7 @@ import org.springframework.web.portlet.ModelAndView;
 
 @Controller
 public class WebController extends AbstractExceptionController {
-
+	// Test commentaire
 	
     @Autowired
 	private Authenticator authenticator;
