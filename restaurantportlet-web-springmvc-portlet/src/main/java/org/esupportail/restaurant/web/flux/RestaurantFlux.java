@@ -164,5 +164,5 @@ public class RestaurantFlux implements Serializable {
 	
 	public String toString() {
 		return this.jsonStringified;
-	}
+	}	
 }

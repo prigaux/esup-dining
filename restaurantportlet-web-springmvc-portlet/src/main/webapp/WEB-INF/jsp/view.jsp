@@ -8,9 +8,29 @@
 		<div id="map-canvas"></div>
 		
 		<h1 class="main-title">
-			<spring:message code="view.list.title"/> ${area}
+			Mes restaurants favoris
 		</h1>
 
+		<c:if test="${not empty favorites}">
+		
+			<ul class="dininghall-list">
+				<c:forEach var="favRestaurant" items="${favorites}">
+					<li class="lead">
+						<portlet:renderURL var="viewRestaurant">
+			  				<portlet:param name="action" value="viewRestaurant"/>
+			  				<portlet:param name="id" value="${favRestaurant.id}"/>
+						</portlet:renderURL>
+						
+						<a href="${viewRestaurant}">
+							${favRestaurant.title}
+						</a>
+					</li>
+				</c:forEach>
+			</ul>
+		</c:if>
+		<h1 class="main-title">
+			<spring:message code="view.list.title"/> ${area}
+		</h1>
 		<c:if test="${not empty dininghalls}">
 			<ul class="dininghall-list">
 				<c:forEach var="dininghall" items="${dininghalls}">
@@ -20,7 +40,7 @@
 			  				<portlet:param name="id" value="${dininghall.id}"/>
 						</portlet:renderURL>
 						<a href="${viewRestaurant}">
-							${dininghall.title} - ${dininghall.id}
+							${dininghall.title}
 						</a>
 					</li>
 				</c:forEach>

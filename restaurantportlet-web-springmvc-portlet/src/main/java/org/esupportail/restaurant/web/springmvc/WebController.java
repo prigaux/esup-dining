@@ -80,6 +80,30 @@ public class WebController extends AbstractExceptionController {
         		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
         	}
     	}
+    	
+    	
+    	try {
+    		ResultSet favList = dc.executeQuery("SELECT RESTAURANTID FROM FAVORITERESTAURANT WHERE USERNAME='" + user.getLogin() +"';");
+    		List<Restaurant> favorites = new ArrayList<Restaurant>();
+    		
+    		if(favList.next()) {
+	    		for(Restaurant r : flux.getFlux().getRestaurants()) {
+	    			
+	    			do {
+	    				if(r.getId() == favList.getInt("RESTAURANTID"))
+	    					favorites.add(r);
+	    			} while(favList.next());
+	    			
+	    			favList.first();
+	    		}
+	    		
+	    		model.put("favorites", favorites);
+    		}
+    		
+    	} catch(SQLException e) {
+    		// Nothing to do here.
+    	}
+    	
 
     	model.put("area", areaToDisplay);
     	
