@@ -1,7 +1,9 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 
 <portlet:renderURL var="renderRefreshUrl" />
-	
+
+<c:if test="${not empty user}">
+
 	<h1>Paramètres</h1>
 
 	<a href="<portlet:renderURL portletMode="edit"/>" class="icn-fam icn-fam-back">
@@ -82,5 +84,9 @@ ${nothingToDisplay}
 				<input type="submit" value="Valider" />
 			</fieldset>
 		</form>
+</c:if>
+<c:if test="${not empty user}">
+	<spring:message code="admin.notallowed"/>
+</c:if>
 
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>
