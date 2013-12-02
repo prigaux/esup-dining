@@ -93,9 +93,23 @@
 	</c:if>	
 
 <script type="text/javascript">
-	$(document).ready(function() {
-		$(".menus").tabs();
-		$(".meals-accordion").accordion();
+	$(window).load(function() {
+
+		var $menus = $(".menus").tabs();
+		var $meals = $(".meals-accordion");
+
+		$menus.each(function(index) {
+
+			var $menuLi = $(this).find('.tab-header li');
+
+			$menuLi.click(function(e) {
+				var indexClick = $menuLi.index($(this));
+				// We need to refresh the accordion because jQuery UI cannot calculate the height of a display none accordion element.
+				$meals.eq(indexClick).refresh();
+			});
+
+		});
+		
 	});
 </script>
 

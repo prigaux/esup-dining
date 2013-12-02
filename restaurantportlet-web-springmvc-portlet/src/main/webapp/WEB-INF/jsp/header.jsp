@@ -39,7 +39,6 @@
 	});
 	 
 	function onWindowResize() {
-		console.time("windowResize")
 		$portletContainers.each(function(index) {
 			
 			var $that = $(this);
@@ -57,7 +56,6 @@
 				$that.addClass("lg");
 		
 		});
-		console.timeEnd("windowResize");
 	}
 
 </script>
