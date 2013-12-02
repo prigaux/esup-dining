@@ -9,7 +9,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import net.sf.ehcache.Element;
 
@@ -97,13 +96,7 @@ public class RestaurantFlux implements Serializable {
 		
 		// Init flux by mapping JSON to POJO	
 		this.flux = this.mapJson();
-	}
-	
-	public void cacheJsonString() {
-		RestaurantCache rc = RestaurantCache.getInstance();
-		rc.setCacheElement(new Element(CacheModelConst.RESTAURANT_FLUX, this.jsonStringified));
-	}
-	
+	}	
 	
 	private String getJsonContent(BufferedReader in) {
 		String jsonText = new String();
@@ -129,27 +122,50 @@ public class RestaurantFlux implements Serializable {
 	
 	public boolean update() {
 		
-		if(this.path == null) 
-			return false;
+		if(this.path == null) return false;
 		
-		RestaurantFlux newRf = new RestaurantFlux();
+		URLConnection yc = null;
 		try {
-			newRf.setPath(this.path);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			yc = this.path.openConnection();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	
-		if(this.equals(newRf)) 
-			return false;
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(yc.getInputStream(), "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		String tempJson = this.getJsonContent(br);
 		
 		try {
-			this.setPath(this.path);
-		} catch (Exception e) {
+			br.close();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		return true;
+		if(!this.jsonStringified.equals(tempJson)) {
+			this.jsonStringified = tempJson;
+			try {
+				this.flux = this.mapJson();
+			} catch (JsonParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public boolean equals(Object o) {
@@ -165,4 +181,9 @@ public class RestaurantFlux implements Serializable {
 	public String toString() {
 		return this.jsonStringified;
 	}	
+	
+	public void run() {
+		System.out.println("Update : " + this.update());
+	}
+	
 }

@@ -1,7 +1,5 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 
-	${usr}
-
 	<portlet:renderURL var="renderRefreshUrl" />
 
 	${nothingToDisplay}

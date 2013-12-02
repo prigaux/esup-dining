@@ -57,9 +57,7 @@ public class WebController extends AbstractExceptionController {
     	
     	User user = authenticator.getUser();
     	String areaToDisplay = new String();
-    	
-    	model.put("usr", user);
-    	
+
     	try {
     		ResultSet results = dc.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='"+user.getLogin()+"';");
     		results.next();
@@ -411,11 +409,11 @@ public class WebController extends AbstractExceptionController {
     	User user = authenticator.getUser();
     	
     	if(user.isAdmin()) {
+        	
         	response.setRenderParameter("action", "adminSettings");
         	try {
         		URL urlFlux = new URL(url);	
         		flux.setPath(urlFlux);
-        		flux.cacheJsonString();
         		response.setRenderParameter("urlError", "false");
         		
         		// If URL is correct, then we can insert this into the database. 

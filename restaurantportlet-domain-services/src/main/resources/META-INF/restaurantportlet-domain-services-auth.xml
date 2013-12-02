@@ -29,7 +29,6 @@
 		class="org.esupportail.commons.services.authentication.OfflineFixedUserAuthenticationService">
 		<property name="authId" value="loginuser" />
 		<property name="authType" value="cas" />
-		<property name="authAdmin" value="true" />
 	</bean>
 
 </beans>
