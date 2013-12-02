@@ -64,13 +64,16 @@
 				var map;
 				var diningHallsLatLng = new Array();
 				var myLatlng = new google.maps.LatLng(parseFloat(diningHalls[0][1]).toFixed(6), parseFloat(diningHalls[0][2]).toFixed(6));
+				
+				var mapCenter = mapCenterCalculator(diningHalls);
+				
 				var mapOptions = 
 				{
-				     center: myLatlng,
+				     center: mapCenter,
 				     zoom: 12,
 				     mapTypeId: google.maps.MapTypeId.ROADMAP
 			    };
-
+				
 				function initialize() {
 
 					// Map init
@@ -81,8 +84,8 @@
 
 				    for(var i=0; i<diningHalls.length; i++) {
 				    	
-				    	var diningHallPosition = new google.maps.LatLng(diningHalls[i][1],diningHalls[i][2]);
-
+				    	var diningHallPosition = new google.maps.LatLng(diningHalls[i][1],diningHalls[i][2]);				    	
+				    	
 				    	// For the distance matrix
 				    	diningHallsLatLng.push(diningHallPosition);
 
@@ -122,6 +125,25 @@
 						map.setCenter(myLatlng);
 					}
 				}
+				
+				
+				/* @return : Approximation of the center of all points displayed on the map 
+				   works well if coords are less than 500 miles distant 
+				*/
+				function mapCenterCalculator(coords) {
+					   
+					var lat=0, lng=0;
+					
+					for(var i=0; i<coords.length; ++i) {
+					   lat += coords[i][1];
+					   lng += coords[i][2];
+					}					
+
+					lat /= coords.length;
+					lng /= coords.length;
+					
+					return new google.maps.LatLng(lat, lng);
+				}				
 
 				function distanceCalculator(position) {
 
