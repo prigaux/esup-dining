@@ -13,7 +13,7 @@ public class MinimizedStateHandlerInterceptor extends HandlerInterceptorAdapter 
         if (WindowState.MINIMIZED.equals(request.getWindowState())) {
             return false;
         }
-        
+
         return true;
     }
 }
