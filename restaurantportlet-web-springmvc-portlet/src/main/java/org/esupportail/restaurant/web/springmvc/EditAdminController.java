@@ -88,14 +88,14 @@ public class EditAdminController extends AbstractExceptionController {
 	    	if(zoneSubmit != null)
 	    		model.put("zoneSubmit", zoneSubmit);
 	    	
-	    	String feedUpdate = request.getParameter("feedUpdate");
-	    	if(feedUpdate != null) {
-	    		if(Boolean.parseBoolean(feedUpdate)) {
-	    			model.put("updateFeed", "The feed has been correctly updated");
+	    	if(request.getParameter("update")!=null) {
+		    	Boolean isUpdated = new Boolean(request.getParameter("update"));
+		    	if(isUpdated.booleanValue()) {
+		    		model.put("updateFeed", "The feed has been correctly updated");
 	    		} else {
 	        		model.put("updateFeed", "The feed is already up to date");
 	        	}
-	    	} 
+	    	}
 	    	
     	}
     	
@@ -156,8 +156,18 @@ public class EditAdminController extends AbstractExceptionController {
     
     @RequestMapping(params = {"action=forceFeedUpdate"})
     public void feedUpdate(ActionRequest request, ActionResponse response) throws Exception {
-    	boolean needUpdate = flux.update();
+    	
+    	User user = authenticator.getUser();
+    	Boolean isUpdated;
+    	
+    	if(user.isAdmin()) {
+    		isUpdated = flux.update();
+    	} else {
+    		isUpdated = false;
+    	}
+    	
     	response.setRenderParameter("action", "adminSettings");
+    	response.setRenderParameter("update", isUpdated.toString());
     }
 	
 }

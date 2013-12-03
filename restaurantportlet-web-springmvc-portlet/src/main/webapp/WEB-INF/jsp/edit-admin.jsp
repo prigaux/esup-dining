@@ -18,19 +18,6 @@
 ${nothingToDisplay}
 <br/>
 <c:if test="${empty nothingToDisplay}">	
-		<portlet:actionURL var="forceFeedUpdate">
-		  <portlet:param name="action" value="forceFeedUpdate"/>
-		</portlet:actionURL>
-
-		<h3>
-			<a href="${forceFeedUpdate}">
-				<spring:message code="edit.admin.forceupdate"/>
-			</a>
-		</h3>
-		<c:if test="${not empty updateFeed}">
-			${updateFeed}
-		</c:if>
-
 		<portlet:actionURL var="setDefaultArea">
 		  <portlet:param name="action" value="setDefaultArea"/>
 		</portlet:actionURL>
@@ -84,6 +71,20 @@ ${nothingToDisplay}
 				<input type="submit" value="Valider" />
 			</fieldset>
 		</form>
+		
+		<portlet:actionURL var="forceFeedUpdate">
+		  <portlet:param name="action" value="forceFeedUpdate"/>
+		</portlet:actionURL>
+		
+		<p>
+			<a href="${forceFeedUpdate}" class="btn btn-primary">
+				<spring:message code="edit.admin.forceupdate"/>
+			</a>
+		</p>
+		<c:if test="${not empty updateFeed}">
+			${updateFeed}
+		</c:if>
+		
 </c:if>
 <c:if test="${not empty user}">
 	<spring:message code="admin.notallowed"/>
