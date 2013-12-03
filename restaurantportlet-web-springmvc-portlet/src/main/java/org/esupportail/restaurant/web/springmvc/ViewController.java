@@ -214,7 +214,7 @@ public class ViewController extends AbstractExceptionController {
 			   @RequestParam(value = "code", required = false) String code,
 			   @RequestParam(value = "id", required=true) int id) throws Exception {
     	
-    	
+    	User user = authenticator.getUser();
     	ModelMap model = new ModelMap();
     	
     	model.put("restaurantId", id);
@@ -241,6 +241,21 @@ public class ViewController extends AbstractExceptionController {
 		/* Awful code ends now */
     	
     	model.put("nutritionitems", listNutritionItems);
+    	
+		try {
+			
+			ResultSet prefUser = dc.executeQuery("SELECT NUTRITIONCODE FROM nutritionPreferences WHERE USERNAME='"+ user.getLogin() +"';");
+	    	
+			Set<String> nutritionPrefs = new HashSet<String>();
+			
+			while(prefUser.next()) {
+				nutritionPrefs.add(prefUser.getString("NUTRITIONCODE"));
+			}
+				
+			model.put("nutritionPrefs", nutritionPrefs);
+			
+			
+		} catch(SQLException e) { /**/ }
     	
     	return new ModelAndView("dish", model);
     }	
