@@ -57,14 +57,12 @@ public class EditController extends AbstractExceptionController {
 				
 				while(prefUser.next()) {
 					nutritionPrefs.add(prefUser.getString("NUTRITIONCODE"));
-					System.out.println(prefUser.getString("NUTRITIONCODE"));
 				}
 					
 				model.put("nutritionPrefs", nutritionPrefs);
-				System.out.println(nutritionPrefs);
 				
 				
-			} catch(SQLException e) { e.printStackTrace(); }
+			} catch(SQLException e) { /**/ }
 			
 	    	try {
 	    		Set<String> areaList = new HashSet<String>();
@@ -141,13 +139,13 @@ public class EditController extends AbstractExceptionController {
 	    			
 	    			try {
 	    				dc.executeUpdate("INSERT INTO nutritionPreferences (USERNAME, NUTRITIONCODE) VALUES ('"+ userLogin +"', '"+ code[i] +"');");
-	    			} catch (SQLException e) { e.printStackTrace(); }
+	    			} catch (SQLException e) { /**/ }
 	    			
 	    		} else {
 	    			
 	    			try {
 	    				dc.executeUpdate("DELETE FROM nutritionPreferences WHERE username='"+ userLogin +"' AND  NUTRITIONCODE='"+ code[i] +"');");
-	    			} catch (SQLException e) { e.printStackTrace(); }
+	    			} catch (SQLException e) { /**/ }
 	    			
 	    		}
 	    	}

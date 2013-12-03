@@ -48,6 +48,7 @@ public class DatabaseConnector {
 			statement.executeUpdate("DROP TABLE FAVORITERESTAURANT");
 			statement.executeUpdate("DROP TABLE USERAREA");
 			statement.executeUpdate("DROP TABLE PATHFLUX");
+			statement.executeUpdate("DROP TABLE NUTRITIONPREFERENCES");
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}*/
@@ -70,7 +71,6 @@ public class DatabaseConnector {
 		try {
 			statement.executeUpdate("CREATE TABLE nutritionPreferences (USERNAME varchar(100), NUTRITIONCODE INTEGER, CONSTRAINT pk_nutrition PRIMARY KEY (USERNAME, NUTRITIONCODE))");
 		} catch (SQLException e ) {
-			e.printStackTrace();
 			System.out.println("[INFO] Table nutritionPreferences already exist");
 		}
 		

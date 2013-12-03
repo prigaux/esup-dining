@@ -6,8 +6,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -144,7 +146,24 @@ public class ViewController extends AbstractExceptionController {
     
     @RequestMapping(params = {"action=viewMeals"})
     public ModelAndView renderMealsView(RenderRequest request, RenderResponse response, @RequestParam(value = "id", required=true) int id) throws Exception {
+    	
     	ModelMap model = new ModelMap();
+    	User user = authenticator.getUser();
+    	
+    	try {
+			
+			ResultSet prefUser = dc.executeQuery("SELECT NUTRITIONCODE FROM nutritionPreferences WHERE USERNAME='"+ user.getLogin() +"';");
+	    	
+			Set<String> nutritionPrefs = new HashSet<String>();
+			
+			while(prefUser.next()) {
+				nutritionPrefs.add(prefUser.getString("NUTRITIONCODE"));
+			}
+				
+			model.put("nutritionPrefs", nutritionPrefs);
+			
+			
+		} catch(SQLException e) { /**/ }
     	
     	try {
     		restaurants = flux.getFlux();

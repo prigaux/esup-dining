@@ -1,5 +1,14 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 	
+	<style type="text/css">
+		.smart-choice {
+			background: #00FF6A;
+		}
+		.warning {
+			background: #FFD859;
+		}
+	</style>
+	
 	<p>${nothingToDisplay}</p>
 
 	<c:if test="${not empty restaurant}">
@@ -15,7 +24,7 @@
 			</portlet:renderURL>
 			<a href="${viewRestaurant}" class="icn-fam icn-fam-back">
 				<spring:message code="restaurant.link.back"/>
-			</a>	
+			</a>
 		</p>
 		
 		<div class="menus">
@@ -52,7 +61,27 @@
 									
 									<ul>
 										<c:forEach var="dish" items="${foodCategory.dishes}">
-											<li>
+											<li
+												<c:if test="${not empty dish.code}">
+													<c:forEach var="codeNumber" items="${dish.code}">
+														<c:forEach var="userCodeNumber" items="${nutritionPrefs}">
+															
+															<c:if test="${codeNumber==userCodeNumber}">
+																
+																<c:choose>
+																	<c:when test="${codeNumber=='15'}">
+																		class="smart-choice"
+																	</c:when>
+																	<c:otherwise>
+																		class="warning"
+																	</c:otherwise>
+																</c:choose>
+															</c:if>
+															
+														</c:forEach>								
+													</c:forEach>
+												</c:if>
+											>
 
 												<portlet:renderURL var="viewDish">
 													<portlet:param name="action" value="viewDish"/>
@@ -96,7 +125,7 @@
 	$(window).load(function() {
 
 		var $menus = $(".menus").tabs();
-		var $meals = $(".meals-accordion");
+		var $meals = $(".meals-accordion").accordion();
 
 		$menus.each(function(index) {
 
@@ -105,7 +134,8 @@
 			$menuLi.click(function(e) {
 				var indexClick = $menuLi.index($(this));
 				// We need to refresh the accordion because jQuery UI cannot calculate the height of a display none accordion element.
-				$meals.eq(indexClick).refresh();
+				$menus.eq(indexClick).tabs("refresh");
+				$meals.accordion("refresh");
 			});
 
 		});
