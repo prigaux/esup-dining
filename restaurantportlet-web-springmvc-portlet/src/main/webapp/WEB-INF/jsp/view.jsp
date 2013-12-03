@@ -7,13 +7,13 @@
 
 		<div id="map-canvas"></div>
 		
-		<h1 class="main-title">
+		<h1>
 			Mes restaurants favoris
 		</h1>
 
 		<c:if test="${not empty favorites}">
 		
-			<ul class="dininghall-list">
+			<ul class="fav-dininghall-list">
 				<c:forEach var="favRestaurant" items="${favorites}">
 					<li class="lead">
 						<portlet:renderURL var="viewRestaurant">
@@ -70,9 +70,10 @@
 				var mapOptions = 
 				{
 				     center: mapCenter,
-				     zoom: 12,
 				     mapTypeId: google.maps.MapTypeId.ROADMAP
 			    };
+
+			    var bounds = new google.maps.LatLngBounds ();
 				
 				function initialize() {
 
@@ -86,6 +87,8 @@
 				    	
 				    	var diningHallPosition = new google.maps.LatLng(diningHalls[i][1],diningHalls[i][2]);				    	
 				    	
+				    	bounds.extend(diningHallPosition);
+
 				    	// For the distance matrix
 				    	diningHallsLatLng.push(diningHallPosition);
 
@@ -106,6 +109,8 @@
 				    	});
 				    }
 
+				    map.fitBounds(bounds);
+
 				    // Geolocation feature
 
 					if(navigator.geolocation) {
@@ -122,7 +127,7 @@
 					// Event Listeners
 
 					window.onresize = function() {
-						map.setCenter(myLatlng);
+						map.fitBounds(bounds);
 					}
 				}
 				

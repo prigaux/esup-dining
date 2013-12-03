@@ -142,9 +142,8 @@ public class EditController extends AbstractExceptionController {
 	    			} catch (SQLException e) { /**/ }
 	    			
 	    		} else {
-	    			
 	    			try {
-	    				dc.executeUpdate("DELETE FROM nutritionPreferences WHERE username='"+ userLogin +"' AND  NUTRITIONCODE='"+ code[i] +"');");
+	    				dc.executeUpdate("DELETE FROM nutritionPreferences WHERE USERNAME='"+ userLogin +"' AND  NUTRITIONCODE='"+ code[i] +"';");
 	    			} catch (SQLException e) { /**/ }
 	    			
 	    		}
