@@ -72,6 +72,28 @@ ${nothingToDisplay}
 </form>
 </c:if>
 </c:if>
+
+<h2>Préférences nutritive</h2>
+<portlet:actionURL var="nutritionPreferences">
+  <portlet:param name="action" value="nutritionPreferences"/>
+</portlet:actionURL>
+<form method="POST" action="${nutritionPreferences}">
+	<c:forEach var="code" items="${nutritionCodes}">
+		<label style="float: none;">
+			<spring:message code="meal.code.${fn:trim(code)}.name" />
+			<input type="checkbox" name="code-${code}" id="code-${code}"
+				
+				<c:forEach var="userPrefCode" items="${nutritionPrefs}">
+					<c:if test="${userPrefCode == code}">
+						checked="checked"
+					</c:if>
+				</c:forEach>
+				
+			/>
+		</label>	
+	</c:forEach>
+	<input type="submit"/>
+</form>
 	
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>
 

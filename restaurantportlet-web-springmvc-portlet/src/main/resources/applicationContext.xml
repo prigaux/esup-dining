@@ -48,7 +48,15 @@
 
 	<bean id="flux" class="org.esupportail.restaurant.web.flux.RestaurantFlux" />
 
-	<!-- SchedulerFactoryBean throw an exception Need to find why, and fix it. -->
+	<!-- Start : ehcache beans -->
+	
+	<ehcache:annotation-driven cache-manager="ehCacheManager" />
+	
+	<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
+	
+	<!-- End : ehcache beans -->
+
+	<!-- Start : Timer beans -->
 
 	<bean id="doIt"
 		class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
@@ -71,5 +79,7 @@
 	    </list>
 	  </property>
 	</bean>
+
+	<!-- End : Timer beans -->
 
 </beans>

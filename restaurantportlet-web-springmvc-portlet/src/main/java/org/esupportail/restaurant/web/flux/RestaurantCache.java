@@ -50,4 +50,23 @@ public class RestaurantCache {
 	public Element getCacheByKey(String key) {
 		return fluxCache.get(key);
 	}
+
+		/* 
+		@Autowired
+		private DatabaseConnector dc;
+		@Autowired
+		private RestaurantFlux flux;
+		private List<Restaurant> restaurants;
+		
+		public RestaurantCache() {
+			restaurants = flux.getFlux().getRestaurants();
+		}
+		
+		@Cacheable(cacheName="image")
+		public URL getImage(URL url)  {
+			
+			return null;
+		}
+		*/
+	
 }

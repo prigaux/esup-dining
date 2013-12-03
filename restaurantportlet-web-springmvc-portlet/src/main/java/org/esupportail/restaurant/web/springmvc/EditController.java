@@ -1,13 +1,11 @@
 package org.esupportail.restaurant.web.springmvc;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.portlet.ActionRequest;
@@ -15,8 +13,6 @@ import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
@@ -50,6 +46,26 @@ public class EditController extends AbstractExceptionController {
 	    	User user = authenticator.getUser();
 	    	model.put("user", user);
 	    	
+	    	int[] code     = {1,2,3,4,5,6,7,9,10,11,12,13,14,15};
+			model.put("nutritionCodes", code);
+			
+			try {
+				
+				ResultSet prefUser = dc.executeQuery("SELECT NUTRITIONCODE FROM nutritionPreferences WHERE USERNAME='"+ user.getLogin() +"';");
+		    	
+				Set<String> nutritionPrefs = new HashSet<String>();
+				
+				while(prefUser.next()) {
+					nutritionPrefs.add(prefUser.getString("NUTRITIONCODE"));
+					System.out.println(prefUser.getString("NUTRITIONCODE"));
+				}
+					
+				model.put("nutritionPrefs", nutritionPrefs);
+				System.out.println(nutritionPrefs);
+				
+				
+			} catch(SQLException e) { e.printStackTrace(); }
+			
 	    	try {
 	    		Set<String> areaList = new HashSet<String>();
 	    		for(Restaurant r : flux.getFlux().getRestaurants()) {
@@ -110,6 +126,33 @@ public class EditController extends AbstractExceptionController {
 	    	return new ModelAndView("edit", model);
 	    }    
 	    
+	    @RequestMapping(value = {"EDIT"}, params = {"action=nutritionPreferences"})
+	    public void setUserNutritionPreferences(ActionRequest request, ActionResponse response) throws Exception {
+	    	
+	    	String userLogin = authenticator.getUser().getLogin();
+	    	
+	    	Map parameters = request.getParameterMap();
+	    	
+	    	int[] code     = {1,2,3,4,5,6,7,9,10,11,12,13,14,15};
+	    	
+	    	for(int i=0; i<code.length; i++) {
+	    		
+	    		if(parameters.get("code-"+code[i]) != null) {
+	    			
+	    			try {
+	    				dc.executeUpdate("INSERT INTO nutritionPreferences (USERNAME, NUTRITIONCODE) VALUES ('"+ userLogin +"', '"+ code[i] +"');");
+	    			} catch (SQLException e) { e.printStackTrace(); }
+	    			
+	    		} else {
+	    			
+	    			try {
+	    				dc.executeUpdate("DELETE FROM nutritionPreferences WHERE username='"+ userLogin +"' AND  NUTRITIONCODE='"+ code[i] +"');");
+	    			} catch (SQLException e) { e.printStackTrace(); }
+	    			
+	    		}
+	    	}
+	    }
+	  
 	    @RequestMapping(params = {"action=setUserArea"})
 	    public void setUserArea(ActionRequest request, ActionResponse response, @RequestParam(value = "zone", required = true) String area) throws Exception {
 

@@ -67,6 +67,14 @@ public class DatabaseConnector {
 		} catch (SQLException e) {
 			System.out.println("[INFO] Table pathFlux already exist");
 		}
+		try {
+			statement.executeUpdate("CREATE TABLE nutritionPreferences (USERNAME varchar(100), NUTRITIONCODE INTEGER, CONSTRAINT pk_nutrition PRIMARY KEY (USERNAME, NUTRITIONCODE))");
+		} catch (SQLException e ) {
+			e.printStackTrace();
+			System.out.println("[INFO] Table nutritionPreferences already exist");
+		}
+		
+		
 	}
 	
 	public ResultSet executeQuery(String query) throws SQLException {

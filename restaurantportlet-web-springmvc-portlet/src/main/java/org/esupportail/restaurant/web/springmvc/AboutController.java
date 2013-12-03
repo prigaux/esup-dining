@@ -13,9 +13,9 @@ import org.springframework.web.portlet.ModelAndView;
 public class AboutController extends AbstractExceptionController {
 
 	@RequestMapping
-	public ModelAndView renderAboutView(RenderRequest request, RenderResponse response) throws Exception {
+	public ModelAndView renderAboutView(RenderRequest request,
+			RenderResponse response) throws Exception {
 		ModelMap model = new ModelMap();
 		return new ModelAndView("about", model);
 	}
-	
 }
