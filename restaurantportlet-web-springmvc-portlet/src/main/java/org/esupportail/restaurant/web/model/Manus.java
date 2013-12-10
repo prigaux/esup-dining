@@ -1,5 +1,5 @@
 
-package org.esupportail.restaurant.web.json;
+package org.esupportail.restaurant.web.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,53 +18,53 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "foodcategory",
-    "name"
+    "date",
+    "meal"
 })
-public class Meal {
+public class Manus {
 
     /**
      * 
      */
-    @JsonProperty("foodcategory")
-    private List<Foodcategory> foodcategory = new ArrayList<Foodcategory>();
+    @JsonProperty("date")
+    private String date;
     /**
      * 
      */
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("meal")
+    private List<Meal> meal = new ArrayList<Meal>();
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * 
      */
-    @JsonProperty("foodcategory")
-    public List<Foodcategory> getFoodcategory() {
-        return foodcategory;
+    @JsonProperty("date")
+    public String getDate() {
+        return date;
     }
 
     /**
      * 
      */
-    @JsonProperty("foodcategory")
-    public void setFoodcategory(List<Foodcategory> foodcategory) {
-        this.foodcategory = foodcategory;
+    @JsonProperty("date")
+    public void setDate(String date) {
+        this.date = date;
     }
 
     /**
      * 
      */
-    @JsonProperty("name")
-    public String getName() {
-        return name;
+    @JsonProperty("meal")
+    public List<Meal> getMeal() {
+        return meal;
     }
 
     /**
      * 
      */
-    @JsonProperty("name")
-    public void setName(String name) {
-        this.name = name;
+    @JsonProperty("meal")
+    public void setMeal(List<Meal> meal) {
+        this.meal = meal;
     }
 
     @Override

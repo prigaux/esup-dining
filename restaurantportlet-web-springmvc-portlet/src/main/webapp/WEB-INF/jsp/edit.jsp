@@ -92,6 +92,13 @@ ${nothingToDisplay}
 			/>
 		</label>	
 	</c:forEach>
+	
+	<c:if test="${nutritSubmit == 'true'}">
+		<label class="is-valid icn-fam icn-fam-valid" style="float:none;">
+			<spring:message code="edit.msg.success"/>
+		</label>
+	</c:if>
+	
 	<input type="submit"/>
 </form>
 	

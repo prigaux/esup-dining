@@ -21,10 +21,11 @@ import javax.portlet.RenderResponse;
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
-import org.esupportail.restaurant.web.flux.RestaurantFlux;
-import org.esupportail.restaurant.web.json.Manus;
-import org.esupportail.restaurant.web.json.Restaurant;
-import org.esupportail.restaurant.web.json.RestaurantFeedRoot;
+import org.esupportail.restaurant.web.flux.RestaurantCache;
+import org.esupportail.restaurant.web.flux.RestaurantFeed;
+import org.esupportail.restaurant.web.model.Manus;
+import org.esupportail.restaurant.web.model.Restaurant;
+import org.esupportail.restaurant.web.model.RestaurantFeedRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -41,12 +42,15 @@ public class ViewController extends AbstractExceptionController {
 	@Autowired
 	private DatabaseConnector dc;
 	@Autowired
-	private RestaurantFlux flux;
+	private RestaurantFeed flux;
 	private RestaurantFeedRoot restaurants;
+	
+	@Autowired 
+	RestaurantCache cache;
 	
 	@RequestMapping
     public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {	
-    	
+		
     	ModelMap model = new ModelMap();
     	
     	User user = authenticator.getUser();
@@ -111,6 +115,7 @@ public class ViewController extends AbstractExceptionController {
     	} catch(Exception e) {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
     	}
+    	
     	return new ModelAndView("view", model);
     }
     
@@ -123,23 +128,12 @@ public class ViewController extends AbstractExceptionController {
     	
     	User user = authenticator.getUser();
     	
-    	try {
-    		restaurants = flux.getFlux();
-    		for(Restaurant r : restaurants.getRestaurants()) {
-    			if(r.getId() == id) {
-    				model.put("restaurant", r);
-
-    				ResultSet results = dc.executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='" + user.getLogin() +"' AND RESTAURANTID='" + id + "';");
-     				
-    				if(results.next()) {
-    					 model.put("isFavorite", true);
-    				}
-    			}
-    		}
-    	
-    	} catch(NullPointerException e) {
-    		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
-    	}
+    	Restaurant restaurant = cache.getCachedRestaurant(id);
+    	model.put("restaurant", restaurant);
+    	ResultSet results = dc.executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='" + user.getLogin() +"' AND RESTAURANTID='" + id + "';");
+		if(results.next()) {
+			model.put("isFavorite", true);
+		}
 
     	return new ModelAndView("restaurant", model);
     }
@@ -166,24 +160,18 @@ public class ViewController extends AbstractExceptionController {
 		} catch(SQLException e) { /**/ }
     	
     	try {
-    		restaurants = flux.getFlux();
-    		for(Restaurant r : restaurants.getRestaurants()) {
-    			if(r.getId() == id) {
-    				model.put("restaurant", r);
-    				
-    				List<Manus> menuList = new ArrayList<Manus>();
-    				Date dateNow = new Date();
-    				for(Manus m : r.getMenus())  {
-    					Date dateMenu = new SimpleDateFormat("yyyy-MM-dd").parse(m.getDate());
-    					// We only send upcomings menu to the view
-    					if(dateMenu.compareTo(dateNow) >= 0) {
-    						menuList.add(m);
-    					}
-    				}
-    				model.put("menus", menuList);	
-    			}
-    		}
-    	
+    		Restaurant restaurant = cache.getCachedRestaurant(id);
+    		model.put("restaurant", restaurant);
+    		List<Manus> menuList = new ArrayList<Manus>();
+			Date dateNow = new Date();
+			for(Manus m : restaurant.getMenus())  {
+				Date dateMenu = new SimpleDateFormat("yyyy-MM-dd").parse(m.getDate());
+				// We only send upcomings menu to the view
+				if(dateMenu.compareTo(dateNow) >= 0) {
+					menuList.add(m);
+				}
+			}
+			model.put("menus", menuList);    	
     	} catch(Exception e) {
     		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
     	}
@@ -256,8 +244,8 @@ public class ViewController extends AbstractExceptionController {
 			
 			
 		} catch(SQLException e) { /**/ }
-    	
+		    	
     	return new ModelAndView("dish", model);
-    }	
-	
+    }	  
+    
 }

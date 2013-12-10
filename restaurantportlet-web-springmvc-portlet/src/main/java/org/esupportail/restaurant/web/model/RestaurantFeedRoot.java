@@ -1,5 +1,5 @@
 
-package org.esupportail.restaurant.web.json;
+package org.esupportail.restaurant.web.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,53 +18,31 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "dishes",
-    "name"
+    "restaurants"
 })
-public class Foodcategory {
+public class RestaurantFeedRoot {
 
     /**
      * 
      */
-    @JsonProperty("dishes")
-    private List<Dish> dishes = new ArrayList<Dish>();
-    /**
-     * 
-     */
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("restaurants")
+    private List<Restaurant> restaurants = new ArrayList<Restaurant>();
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * 
      */
-    @JsonProperty("dishes")
-    public List<Dish> getDishes() {
-        return dishes;
+    @JsonProperty("restaurants")
+    public List<Restaurant> getRestaurants() {
+        return restaurants;
     }
 
     /**
      * 
      */
-    @JsonProperty("dishes")
-    public void setDishes(List<Dish> dishes) {
-        this.dishes = dishes;
-    }
-
-    /**
-     * 
-     */
-    @JsonProperty("name")
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * 
-     */
-    @JsonProperty("name")
-    public void setName(String name) {
-        this.name = name;
+    @JsonProperty("restaurants")
+    public void setRestaurants(List<Restaurant> restaurants) {
+        this.restaurants = restaurants;
     }
 
     @Override

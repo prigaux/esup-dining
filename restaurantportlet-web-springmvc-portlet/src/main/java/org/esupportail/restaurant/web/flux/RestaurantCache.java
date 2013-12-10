@@ -1,72 +1,72 @@
 package org.esupportail.restaurant.web.flux;
 
-import java.net.URL;
+import java.util.List;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
-import org.springframework.context.annotation.Scope;
+import org.esupportail.restaurant.web.model.Restaurant;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class RestaurantCache {
 	
-	/*
-	 * #TODO
-	 * Not implemented yet, need to work on this later
-	 */
+	public static final String RESTAURANT_CACHE_NAME = "restaurant_cache";
 	
-	private static RestaurantCache instance;
-	private URL url;
-	private Cache fluxCache;
+	@Autowired
 	private CacheManager cacheManager;
+	private Cache restaurantCache;
 	
-	public RestaurantCache() {
-		cacheManager = CacheManager.getInstance();
-		cacheManager.addCache("restaurantFlux");
-		fluxCache = cacheManager.getCache("restaurantFlux");
-		// Spring create the object using the constructor
-		// So when we use getInstance for the first this, the variable instance == null
-		// so it creates a second object RestaurantCache and throw and expcetion because the cache already exist.
-		instance = this;
+	@Autowired
+	private RestaurantFeed flux;
+	
+	public RestaurantCache(RestaurantFeed feed) {
+		this.cacheManager = new CacheManager();
+		this.flux = feed;
+		this.cacheManager.addCache(RESTAURANT_CACHE_NAME);
+		this.restaurantCache = this.cacheManager.getCache(RESTAURANT_CACHE_NAME);		
 	}
 	
-	public static RestaurantCache getInstance() {
-		if(instance == null)
-			instance = new RestaurantCache();
-		return instance;
+	public RestaurantFeed getFeed() {
+		return this.flux;
 	}
 	
-	public void setCacheElement(Element el) {
-		this.fluxCache.put(el);
-	}
-	
-	public RestaurantFlux getCachedElement() {
-		if( this.fluxCache.get("restaurantFlux").getObjectValue() != null)
-			return (RestaurantFlux) this.fluxCache.get("restaurantFlux").getObjectValue();
-		else
-			return null;
-	}
-	
-	public Element getCacheByKey(String key) {
-		return fluxCache.get(key);
-	}
-
-		/* 
-		@Autowired
-		private DatabaseConnector dc;
-		@Autowired
-		private RestaurantFlux flux;
-		private List<Restaurant> restaurants;
+	public void cacheRestaurant() {
 		
-		public RestaurantCache() {
-			restaurants = flux.getFlux().getRestaurants();
-		}
+		List<Restaurant> restaurantList = flux.getFlux().getRestaurants();
 		
-		@Cacheable(cacheName="image")
-		public URL getImage(URL url)  {
+		for(Restaurant restaurant : restaurantList) {
 			
-			return null;
+			int restaurantKey = restaurant.getId();
+			
+			restaurantCache.put(new Element(restaurantKey, restaurant));
+
+			System.out.println("restaurant " + restaurantKey + " added to the restaurant cache.");
 		}
-		*/
+	}
+	
+	public Restaurant getCachedRestaurant(int key) {
+		
+		Restaurant restaurant;
+		
+		Element el = restaurantCache.get(key);
+		if(el != null) {
+			restaurant = (Restaurant) el.getObjectValue();
+		} else {
+			
+			restaurant = flux.getRestaurantById(key);
+			
+			if(restaurant!=null) {
+				restaurantCache.put(new Element(key, restaurant));
+				System.out.println("restaurant " + key + " added to the restaurant cache.");
+			}
+
+		}
+		return restaurant;
+	}
+	
+	public void cacheReset(String cacheName) {
+		cacheManager.getCache(cacheName).removeAll();
+	}
 	
 }

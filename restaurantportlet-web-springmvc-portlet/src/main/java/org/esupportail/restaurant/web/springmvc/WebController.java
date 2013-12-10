@@ -2,6 +2,8 @@ package org.esupportail.restaurant.web.springmvc;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
@@ -22,7 +24,7 @@ public class WebController {
     public void removeFavorite(ActionRequest request, ActionResponse response, @RequestParam(value = "restaurant-id", required = true) String id) throws Exception {
     	dc.executeUpdate("DELETE FROM FAVORITERESTAURANT "
     				   + "WHERE RESTAURANTID=" + id 
-    				   +" AND USERNAME='"+ authenticator.getUser().getLogin() +"'");
+    				   + "AND USERNAME='"+ authenticator.getUser().getLogin() +"'");
     }
-	
+    
 }

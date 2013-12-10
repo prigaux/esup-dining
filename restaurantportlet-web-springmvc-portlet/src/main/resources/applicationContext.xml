@@ -46,15 +46,24 @@
 	<import
 		resource="classpath*:META-INF/restaurantportlet-domain-services-auth.xml" />
 
-	<bean id="flux" class="org.esupportail.restaurant.web.flux.RestaurantFlux" />
+	<bean id="flux" class="org.esupportail.restaurant.web.flux.RestaurantFeed" />
+	
+	<bean id="restaurantCache" class="org.esupportail.restaurant.web.flux.RestaurantCache">
+		<constructor-arg index="0" ref="flux"/>
+	</bean>
 
 	<!-- Start : ehcache beans -->
+
+	<bean id="cacheManager" scope="singleton"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<description>
+			This bean is used to configure EhCache.
+		</description>
+		<property name="configLocation" value="classpath:/cache/ehcache.xml" />
+	</bean>
 	
-	<ehcache:annotation-driven cache-manager="ehCacheManager" />
-	
-	<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
-	
-	<!-- End : ehcache beans -->
+	<!--<ehcache:annotation-driven cache-manager="cacheManager" />
+	 End : ehcache beans -->
 
 	<!-- Start : Timer beans -->
 
@@ -73,11 +82,11 @@
 	</bean>
 
 	<bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
-	  <property name="scheduledTimerTasks">
-	    <list>
-	      <ref bean="scheduledTask"/>
-	    </list>
-	  </property>
+		<property name="scheduledTimerTasks">
+			<list>
+				<ref bean="scheduledTask" />
+			</list>
+		</property>
 	</bean>
 
 	<!-- End : Timer beans -->

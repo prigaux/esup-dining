@@ -18,9 +18,9 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
-import org.esupportail.restaurant.web.flux.RestaurantFlux;
-import org.esupportail.restaurant.web.json.Restaurant;
-import org.esupportail.restaurant.web.json.RestaurantFeedRoot;
+import org.esupportail.restaurant.web.flux.RestaurantFeed;
+import org.esupportail.restaurant.web.model.Restaurant;
+import org.esupportail.restaurant.web.model.RestaurantFeedRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -37,8 +37,8 @@ public class EditAdminController extends AbstractExceptionController {
 	@Autowired
 	private DatabaseConnector dc;
 	@Autowired
-	private RestaurantFlux flux;
-	private RestaurantFeedRoot restaurants;
+	private RestaurantFeed flux;
+	
 	
     @RequestMapping(params = {"action=adminSettings"})
     public ModelAndView renderEditAdminView(RenderRequest request, RenderResponse response) throws Exception {
@@ -47,7 +47,6 @@ public class EditAdminController extends AbstractExceptionController {
     	
     	User user = authenticator.getUser();
     	
-    	if(user.isAdmin()) {
 	    	
 	    	model.put("user", user);
 	    	
@@ -96,8 +95,6 @@ public class EditAdminController extends AbstractExceptionController {
 	        		model.put("updateFeed", "The feed is already up to date");
 	        	}
 	    	}
-	    	
-    	}
     	
     	return new ModelAndView("edit-admin", model);
     }
@@ -106,37 +103,35 @@ public class EditAdminController extends AbstractExceptionController {
     public void setURLFlux(ActionRequest request, ActionResponse response, @RequestParam(value = "url", required = true) String url) throws Exception { 
 		
     	User user = authenticator.getUser();
-    	
-    	if(user.isAdmin()) {
         	
-        	response.setRenderParameter("action", "adminSettings");
-        	try {
-        		URL urlFlux = new URL(url);	
-        		flux.setPath(urlFlux);
-        		response.setRenderParameter("urlError", "false");
-        		
-        		// If URL is correct, then we can insert this into the database. 
-        		
-    			ResultSet results = dc.executeQuery("SELECT URLFLUX FROM PATHFLUX");
-    			results.next();
-    			results.updateString("URLFLUX", url);
-    			results.updateRow();   		
-    			
-        	} catch(MalformedURLException e) {
-        		response.setRenderParameter("urlError", "true");
-        	} catch(SQLException e) {
-        		System.out.println("[INFO] URL isn't set, we insert a new ROW to the PATHFLUX table.");
-        		dc.executeUpdate("INSERT INTO PATHFLUX (URLFLUX) VALUES ('"+ url +"')");
-        	} catch(JsonParseException e) {
-        		response.setRenderParameter("urlError", "true");
-        	} catch(JsonMappingException e) {
-        		response.setRenderParameter("urlError", "true");
-        	} catch(IOException e) {
-        		response.setRenderParameter("urlError", "true");
-        	} catch(Exception e) {
-        		response.setRenderParameter("urlError", "true");
-        	}	
-    	}
+    	response.setRenderParameter("action", "adminSettings");
+    	try {
+    		URL urlFlux = new URL(url);	
+    		flux.setPath(urlFlux);
+    		response.setRenderParameter("urlError", "false");
+    		
+    		// If URL is correct, then we can insert this into the database. 
+    		
+			ResultSet results = dc.executeQuery("SELECT URLFLUX FROM PATHFLUX");
+			results.next();
+			results.updateString("URLFLUX", url);
+			results.updateRow();   		
+			
+    	} catch(MalformedURLException e) {
+    		response.setRenderParameter("urlError", "true");
+    	} catch(SQLException e) {
+    		System.out.println("[INFO] URL isn't set, we insert a new ROW to the PATHFLUX table.");
+    		dc.executeUpdate("INSERT INTO PATHFLUX (URLFLUX) VALUES ('"+ url +"')");
+    	} catch(JsonParseException e) {
+    		response.setRenderParameter("urlError", "true");
+    	} catch(JsonMappingException e) {
+    		response.setRenderParameter("urlError", "true");
+    	} catch(IOException e) {
+    		response.setRenderParameter("urlError", "true");
+    	} catch(Exception e) {
+    		response.setRenderParameter("urlError", "true");
+    	}	
+    	
     }
     
     @RequestMapping(params = {"action=setDefaultArea"})
@@ -146,12 +141,11 @@ public class EditAdminController extends AbstractExceptionController {
     	response.setRenderParameter("action", "adminSettings");
 		response.setRenderParameter("zoneSubmit", "true");
 		
-		if(user.isAdmin()) {
-			ResultSet results = dc.executeQuery("SELECT AREANAME FROM PATHFLUX");
-			results.next();
-			results.updateString("AREANAME", area);
-			results.updateRow();
-		}
+		ResultSet results = dc.executeQuery("SELECT AREANAME FROM PATHFLUX");
+		results.next();
+		results.updateString("AREANAME", area);
+		results.updateRow();
+
     }
     
     @RequestMapping(params = {"action=forceFeedUpdate"})
@@ -160,11 +154,7 @@ public class EditAdminController extends AbstractExceptionController {
     	User user = authenticator.getUser();
     	Boolean isUpdated;
     	
-    	if(user.isAdmin()) {
-    		isUpdated = flux.update();
-    	} else {
-    		isUpdated = false;
-    	}
+		isUpdated = flux.update();
     	
     	response.setRenderParameter("action", "adminSettings");
     	response.setRenderParameter("update", isUpdated.toString());

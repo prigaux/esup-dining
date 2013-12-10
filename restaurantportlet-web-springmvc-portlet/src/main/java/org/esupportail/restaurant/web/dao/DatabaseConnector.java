@@ -13,6 +13,10 @@ public class DatabaseConnector {
 	private Connection connection;
 	private Statement statement;
 	private static DatabaseConnector instance;
+
+	private static final String DB_INFOS = "jdbc:hsqldb:file:restaurant";
+	private static final String DB_USER = "sa";
+	private static final String DB_PWD = "";
 	
 	private DatabaseConnector() {
 		try {
@@ -21,7 +25,7 @@ public class DatabaseConnector {
 			e.printStackTrace();
 		}
 		try {
-			this.connection = DriverManager.getConnection("jdbc:hsqldb:file:restaurant", "sa",  "");
+			this.connection = DriverManager.getConnection(DatabaseConnector.DB_INFOS, DatabaseConnector.DB_USER,  DatabaseConnector.DB_PWD);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

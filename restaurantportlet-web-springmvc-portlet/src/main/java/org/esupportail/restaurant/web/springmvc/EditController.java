@@ -16,9 +16,9 @@ import javax.portlet.RenderResponse;
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
-import org.esupportail.restaurant.web.flux.RestaurantFlux;
-import org.esupportail.restaurant.web.json.Restaurant;
-import org.esupportail.restaurant.web.json.RestaurantFeedRoot;
+import org.esupportail.restaurant.web.flux.RestaurantFeed;
+import org.esupportail.restaurant.web.model.Restaurant;
+import org.esupportail.restaurant.web.model.RestaurantFeedRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -35,7 +35,7 @@ public class EditController extends AbstractExceptionController {
 	@Autowired
 	private DatabaseConnector dc;
 	@Autowired
-	private RestaurantFlux flux;
+	private RestaurantFeed flux;
 	private RestaurantFeedRoot restaurants;
 	
 	  @RequestMapping
@@ -121,6 +121,11 @@ public class EditController extends AbstractExceptionController {
 	    	if(zoneSubmit != null)
 	    		model.put("zoneSubmit", zoneSubmit);
 	    	
+	    	String nutritSubmit = request.getParameter("nutritSubmit");
+	    	System.out.println(nutritSubmit);
+	    	if(nutritSubmit != null)
+	    		model.put("nutritSubmit", nutritSubmit);
+	    	
 	    	return new ModelAndView("edit", model);
 	    }    
 	    
@@ -148,6 +153,8 @@ public class EditController extends AbstractExceptionController {
 	    			
 	    		}
 	    	}
+	    	
+	    	response.setRenderParameter("nutritSubmit", "true");
 	    }
 	  
 	    @RequestMapping(params = {"action=setUserArea"})

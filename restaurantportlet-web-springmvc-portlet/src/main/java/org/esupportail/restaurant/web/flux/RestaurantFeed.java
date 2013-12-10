@@ -9,23 +9,34 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
-import org.esupportail.restaurant.web.json.RestaurantFeedRoot;
+import org.esupportail.restaurant.web.model.Restaurant;
+import org.esupportail.restaurant.web.model.RestaurantFeedRoot;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class RestaurantFlux implements Serializable {
+public class RestaurantFeed implements Serializable {
 	
 	private String jsonStringified;
 	private RestaurantFeedRoot flux;
 	private ObjectMapper mapper;
 	private URL path;
 	
-	public RestaurantFlux() {
+	@Autowired 
+	RestaurantCache cache;
+	
+	public RestaurantFeed() {
 		this.jsonStringified = new String();
 		this.mapper = new ObjectMapper();
 		
@@ -49,7 +60,6 @@ public class RestaurantFlux implements Serializable {
 		} catch (Exception e) {
 			System.out.println("[WARN] Couldn't fully instantiate RestaurantFlux, you'll need to configure it manually from admin settings.");
 		}
-		
 	}
 	private RestaurantFeedRoot mapJson() throws JsonParseException, JsonMappingException, IOException {
 		return mapper.readValue(this.jsonStringified, RestaurantFeedRoot.class);
@@ -151,6 +161,8 @@ public class RestaurantFlux implements Serializable {
 			this.jsonStringified = tempJson;
 			try {
 				this.flux = this.mapJson();
+				cache.cacheReset(RestaurantCache.RESTAURANT_CACHE_NAME);
+				cache.cacheRestaurant();
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -168,10 +180,18 @@ public class RestaurantFlux implements Serializable {
 		}
 	}
 	
+	public Restaurant getRestaurantById(int id) {
+		for(Restaurant r : flux.getRestaurants()) {
+			if(r.getId() == id)
+				return r;
+		}
+		return null;
+	}
+	
 	public boolean equals(Object o) {
 		boolean retour = false;
-		if(o instanceof RestaurantFlux) {
-			RestaurantFlux rf = (RestaurantFlux) o;
+		if(o instanceof RestaurantFeed) {
+			RestaurantFeed rf = (RestaurantFeed) o;
 			if(rf.getJsonStringified().equals(this.jsonStringified))
 				retour = true;
 		}
@@ -182,8 +202,9 @@ public class RestaurantFlux implements Serializable {
 		return this.jsonStringified;
 	}	
 	
+	/* automated task */
+	
 	public void run() {
 		System.out.println("Update : " + this.update());
 	}
-	
 }

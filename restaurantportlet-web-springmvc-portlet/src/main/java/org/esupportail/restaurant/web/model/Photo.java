@@ -1,5 +1,5 @@
 
-package org.esupportail.restaurant.web.json;
+package org.esupportail.restaurant.web.model;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,53 +16,53 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "name",
-    "value"
+    "alt",
+    "src"
 })
-public class Nutritionitem {
+public class Photo {
 
     /**
      * 
      */
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("alt")
+    private String alt;
     /**
      * 
      */
-    @JsonProperty("value")
-    private Double value;
+    @JsonProperty("src")
+    private String src;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * 
      */
-    @JsonProperty("name")
-    public String getName() {
-        return name;
+    @JsonProperty("alt")
+    public String getAlt() {
+        return alt;
     }
 
     /**
      * 
      */
-    @JsonProperty("name")
-    public void setName(String name) {
-        this.name = name;
+    @JsonProperty("alt")
+    public void setAlt(String alt) {
+        this.alt = alt;
     }
 
     /**
      * 
      */
-    @JsonProperty("value")
-    public Double getValue() {
-        return value;
+    @JsonProperty("src")
+    public String getSrc() {
+        return src;
     }
 
     /**
      * 
      */
-    @JsonProperty("value")
-    public void setValue(Double value) {
-        this.value = value;
+    @JsonProperty("src")
+    public void setSrc(String src) {
+        this.src = src;
     }
 
     @Override
