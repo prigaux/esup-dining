@@ -25,6 +25,9 @@ public class WebController {
     	dc.executeUpdate("DELETE FROM FAVORITERESTAURANT "
     				   + "WHERE RESTAURANTID=" + id 
     				   + "AND USERNAME='"+ authenticator.getUser().getLogin() +"'");
+    	
+    	request.getPortletSession().getAttribute("isAdmin");
+    	
     }
     
 }

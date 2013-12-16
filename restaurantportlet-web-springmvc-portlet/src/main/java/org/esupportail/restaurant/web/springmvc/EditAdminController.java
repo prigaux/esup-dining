@@ -42,7 +42,7 @@ public class EditAdminController extends AbstractExceptionController {
 	
     @RequestMapping(params = {"action=adminSettings"})
     public ModelAndView renderEditAdminView(RenderRequest request, RenderResponse response) throws Exception {
-    	
+
     	ModelMap model = new ModelMap();
     	
     	User user = authenticator.getUser();

@@ -29,18 +29,19 @@
             <short-title>restaurantportlet-web-springmvc-portlet</short-title>
             <keywords>restaurantportlet-web-springmvc-portlet</keywords>
         </portlet-info>
-
-        <portlet-preferences>
-            <preference>
-                <name>userArea</name>
-                <value></value>
-            </preference>
-            <preference>
-                <name>adminArea</name>
-                <value>LA ROCHELLE</value>
-            </preference>
-        </portlet-preferences>
-
+    
+    	<!--
+	        Administrative role mapping.  This mapping is required if you
+	        want to use the administrative features.
+	    -->
+	    <security-role-ref>
+	        <role-name>restaurantPortletAdmin</role-name>
+	        <role-link>Everyone</role-link>
+	    </security-role-ref>
     </portlet>
+    
+    <user-attribute>
+        <name>user.login.id</name>
+    </user-attribute>
 
 </portlet-app>

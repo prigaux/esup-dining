@@ -51,7 +51,10 @@
 	<bean id="restaurantCache" class="org.esupportail.restaurant.web.flux.RestaurantCache">
 		<constructor-arg index="0" ref="flux"/>
 	</bean>
-
+	
+	<bean id="sessionSetup" class="org.esupportail.restaurant.web.dao.SessionSetupInitializationService" />
+	
+	
 	<!-- Start : ehcache beans -->
 
 	<bean id="cacheManager" scope="singleton"

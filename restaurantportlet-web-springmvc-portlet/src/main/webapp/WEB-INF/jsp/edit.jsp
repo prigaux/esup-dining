@@ -7,7 +7,7 @@
 	<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
 		<spring:message code="go.back.home"/>
 	</a>
-	<c:if test="${user.admin}">
+	<c:if test="${sessionScope.isAdmin}">
 		<h2>
 			<portlet:renderURL var="adminSettings">
   				<portlet:param name="action" value="adminSettings"/>

@@ -13,20 +13,24 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Resource;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
+import org.esupportail.restaurant.web.dao.IInitializationService;
 import org.esupportail.restaurant.web.flux.RestaurantCache;
 import org.esupportail.restaurant.web.flux.RestaurantFeed;
 import org.esupportail.restaurant.web.model.Manus;
 import org.esupportail.restaurant.web.model.Restaurant;
 import org.esupportail.restaurant.web.model.RestaurantFeedRoot;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +49,8 @@ public class ViewController extends AbstractExceptionController {
 	private RestaurantFeed flux;
 	private RestaurantFeedRoot restaurants;
 	
+	private IInitializationService initializationService;
+	
 	@Autowired 
 	RestaurantCache cache;
 	
@@ -56,6 +62,13 @@ public class ViewController extends AbstractExceptionController {
     	User user = authenticator.getUser();
     	String areaToDisplay = new String();
 
+        
+		PortletSession session = request.getPortletSession(true);
+        System.out.println(session.getAttribute("isAdmin"));
+		if (session.getAttribute("isAdmin") == null) {
+        	initializationService.initialize(request);
+        }
+    	
     	try {
     		ResultSet results = dc.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='"+user.getLogin()+"';");
     		results.next();
@@ -123,7 +136,6 @@ public class ViewController extends AbstractExceptionController {
     
     @RequestMapping(params = {"action=viewRestaurant"})
     public ModelAndView renderRestaurantView(RenderRequest request, RenderResponse response, @RequestParam(value = "id", required = true) int id) throws Exception {
-    	
     	ModelMap model = new ModelMap();
     	
     	User user = authenticator.getUser();
@@ -246,6 +258,13 @@ public class ViewController extends AbstractExceptionController {
 		} catch(SQLException e) { /**/ }
 		    	
     	return new ModelAndView("dish", model);
-    }	  
+    }	      
+    
+	@Required
+    @Resource(name="sessionSetup")
+    public void setInitializationServices(IInitializationService service) {
+            this.initializationService = service;
+    }
+    
     
 }
