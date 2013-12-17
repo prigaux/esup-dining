@@ -17,55 +17,65 @@
 	</c:if>
 
 	<c:if test="${not empty restaurant}">		
-		
-		<h1>${restaurant.title}</h1>
-		
-		<p>
-			<%-- Start favorite --%>
-			<c:choose>
-				<c:when test="${isFavorite}">
-					<portlet:actionURL var="removeFromFavorite">
-						<portlet:param name="action" value="removeFavorite" />
-						<portlet:param name="restaurant-id" value="${restaurant.id}" />
-					</portlet:actionURL>
-					<a href="${removeFromFavorite}" class="icn-fam icn-fam-fav">
-						<spring:message code="restaurant.link.removeFromFavorite"/>
-					</a>
-				</c:when>
-				<c:otherwise>
+			
+		<nav class="navbar navbar-default" role="navigation">
+	  	<!-- Brand and toggle get grouped for better mobile display -->
+  			<div class="navbar-header">
+		    	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				    <span class="sr-only">Toggle navigation</span>
+				    <span class="icon-bar"></span>
+				    <span class="icon-bar"></span>
+				    <span class="icon-bar"></span>
+		    	</button>
+		    	<a class="navbar-brand" href="#">${restaurant.title}</a>
+		    </div>
 
-					<portlet:actionURL var="addToFavorite">
-						<portlet:param name="action" value="setFavorite" />
-						<portlet:param name="id" value="${restaurant.id}" />
-					</portlet:actionURL>
-					<a href="${addToFavorite}" class="icn-fam icn-fam-fav">
-						<spring:message code="restaurant.link.addToFavorite"/>
-					</a>
-					
-				</c:otherwise>
-			</c:choose>
-			<%-- End favorite --%>
-			-
-			<%-- Start meal link --%>
-			<portlet:renderURL var="viewMeals">
-				<portlet:param name="action" value="viewMeals" />
-				<portlet:param name="id" value="${restaurant.id}" />
-			</portlet:renderURL>
-			
-			<a href="${viewMeals}" class="icn-fam icn-fam-meal">
-				<spring:message code="restaurant.link.viewMeals"/>
-			</a>
-			<%-- End meal link --%>
-			
-			<%-- start Accessibility block --%>
-			<c:if test="${restaurant.accessibility}">
-				 - 
-				<span class="icn-fam icn-fam-disability">
-					<spring:message code="restaurant.msg.disability"/>
-				</span>
-			</c:if>
-			<%-- end accessibility block--%>
-		</p>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li>
+						<c:choose>
+							<c:when test="${isFavorite}">
+								<portlet:actionURL var="removeFromFavorite">
+									<portlet:param name="action" value="removeFavorite" />
+									<portlet:param name="restaurant-id" value="${restaurant.id}" />
+								</portlet:actionURL>
+								<a href="${removeFromFavorite}" class="icn-fam icn-fam-fav">
+									<spring:message code="restaurant.link.removeFromFavorite"/>
+								</a>
+							</c:when>
+							<c:otherwise>
+
+								<portlet:actionURL var="addToFavorite">
+									<portlet:param name="action" value="setFavorite" />
+									<portlet:param name="id" value="${restaurant.id}" />
+								</portlet:actionURL>
+								<a href="${addToFavorite}" class="icn-fam icn-fam-fav">
+									<spring:message code="restaurant.link.addToFavorite"/>
+								</a>
+								
+							</c:otherwise>
+						</c:choose>
+					</li>
+					<li>
+						<portlet:renderURL var="viewMeals">
+							<portlet:param name="action" value="viewMeals" />
+							<portlet:param name="id" value="${restaurant.id}" />
+						</portlet:renderURL>
+						
+						<a href="${viewMeals}" class="icn-fam icn-fam-meal">
+							<spring:message code="restaurant.link.viewMeals"/>
+						</a>
+					</li>
+					<c:if test="${restaurant.accessibility}">
+					<li>
+						<a href="#" class="icn-fam icn-fam-disability">
+							<spring:message code="restaurant.msg.disability"/>
+						</a>
+					</li>
+					</c:if>
+				</ul>
+			<div>
+		</nav>
 		
 		<%-- start short desc --%>
 		<c:if test="${not empty restaurant.shortdesc}">
@@ -77,13 +87,13 @@
 
 		<div class="row">
 			<%-- Start photo block --%>
-			<div class="col-xs-12 col-sm-6 col-md-4 ta-center">
+			<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 ta-center">
 				<c:if test="${not empty restaurant.photo.src}">
 					<img src="${restaurant.photo.src}" alt="${restaurant.photo.alt}" />
 				</c:if>	
 			</div>
 			<%-- end photo block --%>
-			<div class="col-xs-12 col-sm-6 col-md-8">
+			<div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
 				<%-- start description --%>
 				<c:if test="${not empty restaurant.description}">
 					<p>
@@ -137,15 +147,43 @@
 
 		<div class="row">
 			<%-- start table opening --%>			
-			<div class="col-xs-12 col-sm-6 col-md-4">
+			<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+				<c:if test="${not empty restaurant.lat and not empty restaurant.lon}">
+					<h2>
+						<spring:message code="restaurant.msg.map"/>
+					</h2>
+					
+					<div id="map-canvas"></div>
+					<script type="text/javascript">
+					function initialize() {
+					    var myLatlng = new google.maps.LatLng(${restaurant.lat}, ${restaurant.lon});
+						var mapOptions = {
+					      center: myLatlng,
+					      zoom: 14,
+					      mapTypeId: google.maps.MapTypeId.ROADMAP
+					    };
+					    var map = new google.maps.Map(document.getElementById("map-canvas"),
+					        mapOptions);
+					    var marker = new google.maps.Marker({
+					        position: myLatlng,
+					        map: map,
+					        title:"${restaurant.title}",
+					        icon: "<%= renderRequest.getContextPath() + "/images/pin_resto.png" %>"
+					    });
+		    			window.onresize = function() {
+							map.setCenter(myLatlng);
+						}
+					  }
+					  google.maps.event.addDomListener(window, 'load', initialize);
+					</script>
+				</c:if>			
+			</div>
+			<%-- end table opening --%>
+			<%-- start map --%>
+			<div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
 				<c:if test="${not empty restaurant.opening}">
+					<h2>Jours d'ouverture</h2>
 					<table id="opening" class="table table-striped">
-						
-						<tr>
-							<th colspan="4">
-								Ouverture	
-							</th>
-						</tr>
 						<tr>
 							<th></th>
 							<th><spring:message code="restaurant.msg.opening.morning"/></strong></th>
@@ -191,45 +229,12 @@
 							tableOpening.appendChild(ligne);
 						}
 					</script>
-				</c:if>				
-			</div>
-			<%-- end table opening --%>
-			<%-- start map --%>
-			<div class="col-xs-12 col-sm-6 col-md-8">
-				<c:if test="${not empty restaurant.lat and not empty restaurant.lon}">
-					<h2>
-						<spring:message code="restaurant.msg.map"/>
-					</h2>
-					
-					<div id="map-canvas"></div>
-					<script type="text/javascript">
-					function initialize() {
-					    var myLatlng = new google.maps.LatLng(${restaurant.lat}, ${restaurant.lon});
-						var mapOptions = {
-					      center: myLatlng,
-					      zoom: 14,
-					      mapTypeId: google.maps.MapTypeId.ROADMAP
-					    };
-					    var map = new google.maps.Map(document.getElementById("map-canvas"),
-					        mapOptions);
-					    var marker = new google.maps.Marker({
-					        position: myLatlng,
-					        map: map,
-					        title:"${restaurant.title}",
-					        icon: "<%= renderRequest.getContextPath() + "/images/pin_resto.png" %>"
-					    });
-		    			window.onresize = function() {
-							map.setCenter(myLatlng);
-						}
-					  }
-					  google.maps.event.addDomListener(window, 'load', initialize);
-					</script>
-				</c:if>				
+				</c:if>								
 			</div>
 			<%-- end map --%>
 		</div>
 
-	</c:if>		
+	</c:if>
 
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>
 
