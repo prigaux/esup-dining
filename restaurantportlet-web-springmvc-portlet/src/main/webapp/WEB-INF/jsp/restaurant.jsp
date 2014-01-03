@@ -73,6 +73,13 @@
 						</a>
 					</li>
 					</c:if>
+					<c:if test="${restaurant.wifi}">
+					<li>
+						<a href="#" class="icn-fam icn-fam-wifi">
+							<spring:message code="restaurant.wifi"/>					
+						</a>
+					</li>
+					</c:if>
 				</ul>
 			<div>
 		</nav>
@@ -141,7 +148,21 @@
 						${restaurant.contact.email}
 					</p>
 				</c:if>	
-				<%-- end email --%>			
+				<%-- end email --%>		
+				<%-- start payment method --%>
+				<c:if test="${not empty restaurant.payment}">
+					<p>
+						<strong><spring:message code="restaurant.payment"/></strong> :
+					</p>
+					<ul>
+						<c:forEach var="method" items="${restaurant.payment}">
+							<li>
+								${method.name}
+							</li>
+						</c:forEach>
+					</ul>
+				</c:if>	
+				<%-- end payment method --%>			
 			</div>
 		</div>
 

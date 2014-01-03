@@ -66,7 +66,6 @@ public class ViewController extends AbstractExceptionController {
     	String areaToDisplay = new String();
         
 		PortletSession session = request.getPortletSession(true);
-        System.out.println(session.getAttribute("isAdmin"));
 		if (session.getAttribute("isAdmin") == null) {
         	initializationService.initialize(request);
         }

@@ -22,7 +22,7 @@
 .icn-fam {
 	background-position: 0 center;
 	background-repeat: no-repeat;
-	padding-left: 20px;
+	padding-left: 20px !important;
 }
 
 .get-located {
