@@ -120,7 +120,6 @@ public class EditAdminController extends AbstractExceptionController {
     	} catch(MalformedURLException e) {
     		response.setRenderParameter("urlError", "true");
     	} catch(SQLException e) {
-    		System.out.println("[INFO] URL isn't set, we insert a new ROW to the PATHFLUX table.");
     		dc.executeUpdate("INSERT INTO PATHFLUX (URLFLUX) VALUES ('"+ url +"')");
     	} catch(JsonParseException e) {
     		response.setRenderParameter("urlError", "true");

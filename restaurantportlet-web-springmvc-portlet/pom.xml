@@ -28,6 +28,13 @@
                 <version>0.9</version>
                 <configuration>
                     <!-- Comma-separated list of portlets to be prototyped -->
+     	            <users>
+                      <user>
+                        <username>loginuser</username>
+                        <password>passuser</password>
+                        <roles>myrole,admin,restaurantPortletAdmin</roles>
+                      </user>
+                    </users>
                     <portletNames>restaurantportlet</portletNames>
                     <portletXml>${basedir}/src/main/webapp/WEB-INF/portlet.xml</portletXml>
                     <webAppSourceDirectory>${project.build.outputDirectory}/../${project.artifactId}-${project.version}</webAppSourceDirectory>
@@ -81,7 +88,17 @@
             <artifactId>esup-commons2-web</artifactId>
             <version>${esupcommons.version}</version>
         </dependency>
-
+        <dependency>
+			<groupId>org.jdom</groupId>
+			<artifactId>jdom</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+<dependency>
+	<groupId>commons-io</groupId>
+	<artifactId>commons-io</artifactId>
+	<version>2.4</version>
+</dependency>
+            
         <!-- ===== Compile Time Dependencies ============================== -->
         <dependency>
             <groupId>javax.servlet</groupId>

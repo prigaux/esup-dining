@@ -53,27 +53,31 @@ ${nothingToDisplay}
 </c:if>
 
 <c:if test="${not empty listFavRestaurant}">
-	<portlet:actionURL var="removeFavorite">
-	  <portlet:param name="action" value="removeFavorite"/>
-	</portlet:actionURL>
-	<form method="POST" action="${removeFavorite}">
-	<fieldset>
-		<legend>Vos restaurant favoris</legend>
-		<c:forEach var="restaurant" items="${listFavRestaurant}">
+<h3>Vos restaurants favoris</h3>
 
-			<label for="field-restaurant-${restaurant.id}" style="display:block; padding: 10px 0; border-bottom: 1px solid #333;">
+<table class="table table-responsive table-striped">
+	<c:forEach var="restaurant" items="${listFavRestaurant}">
+		<tr>
+			<td>
 				${restaurant.title}
-				<input type="radio" name="restaurant-id" id="field-restaurant-${restaurant.id}" value="${restaurant.id}"/>
-			</label>
+			</td>
+			<td>
+				<portlet:actionURL var="removeFavorite">
+				  <portlet:param name="action" value="removeFavorite"/>
+				  <portlet:param name="restaurant-id" value="${restaurant.id}"/>
+				</portlet:actionURL>
+				<a href="${removeFavorite}">
+					Supprimer <span class="glyphicon glyphicon-remove"></span>
+				</a>
+			</td>
+		</tr>
+	</c:forEach>
+</table>
 
-		</c:forEach>
-		<input type="submit" value="Supprimer">
-	</fieldset>
-</form>
 </c:if>
 </c:if>
 
-<h2>Préférences nutritive</h2>
+<h3>Préférences nutritive</h3>
 <portlet:actionURL var="nutritionPreferences">
   <portlet:param name="action" value="nutritionPreferences"/>
 </portlet:actionURL>
@@ -103,4 +107,3 @@ ${nothingToDisplay}
 </form>
 	
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>
-

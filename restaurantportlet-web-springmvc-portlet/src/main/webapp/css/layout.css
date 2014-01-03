@@ -3,9 +3,10 @@
 	img {
 		max-width: 100%;
 	}
-	#map-canvas img {
-		width: auto !important;
-		max-width: auto;
+	/* max-width: 100%; trick is buggy with sprite images */
+	#map-canvas img,
+	.sprite {
+		max-width: none;
 	}
 	#map-canvas {
 		width: 100%;

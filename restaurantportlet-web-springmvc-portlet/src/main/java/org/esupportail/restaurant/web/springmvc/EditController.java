@@ -36,7 +36,6 @@ public class EditController extends AbstractExceptionController {
 	private DatabaseConnector dc;
 	@Autowired
 	private RestaurantFeed flux;
-	private RestaurantFeedRoot restaurants;
 	
 	  @RequestMapping
 	    public ModelAndView renderEditView(RenderRequest request, RenderResponse response) throws Exception {
@@ -61,7 +60,7 @@ public class EditController extends AbstractExceptionController {
 					
 				model.put("nutritionPrefs", nutritionPrefs);
 				
-				
+				prefUser.close();
 			} catch(SQLException e) { /**/ }
 			
 	    	try {
@@ -77,6 +76,7 @@ public class EditController extends AbstractExceptionController {
 	    			ResultSet results = dc.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='"+user.getLogin()+"';");
 	    			results.next();
 	    			userArea = results.getString("AREANAME");
+	    			results.close();
 	    		} catch (SQLException e) {
 	    			// here we are if the user doesn't already have a specific area setting.
 	    			ResultSet results = dc.executeQuery("SELECT AREANAME FROM PATHFLUX");
@@ -87,6 +87,7 @@ public class EditController extends AbstractExceptionController {
 	    				// No default area for all user, admin must configure the portlet. 
 	    				// No need to throw an exception
 	    			}
+	    			results.close();
 	    			
 	    		}
 	    		model.put("defaultArea", userArea);
@@ -97,6 +98,7 @@ public class EditController extends AbstractExceptionController {
 	        		while(results.next()) {
 	        			favResults.add(results.getString("restaurantId"));
 	        		}
+	        		results.close();
 	        	} catch(Exception e) {
 	        		// No data available, doesn't matter 
 	        	}
@@ -122,7 +124,6 @@ public class EditController extends AbstractExceptionController {
 	    		model.put("zoneSubmit", zoneSubmit);
 	    	
 	    	String nutritSubmit = request.getParameter("nutritSubmit");
-	    	System.out.println(nutritSubmit);
 	    	if(nutritSubmit != null)
 	    		model.put("nutritSubmit", nutritSubmit);
 	    	
@@ -167,6 +168,7 @@ public class EditController extends AbstractExceptionController {
 	    		results.next();
 	    		results.updateString("AREANAME", area);
 	    		results.updateRow();
+	    		results.close();
 	    	} catch (SQLException e) {
 	    		dc.executeUpdate("INSERT INTO USERAREA (USERNAME, AREANAME) VALUES ('"+user.getLogin()+"', '"+area+"');");
 	    	}

@@ -24,10 +24,7 @@ public class WebController {
     public void removeFavorite(ActionRequest request, ActionResponse response, @RequestParam(value = "restaurant-id", required = true) String id) throws Exception {
     	dc.executeUpdate("DELETE FROM FAVORITERESTAURANT "
     				   + "WHERE RESTAURANTID=" + id 
-    				   + "AND USERNAME='"+ authenticator.getUser().getLogin() +"'");
-    	
-    	request.getPortletSession().getAttribute("isAdmin");
-    	
+    				   + "AND USERNAME='"+ authenticator.getUser().getLogin() +"'");    	
     }
     
 }
