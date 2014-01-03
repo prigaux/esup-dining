@@ -56,6 +56,8 @@ public class ViewController extends AbstractExceptionController {
 	
 	@RequestMapping
     public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {	
+		File f = new File("hello.txt");
+		RestaurantParser rp = new RestaurantParser(new URL("http://www.souquet.eu/test/xml/crous.xml"), new URL("http://www.souquet.eu/test/xml/crous-menus.xml"))
 		
     	ModelMap model = new ModelMap();
     	

@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Scanner;
 
-import org.esupportail.commons.utils.FileUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -22,19 +22,38 @@ public class RestaurantParser {
 	private File stylesheet;
 	private String jsonOutput;
 
-	public RestaurantParser(URL restaurantsURL, URL menuURL, URL stylesheetURL) {
+	public RestaurantParser(URL restaurantsURL, URL menuURL, File stylesheet) {
+		
+		File f =  new File("src/main/ressources/mock-data/portlet.xsl");
+		
+		try {
+			System.out.println(this.readFile(f));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		this.restaurants = this.buildDocument(restaurantsURL);
 		this.menus = this.buildDocument(menuURL);
 		this.xml = mergeFeeds(this.restaurants, this.menus);
-		
-		this.stylesheet = new File("crous-schema.xml");
-		/*try {
-			FileUtils.copyURLToFile(stylesheetURL, this.stylesheet);
-		} catch (IOException e) {
-			System.out.println("I/O Error : " + e);
-		}*/
+		this.stylesheet = stylesheet;
 	}
 
+	private String readFile(File file) throws IOException {
+	    StringBuilder fileContents = new StringBuilder((int)file.length());
+	    Scanner scanner = new Scanner(file);
+	    String lineSeparator = System.getProperty("line.separator");
+
+	    try {
+	        while(scanner.hasNextLine()) {        
+	            fileContents.append(scanner.nextLine() + lineSeparator);
+	        }
+	        return fileContents.toString();
+	    } finally {
+	        scanner.close();
+	    }
+	}
+	
 	private Document mergeFeeds(Document restaurants, Document menus) {
 		
 		Document newDc = new Document();

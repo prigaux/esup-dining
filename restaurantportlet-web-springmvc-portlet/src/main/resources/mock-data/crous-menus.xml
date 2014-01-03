@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listemenus>
+	<menu date="2013-10-31" restaurant="r6">
+		<repas nom="Matin">
+			<plats nom="Boissons">
+				<plat>
+					<nom>Café</nom>
+				</plat>
+				<plat>
+					<nom>Thé</nom>
+				</plat>
+				<plat>
+					<nom>Chocolat Chaud</nom>
+					<code valeur="1"/>
+					<code valeur="3"/>
+					<code valeur="9"/>
+				</plat>
+				<plat>
+					<nom>Jus d'orange</nom>
+				</plat>
+			</plats>
+			<plats nom="Autres">
+				<plat>
+					<nom>Céréales</nom>
+				</plat>
+				<plat>
+					<nom>Pain</nom>
+				</plat>
+				<plat>
+					<nom>Confiture</nom>
+					<code valeur="9"/>
+				</plat>
+				<plat>
+					<nom>Pate a tartiner</nom>
+					<code valeur="1"/>
+					<code valeur="2"/>
+					<code valeur="3"/>
+				</plat>
+				<plat>
+					<nom>Beurre</nom>
+				</plat>
+			</plats>
+		</repas>
+		<repas nom="Midi">
+			<plats nom="Les entrées">
+				<plat>
+					<nom>Salade piémontaise</nom>
+				</plat>
+				<plat>
+					<nom>Gésiers de canard</nom>
+					<code valeur="9"/>
+				</plat>
+				<plat>
+					<nom>Soufflé au fromage</nom>
+				</plat>
+			</plats>
+			<plats nom="Les plats">
+				<plat>
+					<nom>Purée</nom>
+				</plat>
+				<plat>
+					<nom>Frites</nom>
+				</plat>
+				<plat>
+					<nom>Haricots vert</nom>
+					<code valeur="10"/>
+					<code valeur="5"/>
+				</plat>
+				<plat>
+					<nom>Rumsteack</nom>
+				</plat>
+				<plat>
+					<nom>Brochette de poisson</nom>
+					<code valeur="4"/>
+					<code valeur="2"/>
+				</plat>
+			</plats>
+			<plats nom="Les désserts">
+				<plat>
+					<nom>Salade de fruits</nom>
+				</plat>
+				<plat>
+					<nom>Crème brulée</nom>
+				</plat>
+				<plat>
+					<nom>Mousse au chocolat</nom>
+				</plat>
+				<plat>
+					<nom>Fruits</nom>
+				</plat>
+			</plats>					
+		</repas>
+	</menu>
+</listemenus>

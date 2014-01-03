@@ -100,10 +100,7 @@ public class EditAdminController extends AbstractExceptionController {
     }
 
     @RequestMapping(params = {"action=urlFlux"})
-    public void setURLFlux(ActionRequest request, ActionResponse response, @RequestParam(value = "url", required = true) String url) throws Exception { 
-		
-    	User user = authenticator.getUser();
-        	
+    public void setURLFlux(ActionRequest request, ActionResponse response, @RequestParam(value = "url", required = true) String url) throws Exception { 	
     	response.setRenderParameter("action", "adminSettings");
     	try {
     		URL urlFlux = new URL(url);	
@@ -131,6 +128,17 @@ public class EditAdminController extends AbstractExceptionController {
     		response.setRenderParameter("urlError", "true");
     	}	
     	
+    }
+    
+    @RequestMapping(params = {"action=urlCrous"})
+    public void setURLCrous(ActionRequest request, ActionResponse response, @RequestParam(value = "url-restaurant", required = true) String url1,
+    																		@RequestParam(value = "url-menus", required = true) String url2) throws Exception {
+    	  try {
+    		  URL urlRestaurant = new URL(url1);
+    		  URL urlMenus = new URL(url2);
+    	  } catch (Exception e) {
+    		  response.setRenderParameter("urlError", "true");
+    	  }
     }
     
     @RequestMapping(params = {"action=setDefaultArea"})
