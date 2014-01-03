@@ -78,7 +78,6 @@ public class DatabaseConnector {
 			System.out.println("[INFO] Table nutritionPreferences already exist");
 		}
 		
-		
 	}
 	
 	public ResultSet executeQuery(String query) throws SQLException {

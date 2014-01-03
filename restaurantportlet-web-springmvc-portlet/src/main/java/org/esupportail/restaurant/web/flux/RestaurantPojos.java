@@ -10,7 +10,7 @@ import com.sun.codemodel.JCodeModel;
 public class RestaurantPojos {
 
     private final File jsonSchema = new File("src/main/resources/mock-data/portlet-schema.json"); 
-    private final File outputFolder = new File("src/main/java/org/esupportail/restaurant/web/model");
+    private final File outputFolder = new File("src/main/java");
     
     public RestaurantPojos() throws Exception {
     	
@@ -36,7 +36,6 @@ public class RestaurantPojos {
 			jsonSchemaUrl = jsonSchema.toURI().toURL();
 	        new SchemaMapper().generate(codeModel, "RestaurantFeedRoot", "org.esupportail.restaurant.web.model.model", jsonSchemaUrl);
 	        codeModel.build(this.outputFolder);
-	        System.out.println("POJOs successfully generated.");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
