@@ -15,43 +15,17 @@ import org.jdom2.transform.XSLTransformer;
 
 public class RestaurantParser {
 
+	private static final File CROUS_STYLESHEET = new File("src/main/resources/mock-data/portlet.xsl");
+	
 	private Document xml;
 	
 	private Document restaurants;
 	private Document menus;
-	private File stylesheet;
-	private String jsonOutput;
 
-	public RestaurantParser(URL restaurantsURL, URL menuURL, File stylesheet) {
-		
-		File f =  new File("src/main/ressources/mock-data/portlet.xsl");
-		
-		try {
-			System.out.println(this.readFile(f));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+	public RestaurantParser(URL restaurantsURL, URL menuURL) {	
 		this.restaurants = this.buildDocument(restaurantsURL);
 		this.menus = this.buildDocument(menuURL);
 		this.xml = mergeFeeds(this.restaurants, this.menus);
-		this.stylesheet = stylesheet;
-	}
-
-	private String readFile(File file) throws IOException {
-	    StringBuilder fileContents = new StringBuilder((int)file.length());
-	    Scanner scanner = new Scanner(file);
-	    String lineSeparator = System.getProperty("line.separator");
-
-	    try {
-	        while(scanner.hasNextLine()) {        
-	            fileContents.append(scanner.nextLine() + lineSeparator);
-	        }
-	        return fileContents.toString();
-	    } finally {
-	        scanner.close();
-	    }
 	}
 	
 	private Document mergeFeeds(Document restaurants, Document menus) {
@@ -90,7 +64,7 @@ public class RestaurantParser {
 	public String buildJsonString() {
 		Document doc = null;
 		try {
-			doc = this.transf(this.xml, this.stylesheet);
+			doc = this.transf(this.xml, RestaurantParser.CROUS_STYLESHEET);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -104,7 +78,6 @@ public class RestaurantParser {
 			transformer = new XSLTransformer(stylesheetFile);
 			modifiedDoc = transformer.transform(source);
 		} catch (XSLTransformException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
 		return modifiedDoc;
@@ -112,10 +85,6 @@ public class RestaurantParser {
 	
 	public Document getXML() {
 		return this.xml;
-	}
-	public File getStylesheet() {
-		return this.stylesheet;
-	}
-	
+	}	
 }
 

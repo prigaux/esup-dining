@@ -55,6 +55,8 @@
 	<bean id="sessionSetup" class="org.esupportail.restaurant.web.dao.SessionSetupInitializationService" />
 	
 	
+	<bean class="org.esupportail.restaurant.web.flux.RestaurantPojos" />
+	
 	<!-- Start : ehcache beans -->
 
 	<bean id="cacheManager" scope="singleton"

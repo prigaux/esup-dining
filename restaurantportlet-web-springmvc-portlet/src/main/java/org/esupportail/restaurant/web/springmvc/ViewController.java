@@ -1,5 +1,7 @@
 package org.esupportail.restaurant.web.springmvc;
 
+import java.io.File;
+import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -26,6 +28,7 @@ import org.esupportail.restaurant.web.dao.DatabaseConnector;
 import org.esupportail.restaurant.web.dao.IInitializationService;
 import org.esupportail.restaurant.web.flux.RestaurantCache;
 import org.esupportail.restaurant.web.flux.RestaurantFeed;
+import org.esupportail.restaurant.web.flux.RestaurantParser;
 import org.esupportail.restaurant.web.model.Manus;
 import org.esupportail.restaurant.web.model.Restaurant;
 import org.esupportail.restaurant.web.model.RestaurantFeedRoot;
@@ -56,8 +59,6 @@ public class ViewController extends AbstractExceptionController {
 	
 	@RequestMapping
     public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {	
-		File f = new File("hello.txt");
-		RestaurantParser rp = new RestaurantParser(new URL("http://www.souquet.eu/test/xml/crous.xml"), new URL("http://www.souquet.eu/test/xml/crous-menus.xml"))
 		
     	ModelMap model = new ModelMap();
     	
