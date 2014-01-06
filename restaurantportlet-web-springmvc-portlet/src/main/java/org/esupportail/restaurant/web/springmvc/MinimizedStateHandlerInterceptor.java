@@ -1,4 +1,4 @@
-package org.esupportail.restaurant.web.springmvc;
+package org.esupportail.restaurant.web.	springmvc;
 
 import javax.annotation.Resource;
 import javax.portlet.PortletSession;
@@ -18,15 +18,14 @@ public class MinimizedStateHandlerInterceptor extends HandlerInterceptorAdapter 
 	private Authenticator authenticator;
 
 	private IInitializationService initializationService;
-	
+
     @Override
     public boolean preHandleRender(RenderRequest request, RenderResponse response, Object handler) throws Exception {
         if (WindowState.MINIMIZED.equals(request.getWindowState())) {
             return false;
         }
-        
+
         return true;
     }
-    
 
 }

@@ -15,23 +15,23 @@ public abstract class AbstractExceptionController {
 	private final Logger logger = new LoggerImpl(this.getClass());
 
 	@ExceptionHandler(Exception.class)
-	public ModelAndView handleException(Exception ex) {
-		
-		logger.error("Exception catching in spring mvc controller ... ", ex);
-		
+    public final ModelAndView handleException(final Exception ex) {
+
+	    logger.error("Exception catching in spring mvc controller ... ", ex);
+
 		ModelMap model = new ModelMap();
-		
+
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
     	PrintStream print = new PrintStream(output);
     	ex.printStackTrace(print);
     	String exceptionStackTrace = new String(output.toByteArray());
     	model.put("exceptionStackTrace", exceptionStackTrace);
-    	
+
     	model.put("exceptionMessage", ex.getMessage());
 
-    	
+
         return new ModelAndView("exception", model);
 	}
 
-	
+
 }

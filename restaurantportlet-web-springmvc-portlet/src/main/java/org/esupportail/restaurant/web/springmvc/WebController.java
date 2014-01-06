@@ -19,12 +19,12 @@ public class WebController {
 	private Authenticator authenticator;	
 	@Autowired
 	private DatabaseConnector dc;
-	
+
     @RequestMapping(value = {"EDIT", "VIEW"}, params = {"action=removeFavorite"})
-    public void removeFavorite(ActionRequest request, ActionResponse response, @RequestParam(value = "restaurant-id", required = true) String id) throws Exception {
+    public final void removeFavorite(final ActionRequest request, final ActionResponse response, @RequestParam(value = "restaurant-id", required = true) final String id) throws Exception {
     	dc.executeUpdate("DELETE FROM FAVORITERESTAURANT "
     				   + "WHERE RESTAURANTID=" + id 
     				   + "AND USERNAME='"+ authenticator.getUser().getLogin() +"'");    	
     }
-    
+
 }

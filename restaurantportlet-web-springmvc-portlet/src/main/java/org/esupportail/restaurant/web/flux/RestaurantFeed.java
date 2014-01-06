@@ -9,15 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.ResultSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
-import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -188,14 +180,35 @@ public class RestaurantFeed implements Serializable {
 		return null;
 	}
 	
-	public boolean equals(Object o) {
-		boolean retour = false;
-		if(o instanceof RestaurantFeed) {
-			RestaurantFeed rf = (RestaurantFeed) o;
-			if(rf.getJsonStringified().equals(this.jsonStringified))
-				retour = true;
-		}
-		return retour;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((jsonStringified == null) ? 0 : jsonStringified.hashCode());
+		result = prime * result + ((path == null) ? 0 : path.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RestaurantFeed other = (RestaurantFeed) obj;
+		if (jsonStringified == null) {
+			if (other.jsonStringified != null)
+				return false;
+		} else if (!jsonStringified.equals(other.jsonStringified))
+			return false;
+		if (path == null) {
+			if (other.path != null)
+				return false;
+		} else if (!path.equals(other.path))
+			return false;
+		return true;
 	}
 	
 	public String toString() {

@@ -9,7 +9,7 @@ import com.sun.codemodel.JCodeModel;
 
 public class RestaurantPojos {
 
-    private final File jsonSchema = new File("src/main/resources/mock-data/portlet-schema.json"); 
+    private final File jsonSchema = new File("src/main/resources/schema/portlet-schema.json"); 
     private final File outputFolder = new File("src/main/java");
     
     public RestaurantPojos() throws Exception {
@@ -34,7 +34,7 @@ public class RestaurantPojos {
         URL jsonSchemaUrl;
 		try {
 			jsonSchemaUrl = jsonSchema.toURI().toURL();
-	        new SchemaMapper().generate(codeModel, "RestaurantFeedRoot", "org.esupportail.restaurant.web.model.model", jsonSchemaUrl);
+	        new SchemaMapper().generate(codeModel, "RestaurantFeedRoot", "org.esupportail.restaurant.web.model", jsonSchemaUrl);
 	        codeModel.build(this.outputFolder);
 		} catch (Exception e) {
 			e.printStackTrace();

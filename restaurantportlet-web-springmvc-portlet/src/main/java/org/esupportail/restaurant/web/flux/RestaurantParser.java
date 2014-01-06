@@ -15,7 +15,7 @@ import org.jdom2.transform.XSLTransformer;
 
 public class RestaurantParser {
 
-	private static final File CROUS_STYLESHEET = new File("src/main/resources/mock-data/portlet.xsl");
+	private static final File CROUS_STYLESHEET = new File("src/main/resources/schema/portlet.xsl");
 	
 	private Document xml;
 	

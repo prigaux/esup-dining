@@ -19,5 +19,5 @@ public class HelpController extends AbstractExceptionController {
 		model.put("code", code);
     	return new ModelAndView("help", model);
     }
-	
+
 }
