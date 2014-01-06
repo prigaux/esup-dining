@@ -86,8 +86,7 @@ public class ViewController extends AbstractExceptionController {
 			} catch (SQLException e2) {
 				// If there is no default area, then the admin must configure
 				// the portlet before.
-				model.put("nothingToDisplay",
-						"This portlet needs to be configured by an authorized user");
+			    return new ModelAndView("error", new ModelMap());
 			}
 		}
 
@@ -112,10 +111,8 @@ public class ViewController extends AbstractExceptionController {
 				model.put("favorites", favorites);
 			}
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// Nothing to do here.
-		} catch (NullPointerException e2) {
-			// nop
 		}
 
 		model.put("area", areaToDisplay);
@@ -134,8 +131,7 @@ public class ViewController extends AbstractExceptionController {
 			model.put("dininghalls", dininghallList);
 
 		} catch (Exception e) {
-			model.put("nothingToDisplay",
-					"This portlet needs to be configured by an authorized user");
+            return new ModelAndView("error", new ModelMap());
 		}
 
 		return new ModelAndView("view", model);
@@ -202,8 +198,7 @@ public class ViewController extends AbstractExceptionController {
 			}
 			model.put("menus", menuList);
 		} catch (Exception e) {
-			model.put("nothingToDisplay",
-					"This portlet needs to be configured by an authorized user");
+            return new ModelAndView("error", new ModelMap());
 		}
 
 		return new ModelAndView("meals", model);

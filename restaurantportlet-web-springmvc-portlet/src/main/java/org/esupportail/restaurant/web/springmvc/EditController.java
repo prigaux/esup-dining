@@ -117,9 +117,7 @@ public class EditController extends AbstractExceptionController {
 
 	        	model.put("listFavRestaurant", listFavRestaurant);
 
-	    	} catch (NullPointerException e) {
-	    		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
-	    	}
+	    	} catch (NullPointerException e) { /**/ }
 
 	    	String zoneSubmit = request.getParameter("zoneSubmit");
 	    	if (zoneSubmit != null) {

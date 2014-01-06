@@ -27,9 +27,9 @@ public class DatabaseConnector {
 		try {
 			this.connection = DriverManager.getConnection(DatabaseConnector.DB_INFOS, DatabaseConnector.DB_USER,  DatabaseConnector.DB_PWD);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		try {
 			this.connection.setAutoCommit(true);
 			this.statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -48,14 +48,14 @@ public class DatabaseConnector {
 	
 	public void createTables() {		
 
-		/*try {
+		try {
 			statement.executeUpdate("DROP TABLE FAVORITERESTAURANT");
 			statement.executeUpdate("DROP TABLE USERAREA");
 			statement.executeUpdate("DROP TABLE PATHFLUX");
 			statement.executeUpdate("DROP TABLE NUTRITIONPREFERENCES");
 		} catch (SQLException e1) {
 			e1.printStackTrace();
-		}*/
+		}
 		
 		try {
 			statement.executeUpdate("CREATE TABLE FAVORITERESTAURANT(USERNAME VARCHAR(100), RESTAURANTID VARCHAR(100))");

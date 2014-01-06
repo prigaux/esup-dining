@@ -75,9 +75,7 @@ public class EditAdminController extends AbstractExceptionController {
 	        	model.put("urlfluxdb", urlflux);
 	        	model.put("defaultArea", area);
 
-	    	} catch (NullPointerException e) {
-	    		model.put("nothingToDisplay", "This portlet needs to be configured by an authorized user");
-	    	}
+	    	} catch (NullPointerException e) { /**/ }
 
 	    	String hasError = request.getParameter("urlError");
 	    	if (hasError != null)
