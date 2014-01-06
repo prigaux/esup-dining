@@ -2,25 +2,23 @@
 
 <portlet:renderURL var="renderRefreshUrl" />
 	
-	<h1>Paramètres</h1>
-	
-	<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
-		<spring:message code="go.back.home"/>
-	</a>
-	<%-- <c:if test="${sessionScope.isAdmin}"> --%>
-		<h2>
-			<portlet:renderURL var="adminSettings">
-  				<portlet:param name="action" value="adminSettings"/>
-			</portlet:renderURL>
-		
-			<a href="${adminSettings}">
-				<spring:message code="menu.editadmin"/>
-			</a>
-		</h2>
-	<%-- </c:if> --%>
-${nothingToDisplay}
+<h1><spring:message code="edit.title"/></h1>
 
-<c:if test="${empty nothingToDisplay}">
+<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
+	<spring:message code="go.back.home"/>
+</a>
+<%-- <c:if test="${sessionScope.isAdmin}"> --%>
+	<h2>
+		<portlet:renderURL var="adminSettings">
+ 				<portlet:param name="action" value="adminSettings"/>
+		</portlet:renderURL>
+	
+		<a href="${adminSettings}">
+			<spring:message code="menu.editadmin"/>
+		</a>
+	</h2>
+<%-- </c:if> --%>
+
 <c:if test="${not empty areas}">
 	
 	<portlet:actionURL var="setUserArea">
@@ -29,8 +27,8 @@ ${nothingToDisplay}
 
 	<form method="post" action="${setUserArea}">
 		<fieldset>
-			<legend>Choisir une zone par défaut</legend>
-			<label for="field-zone">Zones : </label>
+			<legend><spring:message code="edit.form.zone.legend"/></legend>
+			<label for="field-zone"><spring:message code="edit.form.zone.label"/></label>
 			<select id="field-zone" name="zone">
 				<c:forEach var="area" items="${areas}">
 					<option value="${area}"
@@ -47,7 +45,7 @@ ${nothingToDisplay}
 						<spring:message code="edit.msg.success"/>
 					</label>
 				</c:if>
-			<input type="submit" value="Valider"/>
+			<input type="submit" value="<spring:message code="edit.form.submit"/>"/>
 		</fieldset>
 	</form>
 </c:if>
@@ -67,7 +65,7 @@ ${nothingToDisplay}
 				  <portlet:param name="restaurant-id" value="${restaurant.id}"/>
 				</portlet:actionURL>
 				<a href="${removeFavorite}">
-					Supprimer <span class="glyphicon glyphicon-remove"></span>
+					<spring:message code="edit.delete"/> <span class="glyphicon glyphicon-remove"></span>
 				</a>
 			</td>
 		</tr>
@@ -75,9 +73,8 @@ ${nothingToDisplay}
 </table>
 
 </c:if>
-</c:if>
 
-<h3>Préférences nutritive</h3>
+<h3><spring:message code="edit.nutritive.prefs"/></h3>
 <portlet:actionURL var="nutritionPreferences">
   <portlet:param name="action" value="nutritionPreferences"/>
 </portlet:actionURL>
@@ -103,7 +100,7 @@ ${nothingToDisplay}
 		</label>
 	</c:if>
 	
-	<input type="submit"/>
+	<input type="submit" value="<spring:message code="edit.form.submit"/>"/>
 </form>
 	
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>

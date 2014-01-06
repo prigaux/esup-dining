@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 
-  <h1>Lexique</h1>
+  <h1><spring:message code="help.title"/></h1>
 
   <ul>
     <c:forEach var="codeNumber" items="${code}">

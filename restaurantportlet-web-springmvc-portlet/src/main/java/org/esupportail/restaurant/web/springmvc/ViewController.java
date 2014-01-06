@@ -54,7 +54,8 @@ public class ViewController extends AbstractExceptionController {
 
 	private IInitializationService initializationService;
 
-	RestaurantCache cache;
+	@Autowired
+	private RestaurantCache cache;
 
 	@RequestMapping
 	public ModelAndView renderMainView(RenderRequest request,

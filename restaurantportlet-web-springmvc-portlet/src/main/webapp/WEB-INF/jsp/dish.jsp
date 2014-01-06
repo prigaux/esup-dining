@@ -69,8 +69,6 @@
 				
 				<c:if test="${(fn:trim(userCode) == fn:trim(codeNumber)) && fn:trim(codeNumber) != '15'}">
 				
-					<script type="text/javascript">console.log("On y est !");</script>	
-			
 					<div class="warning">
 					
 						<h2><spring:message code="meal.code.${fn:trim(codeNumber)}.name"/></h2>

@@ -4,7 +4,7 @@
 
 <c:if test="${not empty user}">
 
-	<h1>Paramètres</h1>
+	<h1><spring:message code="edit.title"/></h1>
 
 	<a href="<portlet:renderURL portletMode="edit"/>" class="icn-fam icn-fam-back">
 		<spring:message code="edit.admin.back"/>
@@ -12,20 +12,17 @@
 	<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
 		<spring:message code="go.back.home"/>
 	</a>
-	
-	<!-- On met une négation dans le test pour faire les tests en local -->
+
 <br/>
-${nothingToDisplay}
-<br/>
-<c:if test="${empty nothingToDisplay}">	
+<c:if test="${not empty urlfluxdb}">	
 		<portlet:actionURL var="setDefaultArea">
 		  <portlet:param name="action" value="setDefaultArea"/>
 		</portlet:actionURL>
 		
 		<form method="post" action="${setDefaultArea}">
 			<fieldset>
-				<legend>Choisir une zone par défaut</legend>
-				<label for="field-zone">Zones : </label>
+				<legend><spring:message code="edit.form.zone.legend"/></legend>
+				<label for="field-zone"><spring:message code="edit.form.zone.label"/></label>
 				<select id="field-zone" name="zone">
 					<c:forEach var="area" items="${areas}">
 						<option value="${area}"
@@ -42,7 +39,7 @@ ${nothingToDisplay}
 						<spring:message code="edit.msg.success"/>
 					</label>
 				</c:if>
-				<input type="submit" value="Valider"/>
+				<input type="submit" value="<spring:message code="edit.form.submit"/>"/>
 			</fieldset>
 		</form>
 </c:if>
@@ -53,8 +50,8 @@ ${nothingToDisplay}
 	
 		<form method="post" action="${urlFlux}">
 			<fieldset>
-				<legend>URL du flux</legend>
-				<label for="field-url">URL : </label>
+				<legend><spring:message code="edit.admin.form.legend"/></legend>
+				<label for="field-url"><spring:message code="edit.admin.form.label"/></label>
 				<input type="text" id="field-url" name="url" value="${urlfluxdb}"/>
 				<c:if test="${not empty urlError}">
 					<label class="icn-fam <c:if test="${urlError == 'true'}">is-invalid icn-fam-invalid</c:if><c:if test="${urlError == 'false'}">is-valid icn-fam-valid</c:if>">
@@ -68,7 +65,7 @@ ${nothingToDisplay}
 						</c:choose>
 					</label>
 				</c:if>				
-				<input type="submit" value="Valider" />
+				<input type="submit" value="<spring:message code="edit.form.submit"/>" />
 			</fieldset>
 		</form>
 		

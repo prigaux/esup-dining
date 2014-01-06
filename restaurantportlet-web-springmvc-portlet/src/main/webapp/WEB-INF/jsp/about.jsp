@@ -1,6 +1,5 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 
-<h1>Portlet about</h1>
-<h2>#todo</h2>
+<h1>About</h1>
 
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>

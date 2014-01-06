@@ -48,14 +48,14 @@ public class DatabaseConnector {
 	
 	public void createTables() {		
 
-		try {
-			statement.executeUpdate("DROP TABLE FAVORITERESTAURANT");
-			statement.executeUpdate("DROP TABLE USERAREA");
-			statement.executeUpdate("DROP TABLE PATHFLUX");
-			statement.executeUpdate("DROP TABLE NUTRITIONPREFERENCES");
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+//		try {
+//			statement.executeUpdate("DROP TABLE FAVORITERESTAURANT");
+//			statement.executeUpdate("DROP TABLE USERAREA");
+//			statement.executeUpdate("DROP TABLE PATHFLUX");
+//			statement.executeUpdate("DROP TABLE NUTRITIONPREFERENCES");
+//		} catch (SQLException e1) {
+//			e1.printStackTrace();
+//		}
 		
 		try {
 			statement.executeUpdate("CREATE TABLE FAVORITERESTAURANT(USERNAME VARCHAR(100), RESTAURANTID VARCHAR(100))");

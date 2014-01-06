@@ -2,8 +2,6 @@
 
 	<portlet:renderURL var="renderRefreshUrl" />
 
-	${nothingToDisplay}
-	<c:if test="${empty nothingToDisplay}">
 	<div class="row">
 		<div class="map-container col-lg-6 col-md-6 col-sm-12 col-sm-12">
 			<div id="map-canvas"></div>
@@ -16,7 +14,8 @@
 				<thead>
 					<tr>
 						<th class="lead">
-							<span class="glyphicon glyphicon-star starred-icon"></span> Mes restaurants favoris
+							<span class="glyphicon glyphicon-star starred-icon"></span>
+							<spring:message code="view.favorite.title"/>
 						</th>
 					</tr>
 				</thead>
@@ -180,7 +179,7 @@
 						var mark = new google.maps.Marker({
 					        position: origin,
 					        map: map,
-					        title:"My current position",
+					        title:"<spring:message code="view.map.currentpos"/>",
 					        zIndex : 99
 					    });
 
@@ -231,14 +230,7 @@
 
 				</script>
 			</c:if>
-
-			<c:if test="${empty dininghalls}">
-				<p>
-					<spring:message code="view.list.empty"/>
-				</p>
-			</c:if>
 		</div>
 	</div>
-	</c:if>
 
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>
