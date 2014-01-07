@@ -41,7 +41,24 @@
     </portlet>
     
     <user-attribute>
-        <name>user.login.id</name>
+        <description>CAS Proxy Ticket</description>
+        <name>casProxyTicket</name>
+    </user-attribute>
+    <user-attribute>
+        <description>luid</description>
+        <name>luid</name>
+    </user-attribute>
+    <user-attribute>
+        <description>uid</description>
+        <name>uid</name>
+    </user-attribute>
+    <user-attribute>
+        <description>affiliation</description>
+        <name>affiliation</name>
+    </user-attribute>
+    <user-attribute>
+        <description>composante</description>
+        <name>composante</name>
     </user-attribute>
 
 </portlet-app>

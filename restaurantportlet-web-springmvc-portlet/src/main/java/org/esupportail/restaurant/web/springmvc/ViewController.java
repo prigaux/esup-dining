@@ -64,6 +64,9 @@ public class ViewController extends AbstractExceptionController {
 		ModelMap model = new ModelMap();
 
 		User user = authenticator.getUser();
+		
+		System.out.println(user.getLogin());
+		
 		String areaToDisplay = new String();
 
 		PortletSession session = request.getPortletSession(true);

@@ -28,13 +28,6 @@
                 <version>0.9</version>
                 <configuration>
                     <!-- Comma-separated list of portlets to be prototyped -->
-     	            <users>
-                      <user>
-                        <username>loginuser</username>
-                        <password>passuser</password>
-                        <roles>myrole,admin,restaurantPortletAdmin</roles>
-                      </user>
-                    </users>
                     <portletNames>restaurantportlet</portletNames>
                     <portletXml>${basedir}/src/main/webapp/WEB-INF/portlet.xml</portletXml>
                     <webAppSourceDirectory>${project.build.outputDirectory}/../${project.artifactId}-${project.version}</webAppSourceDirectory>
