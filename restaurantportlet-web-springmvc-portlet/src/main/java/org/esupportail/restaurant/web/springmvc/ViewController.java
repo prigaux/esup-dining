@@ -127,7 +127,12 @@ public class ViewController extends AbstractExceptionController {
 
 			for (Restaurant restaurant : restaurants.getRestaurants()) {
 				if (restaurant.getArea().equalsIgnoreCase(areaToDisplay)) {
-					dininghallList.add(restaurant);
+				    
+				    // Check if the restaurant is currently closed
+				    // create an additionnal property
+				    restaurant.setAdditionalProperties("isClosed", flux.isClosed(restaurant));                  
+	                
+				    dininghallList.add(restaurant);
 				}
 			}
 			model.put("dininghalls", dininghallList);

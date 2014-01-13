@@ -56,7 +56,7 @@
 			  				<portlet:param name="id" value="${dininghall.id}"/>
 						</portlet:renderURL>
 						<tr>
-							<td>
+							<td<c:if test="${dininghall.additionalProperties['isClosed']}"> class="warning"</c:if><c:if test="${dininghall.additionalProperties['isClosed']}">class="warning"</c:if>>
 								<a href="${viewRestaurant}">
 									${dininghall.title}
 								</a>

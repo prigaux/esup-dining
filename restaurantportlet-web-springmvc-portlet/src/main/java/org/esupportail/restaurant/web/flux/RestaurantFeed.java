@@ -195,9 +195,6 @@ public class RestaurantFeed implements Serializable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        System.out.println(reopenningDate);
-        System.out.println(todayDate);
 	    
 	    if(todayDate.before(reopenningDate)) {
 	        return true;
