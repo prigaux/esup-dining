@@ -6,6 +6,13 @@
 		</a>
 	</p>
 	
+	<c:if test="${restaurantClosed}">
+		<div class="alert alert-warning">
+			<a class="close" data-dismiss="alert">×</a>
+			<spring:message code="restaurant.closed" arguments="${restaurant.closing}"/>
+		</div>
+	</c:if>
+
 	<c:if test="${empty restaurant}">
 		<h1>
 			<spring:message code="restaurant.empty"/>

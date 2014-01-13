@@ -27,6 +27,7 @@ import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
 import org.esupportail.restaurant.web.dao.IInitializationService;
 import org.esupportail.restaurant.web.flux.RestaurantCache;
+import org.esupportail.restaurant.web.flux.RestaurantData;
 import org.esupportail.restaurant.web.flux.RestaurantFeed;
 import org.esupportail.restaurant.web.flux.RestaurantParser;
 import org.esupportail.restaurant.web.model.Manus;
@@ -59,7 +60,7 @@ public class ViewController extends AbstractExceptionController {
 
 	@RequestMapping
 	public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {
-
+	    
 		ModelMap model = new ModelMap();
 
 		User user = authenticator.getUser();
@@ -156,6 +157,10 @@ public class ViewController extends AbstractExceptionController {
 			model.put("isFavorite", true);
 		}
 
+		if (flux.isClosed(restaurant)) {
+		    model.put("restaurantClosed", true);
+		}
+		
 		return new ModelAndView("restaurant", model);
 	}
 

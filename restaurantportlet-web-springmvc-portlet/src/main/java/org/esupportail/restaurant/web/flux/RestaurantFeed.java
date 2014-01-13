@@ -9,6 +9,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.ResultSet;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -179,6 +182,29 @@ public class RestaurantFeed implements Serializable {
 		}
 		return null;
 	}
+	public boolean isClosed(Restaurant r) {
+        
+	    SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+	    
+	    Date reopenningDate = new Date(0);
+	    Date todayDate = new Date();
+	    
+	    try {
+            reopenningDate = sf.parse(r.getClosing());
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        System.out.println(reopenningDate);
+        System.out.println(todayDate);
+	    
+	    if(todayDate.before(reopenningDate)) {
+	        return true;
+	    }
+	    
+        return false;
+    }
 	
 	@Override
 	public int hashCode() {
