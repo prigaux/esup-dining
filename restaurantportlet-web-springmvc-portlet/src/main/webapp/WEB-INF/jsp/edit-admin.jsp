@@ -11,6 +11,12 @@
 	</a> - 	
 	<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
 		<spring:message code="go.back.home"/>
+	</a> - 	
+	<portlet:renderURL var="statsAdmin" portletMode="edit">
+	  <portlet:param name="action" value="adminStats"/>
+	</portlet:renderURL>
+	<a href="${statsAdmin}" class="icn-fam icn-fam-back">
+		Statistiques
 	</a>
 
 <br/>

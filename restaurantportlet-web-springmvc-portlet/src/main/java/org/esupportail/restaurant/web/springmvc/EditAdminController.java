@@ -5,7 +5,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.portlet.ActionRequest;
@@ -20,7 +22,6 @@ import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
 import org.esupportail.restaurant.web.flux.RestaurantFeed;
 import org.esupportail.restaurant.web.model.Restaurant;
-import org.esupportail.restaurant.web.model.RestaurantFeedRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -95,6 +96,34 @@ public class EditAdminController extends AbstractExceptionController {
 	    	}
     	return new ModelAndView("edit-admin", model);
     }
+    @RequestMapping(params = {"action=adminStats"})
+    public ModelAndView renderStatsAdminView(RenderRequest request, RenderResponse response) throws Exception {
+        ModelMap model = new ModelMap();
+        
+        ResultSet results = dc.executeQuery("SELECT RESTAURANTID FROM FAVORITERESTAURANT");
+        
+        HashMap<Integer, Integer> nbRestaurant = new HashMap<Integer, Integer>();
+        
+        while(results.next()) {
+            int currentValue = (nbRestaurant.get(results.getInt("RESTAURANTID")) == null ? 0 : nbRestaurant.get(results.getInt("RESTAURANTID")));
+            if(currentValue == 0) {
+                nbRestaurant.put(results.getInt("RESTAURANTID"), 1);
+            } else {
+                nbRestaurant.put(results.getInt("RESTAURANTID"), ++currentValue);
+            }
+        }
+        
+        HashMap<Integer, String> restaurantsName = new HashMap<Integer,String>();
+        for(Restaurant r : flux.getFlux().getRestaurants()) {
+            restaurantsName.put(r.getId(), r.getTitle());
+        }
+        
+
+        model.put("stats", nbRestaurant);
+        model.put("restaurantsName", restaurantsName);
+                     
+        return new ModelAndView("stats", model);
+    }  
 
     @RequestMapping(params = {"action=urlFlux"})
     public void setURLFlux(ActionRequest request, ActionResponse response, @RequestParam(value = "url", required = true) String url) throws Exception { 	

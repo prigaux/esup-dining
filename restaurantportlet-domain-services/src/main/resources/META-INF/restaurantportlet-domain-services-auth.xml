@@ -31,10 +31,10 @@
 	  <property name="uidPortalAttribute" value="uid" />
 	</bean>
     
-<!-- 	<bean id="OfflineFixedUserAuthenticationService" -->
-<!-- 		class="org.esupportail.commons.services.authentication.OfflineFixedUserAuthenticationService"> -->
-<!-- 		<property name="authId" value="loginuser" /> -->
-<!-- 		<property name="authType" value="cas" /> -->
-<!-- 	</bean> -->
+	<bean id="OfflineFixedUserAuthenticationService"
+		class="org.esupportail.commons.services.authentication.OfflineFixedUserAuthenticationService">
+		<property name="authId" value="loginuser" />
+		<property name="authType" value="cas" />
+	</bean>
 
 </beans>

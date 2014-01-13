@@ -58,8 +58,7 @@ public class ViewController extends AbstractExceptionController {
 	private RestaurantCache cache;
 
 	@RequestMapping
-	public ModelAndView renderMainView(RenderRequest request,
-			RenderResponse response) throws Exception {
+	public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {
 
 		ModelMap model = new ModelMap();
 
