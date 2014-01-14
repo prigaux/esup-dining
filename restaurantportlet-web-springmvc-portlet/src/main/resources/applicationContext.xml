@@ -16,9 +16,6 @@
 		</property>
 	</bean>
 
-	<bean id="DatabaseConnector" class="org.esupportail.restaurant.web.dao.DatabaseConnector"
-		scope="singleton" />
-
 	<!-- | Message source for this context, loaded from localized "messages_xx" 
 		files + -->
 	<bean id="messageSource"
@@ -52,7 +49,16 @@
 		<constructor-arg index="0" ref="flux"/>
 	</bean>
 	
-	<bean id="sessionSetup" class="org.esupportail.restaurant.web.dao.SessionSetupInitializationService" />
+	<bean id="DatabaseConnector" class="org.esupportail.restaurant.web.dao.DatabaseConnector">
+		<constructor-arg index="0" type="java.lang.String" value="${db.driver}"/>
+		<constructor-arg index="1" type="java.lang.String" value="${db.infos}"/>
+		<constructor-arg index="2" type="java.lang.String" value="${db.username}"/>
+		<constructor-arg index="3" type="java.lang.String" value="${db.password}"/>
+	</bean>
+	
+	<bean id="sessionSetup" class="org.esupportail.restaurant.web.dao.SessionSetupInitializationService">
+		<constructor-arg index="0" type="java.lang.String" value="${user.admin.role}"/>
+	</bean>
 	
 	
 	<bean class="org.esupportail.restaurant.web.flux.RestaurantPojos" />

@@ -51,6 +51,7 @@ public class ViewController extends AbstractExceptionController {
 	private DatabaseConnector dc;
 	@Autowired
 	private RestaurantFeed flux;
+	
 	private RestaurantFeedRoot restaurants;
 
 	private IInitializationService initializationService;
@@ -120,8 +121,6 @@ public class ViewController extends AbstractExceptionController {
 		model.put("area", areaToDisplay);
 
 		try {
-
-			restaurants = flux.getFlux();
 
 			List<Restaurant> dininghallList = new ArrayList<Restaurant>();
 

@@ -6,57 +6,39 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.esupportail.restaurant.web.flux.RestaurantCache;
-
 public class DatabaseConnector {
 
 	private Connection connection;
 	private Statement statement;
-	private static DatabaseConnector instance;
-
-	private static final String DB_INFOS = "jdbc:hsqldb:file:restaurant";
-	private static final String DB_USER = "sa";
-	private static final String DB_PWD = "";
 	
-	private DatabaseConnector() {
-		try {
-			Class.forName("org.hsqldb.jdbcDriver").newInstance();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		try {
-			this.connection = DriverManager.getConnection(DatabaseConnector.DB_INFOS, DatabaseConnector.DB_USER,  DatabaseConnector.DB_PWD);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			this.connection.setAutoCommit(true);
-			this.statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		this.createTables();
-		DatabaseConnector.instance = this;
+	/* not finished yet */
+	public DatabaseConnector(String db_driver, String db_infos, String db_user, String db_pwd) {
+	    try {
+            Class.forName(db_driver).newInstance();
+            this.connection = DriverManager.getConnection(db_infos, db_user, db_pwd);
+            this.connection.setAutoCommit(true);
+            this.statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+	    } catch (Exception e) {
+	        // Problem with the db connection
+            e.printStackTrace();
+        } 
 	}
-	
-	public static DatabaseConnector getInstance() {
-		if(instance == null)
-			instance = new DatabaseConnector();
-		return instance;
+
+	public void deleteTables() {
+        try {
+            statement.executeUpdate("DROP TABLE FAVORITERESTAURANT");
+            statement.executeUpdate("DROP TABLE USERAREA");
+            statement.executeUpdate("DROP TABLE PATHFLUX");
+            statement.executeUpdate("DROP TABLE NUTRITIONPREFERENCES");
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }    
 	}
 	
 	public void createTables() {		
-
-//		try {
-//			statement.executeUpdate("DROP TABLE FAVORITERESTAURANT");
-//			statement.executeUpdate("DROP TABLE USERAREA");
-//			statement.executeUpdate("DROP TABLE PATHFLUX");
-//			statement.executeUpdate("DROP TABLE NUTRITIONPREFERENCES");
-//		} catch (SQLException e1) {
-//			e1.printStackTrace();
-//		}
 		
+	    this.deleteTables();
+	    
 		try {
 			statement.executeUpdate("CREATE TABLE FAVORITERESTAURANT(USERNAME VARCHAR(100), RESTAURANTID VARCHAR(100))");
 		} catch (SQLException e) {
