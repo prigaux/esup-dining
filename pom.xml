@@ -25,7 +25,19 @@
             <releases>
             </releases>
         </repository>
+        <repository>
+            <id>jlehtinen.net</id>
+            <url>http://repo.jlehtinen.net/maven2/</url>
+        </repository>
     </repositories>
+    
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jlehtinen.net</id>
+            <url>http://repo.jlehtinen.net/maven2/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <distributionManagement>
         <repository>
             <id>esup</id>
@@ -79,7 +91,7 @@
                     </additionalProjectnatures>
                     <additionalBuildcommands>
                         <buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
-                    </additionalBuildcommands>z
+                    </additionalBuildcommands>
                     <downloadSources>true</downloadSources>
                     <downloadJavadocs>true</downloadJavadocs>
                     <wtpversion>2.0</wtpversion>

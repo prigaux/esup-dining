@@ -8,31 +8,20 @@
     </parent>
     <artifactId>restaurantportlet-web-springmvc-portlet</artifactId>
     <packaging>war</packaging>
-    <repositories>
-        <repository>
-            <id>jlehtinen.net</id>
-            <url>http://repo.jlehtinen.net/maven2/</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>jlehtinen.net</id>
-            <url>http://repo.jlehtinen.net/maven2/</url>
-        </pluginRepository>
-    </pluginRepositories>
+    
     <build>
         <plugins>
-            <plugin>
+            <!-- <plugin>
                 <groupId>net.jlehtinen.portlet</groupId>
                 <artifactId>portlet-prototyping-maven-plugin</artifactId>
                 <version>0.9</version>
                 <configuration>
-                    <!-- Comma-separated list of portlets to be prototyped -->
+                    
                     <portletNames>restaurantportlet</portletNames>
                     <portletXml>${basedir}/src/main/webapp/WEB-INF/portlet.xml</portletXml>
                     <webAppSourceDirectory>${project.build.outputDirectory}/../${project.artifactId}-${project.version}</webAppSourceDirectory>
                 </configuration>
-            </plugin>
+            </plugin> -->
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1</version>
@@ -49,48 +38,66 @@
                     <warName>${project.parent.artifactId}</warName>
                 </configuration>
             </plugin>
+
+
+            <plugin>
+                <groupId>net.jlehtinen.portlet</groupId>
+                <artifactId>portlet-prototyping-maven-plugin</artifactId>
+                <version>0.6</version>
+            </plugin>
+
         </plugins>
     </build>
     <dependencies>
+
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>2.3.1</version>
 		</dependency>
+
     	<dependency>
           <groupId>com.googlecode.jsonschema2pojo</groupId>
           <artifactId>jsonschema2pojo-core</artifactId>
           <version>0.3.7</version>
         </dependency>
-    	<!--  Added lines  -->
-		
-    	<!--  End added lines  -->
+
         <dependency>
             <groupId>org.esupportail</groupId>
             <artifactId>esup-commons2-springmvc-portlet</artifactId>
             <version>${esupcommons.version}</version>
             <type>pom</type>
         </dependency>
+
         <dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc-portlet</artifactId>
 			<version>3.0.6.RELEASE</version>
 		</dependency>
+
         <dependency>
             <groupId>org.esupportail</groupId>
             <artifactId>esup-commons2-web</artifactId>
             <version>${esupcommons.version}</version>
         </dependency>
+
         <dependency>
-			<groupId>org.jdom</groupId>
-			<artifactId>jdom</artifactId>
-			<version>2.0.2</version>
-		</dependency>
-<dependency>
-	<groupId>commons-io</groupId>
-	<artifactId>commons-io</artifactId>
-	<version>2.4</version>
-</dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>2.0.2</version>
+        </dependency> <!-- 
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>org.json</artifactId>
+            <version>chargebee-1.0</version>
+        </dependency>
+    -->
+
+        <dependency>
+        	<groupId>commons-io</groupId>
+        	<artifactId>commons-io</artifactId>
+        	<version>2.4</version>
+        </dependency>
             
         <!-- ===== Compile Time Dependencies ============================== -->
         <dependency>
@@ -140,11 +147,6 @@
             <version>1.0-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>org.json</groupId>
-        	<artifactId>org.json</artifactId>
-        	<version>chargebee-1.0</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.ehcache-spring-annotations</groupId>
