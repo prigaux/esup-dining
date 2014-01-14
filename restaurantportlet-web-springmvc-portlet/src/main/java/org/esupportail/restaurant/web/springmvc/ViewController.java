@@ -61,7 +61,7 @@ public class ViewController extends AbstractExceptionController {
 
 	@RequestMapping
 	public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {
-	    
+	  
 		ModelMap model = new ModelMap();
 
 		User user = authenticator.getUser();
@@ -89,7 +89,7 @@ public class ViewController extends AbstractExceptionController {
 			} catch (SQLException e2) {
 				// If there is no default area, then the admin must configure
 				// the portlet before.
-			    return new ModelAndView("error", new ModelMap());
+			    return new ModelAndView("error", new ModelMap("err", e2.getMessage()));
 			}
 		}
 
@@ -121,7 +121,9 @@ public class ViewController extends AbstractExceptionController {
 		model.put("area", areaToDisplay);
 
 		try {
-
+		    
+		    restaurants = flux.getFlux();
+		    
 			List<Restaurant> dininghallList = new ArrayList<Restaurant>();
 
 			for (Restaurant restaurant : restaurants.getRestaurants()) {
@@ -137,7 +139,7 @@ public class ViewController extends AbstractExceptionController {
 			model.put("dininghalls", dininghallList);
 
 		} catch (Exception e) {
-            return new ModelAndView("error", new ModelMap());
+            return new ModelAndView("error", new ModelMap("err", e.getMessage()));
 		}
 
 		return new ModelAndView("view", model);
@@ -208,7 +210,7 @@ public class ViewController extends AbstractExceptionController {
 			}
 			model.put("menus", menuList);
 		} catch (Exception e) {
-            return new ModelAndView("error", new ModelMap());
+            return new ModelAndView("error", new ModelMap("err", e.getMessage()));
 		}
 
 		return new ModelAndView("meals", model);

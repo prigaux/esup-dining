@@ -21,7 +21,7 @@ public class DatabaseConnector {
 	    } catch (Exception e) {
 	        // Problem with the db connection
             e.printStackTrace();
-        } 
+        }
 	}
 
 	public void deleteTables() {

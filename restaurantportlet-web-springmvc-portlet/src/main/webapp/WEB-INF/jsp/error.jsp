@@ -10,4 +10,8 @@
 		</a>
 	</p>
 
+	<pre>
+		${err}
+	</pre>
+
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>

@@ -2,10 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-    http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
+    http://ehcache-spring-gms.googlecode.com/svn/schema/ehcache-spring
      http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
 	xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
-	xmlns:util="http://www.springframework.org/schema/util">
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p">
+
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
@@ -15,6 +18,8 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor" />
 
 	<!-- | Message source for this context, loaded from localized "messages_xx" 
 		files + -->
@@ -42,28 +47,21 @@
 
 	<import
 		resource="classpath*:META-INF/restaurantportlet-domain-services-auth.xml" />
-
-	<bean id="flux" class="org.esupportail.restaurant.web.flux.RestaurantFeed" />
 	
-	<bean id="restaurantCache" class="org.esupportail.restaurant.web.flux.RestaurantCache">
-		<constructor-arg index="0" ref="flux"/>
+	<bean id="sessionSetup" class="org.esupportail.restaurant.web.dao.SessionSetupInitializationService">
+		<constructor-arg index="0" type="java.lang.String" value="${user.admin.role}"/>
 	</bean>
 	
-	<bean id="DatabaseConnector" class="org.esupportail.restaurant.web.dao.DatabaseConnector">
+	<!-- Added -->
+    
+   	<bean id="DatabaseConnector" class="org.esupportail.restaurant.web.dao.DatabaseConnector" scope="singleton">
 		<constructor-arg index="0" type="java.lang.String" value="${db.driver}"/>
 		<constructor-arg index="1" type="java.lang.String" value="${db.infos}"/>
 		<constructor-arg index="2" type="java.lang.String" value="${db.username}"/>
 		<constructor-arg index="3" type="java.lang.String" value="${db.password}"/>
 	</bean>
 	
-	<bean id="sessionSetup" class="org.esupportail.restaurant.web.dao.SessionSetupInitializationService">
-		<constructor-arg index="0" type="java.lang.String" value="${user.admin.role}"/>
-	</bean>
-	
-	
 	<bean class="org.esupportail.restaurant.web.flux.RestaurantPojos" />
-	
-	<!-- Start : ehcache beans -->
 
 	<bean id="cacheManager" scope="singleton"
 		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
@@ -72,34 +70,47 @@
 		</description>
 		<property name="configLocation" value="classpath:/cache/ehcache.xml" />
 	</bean>
+
+
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+	    <bean id="flux" class="org.esupportail.restaurant.web.flux.RestaurantFeed">
+	    	<property name="dc" ref="DatabaseConnector" />
+	    </bean>
 	
-	<!--<ehcache:annotation-driven cache-manager="cacheManager" />
-	 End : ehcache beans -->
+		<bean id="restaurantCache" class="org.esupportail.restaurant.web.flux.RestaurantCache">
+			<constructor-arg index="0" ref="flux"/>
+		</bean>
+		
+		<bean id="doIt"
+			class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+			<property name="targetObject" ref="flux" />
+			<property name="targetMethod" value="run" />
+		</bean>
+	
+		<bean id="scheduledTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+			<property name="delay" value="300000" />
+			<!-- run every 5 minutes -->
+			<property name="period" value="300000" />
+			<property name="timerTask" ref="doIt" />
+		</bean>
+	
+		<bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
+			<property name="scheduledTimerTasks">
+				<list>
+					<ref bean="scheduledTask" />
+				</list>
+			</property>
+		</bean>
 
-	<!-- Start : Timer beans -->
-
-	<bean id="doIt"
-		class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
-		<property name="targetObject" ref="flux" />
-		<property name="targetMethod" value="run" />
-	</bean>
-
-	<bean id="scheduledTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
-		<!-- wait 10 seconds before starting repeated execution -->
-		<property name="delay" value="10000" />
-		<!-- run every 5 minutes -->
-		<property name="period" value="300000" />
-		<property name="timerTask" ref="doIt" />
-	</bean>
-
-	<bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
-		<property name="scheduledTimerTasks">
-			<list>
-				<ref bean="scheduledTask" />
-			</list>
-		</property>
-	</bean>
-
-	<!-- End : Timer beans -->
 
 </beans>

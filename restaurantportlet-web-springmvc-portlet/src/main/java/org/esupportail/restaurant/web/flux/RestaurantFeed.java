@@ -13,6 +13,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.annotation.PostConstruct;
+
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -20,24 +22,26 @@ import org.esupportail.restaurant.web.dao.DatabaseConnector;
 import org.esupportail.restaurant.web.model.Restaurant;
 import org.esupportail.restaurant.web.model.RestaurantFeedRoot;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 public class RestaurantFeed implements Serializable {
-	
+
+    @Autowired 
+    RestaurantCache cache;
+    private DatabaseConnector dc;
 	private String jsonStringified;
 	private RestaurantFeedRoot flux;
 	private ObjectMapper mapper;
 	private URL path;
 	
-	@Autowired 
-	RestaurantCache cache;
-	
-	public RestaurantFeed() {
-		this.jsonStringified = new String();
+	@PostConstruct
+	public void init() {
+	    System.out.println("SYSO DC : ");
+		System.out.println(dc);
+	    this.jsonStringified = new String();
 		this.mapper = new ObjectMapper();
-		
-		DatabaseConnector dc = DatabaseConnector.getInstance();
-		
-		try {
+
+        try {
 			ResultSet results = dc.executeQuery("SELECT URLFLUX FROM PATHFLUX");
 			results.next(); // Move the cursor to the first line.
 			// results.getUrl... throw an exception : This function is not supported
@@ -53,6 +57,9 @@ public class RestaurantFeed implements Serializable {
 			}
 			this.setPath(urlFlux);
 		} catch (Exception e) {
+		    
+		    e.printStackTrace();
+		    
 			System.out.println("[WARN] Couldn't fully instantiate RestaurantFlux, you'll need to configure it manually from admin settings.");
 		}
 	}
@@ -237,6 +244,13 @@ public class RestaurantFeed implements Serializable {
 	public String toString() {
 		return this.jsonStringified;
 	}	
+	
+	public void setDc(DatabaseConnector dc) {
+	    this.dc = dc;
+	}
+	public DatabaseConnector getDc() {
+	    return this.dc;
+	}
 	
 	/* automated task */
 	
