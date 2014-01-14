@@ -1,15 +1,5 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 
-	<style type="text/css">
-		.warning {
-			background: #f0ad4e;
-			border: 1px solid #ed9c28;
-			border-radius: 5px;
-			margin: 5px 0;
-			padding: 0 5px;
-		}
-	</style>
-
 	<p>
 		<portlet:renderURL var="viewRestaurant">
 			<portlet:param name="action" value="viewRestaurant"/>
@@ -69,7 +59,7 @@
 				
 				<c:if test="${(fn:trim(userCode) == fn:trim(codeNumber)) && fn:trim(codeNumber) != '15'}">
 				
-					<div class="warning">
+					<div class="alert alert-warning">
 					
 						<h2><spring:message code="meal.code.${fn:trim(codeNumber)}.name"/></h2>
 						<p>

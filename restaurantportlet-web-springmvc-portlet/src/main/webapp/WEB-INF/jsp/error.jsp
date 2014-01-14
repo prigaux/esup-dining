@@ -5,13 +5,9 @@
 	<p>
 		<spring:message code="error.page.message"/> 
 		<br/>
-		<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
-			<spring:message code="go.back.home"/>
+		<a href="<portlet:renderURL portletMode="edit"/>" class="icn-fam icn-fam-back">
+			<spring:message code="menu.edit"/>
 		</a>
 	</p>
-
-	<pre>
-		${err}
-	</pre>
 
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>

@@ -36,8 +36,6 @@ public class RestaurantFeed implements Serializable {
 	
 	@PostConstruct
 	public void init() {
-	    System.out.println("SYSO DC : ");
-		System.out.println(dc);
 	    this.jsonStringified = new String();
 		this.mapper = new ObjectMapper();
 

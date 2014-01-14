@@ -71,18 +71,6 @@
 		<property name="configLocation" value="classpath:/cache/ehcache.xml" />
 	</bean>
 
-
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
 	    <bean id="flux" class="org.esupportail.restaurant.web.flux.RestaurantFeed">
 	    	<property name="dc" ref="DatabaseConnector" />
 	    </bean>

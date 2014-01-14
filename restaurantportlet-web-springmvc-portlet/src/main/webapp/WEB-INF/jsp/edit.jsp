@@ -51,7 +51,7 @@
 </c:if>
 
 <c:if test="${not empty listFavRestaurant}">
-<h3>Vos restaurants favoris</h3>
+<h3><spring:message code="view.favorite.title"/></h3>
 
 <table class="table table-responsive table-striped">
 	<c:forEach var="restaurant" items="${listFavRestaurant}">

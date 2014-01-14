@@ -16,7 +16,7 @@
 	  <portlet:param name="action" value="adminStats"/>
 	</portlet:renderURL>
 	<a href="${statsAdmin}" class="icn-fam icn-fam-back">
-		Statistiques
+		Stats
 	</a>
 
 <br/>

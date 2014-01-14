@@ -209,6 +209,11 @@ public class ViewController extends AbstractExceptionController {
 				}
 			}
 			model.put("menus", menuList);
+	
+			if (flux.isClosed(restaurant)) {
+	            model.put("restaurantClosed", true);
+	        }
+			
 		} catch (Exception e) {
             return new ModelAndView("error", new ModelMap("err", e.getMessage()));
 		}

@@ -1,31 +1,86 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 	
-	<style type="text/css">
-		.smart-choice {
-			background: #00FF6A;
-		}
-		.warning {
-			background: #FFD859;
-		}
-	</style>
-	
-	<p>${nothingToDisplay}</p>
+	<p>
+		<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
+			<spring:message code="go.back.home" />
+		</a>
+	</p>
 
 	<c:if test="${not empty restaurant}">
 		
-		<h1>
-			<spring:message code="meal.title" arguments="${restaurant.title}"/>
-		</h1>
+		<c:if test="${restaurantClosed}">
+			<div class="alert alert-warning">
+				<a class="close" data-dismiss="alert">×</a>
+				<spring:message code="restaurant.closed" arguments="${restaurant.closing}"/>
+			</div>
+		</c:if>
+		
+		
+<nav class="navbar navbar-default" role="navigation">
+		
+  			<div class="navbar-header">
+		    	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				    <span class="sr-only">Toggle navigation</span>
+				    <span class="icon-bar"></span>
+				    <span class="icon-bar"></span>
+				    <span class="icon-bar"></span>
+		    	</button>
+		    	<a class="navbar-brand" href="#">${restaurant.title}</a>
+		    </div>
 
-		<p>
-			<portlet:renderURL var="viewRestaurant">
-					<portlet:param name="action" value="viewRestaurant"/>
-					<portlet:param name="id" value="${restaurant.id}"/>
-			</portlet:renderURL>
-			<a href="${viewRestaurant}" class="icn-fam icn-fam-back">
-				<spring:message code="restaurant.link.back"/>
-			</a>
-		</p>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li>
+						<c:choose>
+							<c:when test="${isFavorite}">
+								<portlet:actionURL var="removeFromFavorite">
+									<portlet:param name="action" value="removeFavorite" />
+									<portlet:param name="restaurant-id" value="${restaurant.id}" />
+								</portlet:actionURL>
+								<a href="${removeFromFavorite}" class="icn-fam icn-fam-fav">
+									<spring:message code="restaurant.link.removeFromFavorite"/>
+								</a>
+							</c:when>
+							<c:otherwise>
+
+								<portlet:actionURL var="addToFavorite">
+									<portlet:param name="action" value="setFavorite" />
+									<portlet:param name="id" value="${restaurant.id}" />
+								</portlet:actionURL>
+								<a href="${addToFavorite}" class="icn-fam icn-fam-fav">
+									<spring:message code="restaurant.link.addToFavorite"/>
+								</a>
+								
+							</c:otherwise>
+						</c:choose>
+					</li>
+					<li>
+						<portlet:renderURL var="viewRestaurant">
+							<portlet:param name="action" value="viewRestaurant" />
+							<portlet:param name="id" value="${restaurant.id}" />
+						</portlet:renderURL>
+						
+						<a href="${viewRestaurant}" class="icn-fam icn-fam-meal">
+							<spring:message code="restaurant.link.viewRestaurant"/>
+						</a>
+					</li>
+					<c:if test="${restaurant.accessibility}">
+					<li>
+						<a href="#" class="icn-fam icn-fam-disability">
+							<spring:message code="restaurant.msg.disability"/>
+						</a>
+					</li>
+					</c:if>
+					<c:if test="${restaurant.wifi}">
+					<li>
+						<a href="#" class="icn-fam icn-fam-wifi">
+							<spring:message code="restaurant.wifi"/>					
+						</a>
+					</li>
+					</c:if>
+				</ul>
+			<div>
+		</nav>
 		
 		<div class="menus">
 			<ul class="tab-header">
@@ -73,7 +128,7 @@
 																		class="smart-choice"
 																	</c:when>
 																	<c:otherwise>
-																		class="warning"
+																		class="alert alert-warning"
 																	</c:otherwise>
 																</c:choose>
 															</c:if>

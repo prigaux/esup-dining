@@ -22,7 +22,7 @@
 				<tbody>
 					<c:forEach var="favRestaurant" items="${favorites}">
 						<portlet:renderURL var="viewRestaurant">
-			  				<portlet:param name="action" value="viewRestaurant"/>
+			  				<portlet:param name="action" value="viewMeals"/>
 			  				<portlet:param name="id" value="${favRestaurant.id}"/>
 						</portlet:renderURL>
 						<tr>
@@ -52,7 +52,7 @@
 				<tbody>
 					<c:forEach var="dininghall" items="${dininghalls}">
 						<portlet:renderURL var="viewRestaurant">
-			  				<portlet:param name="action" value="viewRestaurant"/>
+			  				<portlet:param name="action" value="viewMeals"/>
 			  				<portlet:param name="id" value="${dininghall.id}"/>
 						</portlet:renderURL>
 						<tr>

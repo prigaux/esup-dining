@@ -17,3 +17,10 @@ table .is-openned {
 table .is-closed {
 	background: #FFA6AA;
 }
+
+.smart-choice {
+	background: #00FF6A;
+}
+.warning {
+	background: #FFD859;
+}
