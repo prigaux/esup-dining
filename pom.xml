@@ -7,6 +7,11 @@
     <packaging>pom</packaging>
     <description>An Blank Application to start your project</description>
     <repositories>
+    	<repository> 
+		    <id>javautil</id> 
+		    <name>Java Util Repository</name> 
+		    <url>http://downloads.sourceforge.net/project/javautil/</url> 
+		</repository> 
         <repository>
             <id>esup-snapshots</id>
             <url>https://mvn.esup-portail.org/content/repositories/snapshots</url>

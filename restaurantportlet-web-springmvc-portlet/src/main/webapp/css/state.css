@@ -24,3 +24,12 @@ table .is-closed {
 .warning {
 	background: #FFD859;
 }
+
+[data-closed] a:before {
+	display: inline-block;
+	vertical-align: middle;
+	width: 16px;
+	height: 16px;
+	background: url("../images/closed.png") no-repeat 0 0;
+	content:'';
+}

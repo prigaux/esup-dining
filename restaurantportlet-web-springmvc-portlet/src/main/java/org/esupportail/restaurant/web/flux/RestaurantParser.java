@@ -68,6 +68,7 @@ public class RestaurantParser {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return doc != null ? doc.getRootElement().getText().trim() : null;
 	}
 
