@@ -11,17 +11,6 @@
     
     <build>
         <plugins>
-            <!-- <plugin>
-                <groupId>net.jlehtinen.portlet</groupId>
-                <artifactId>portlet-prototyping-maven-plugin</artifactId>
-                <version>0.9</version>
-                <configuration>
-                    
-                    <portletNames>restaurantportlet</portletNames>
-                    <portletXml>${basedir}/src/main/webapp/WEB-INF/portlet.xml</portletXml>
-                    <webAppSourceDirectory>${project.build.outputDirectory}/../${project.artifactId}-${project.version}</webAppSourceDirectory>
-                </configuration>
-            </plugin> -->
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1</version>
@@ -49,7 +38,11 @@
         </plugins>
     </build>
     <dependencies>
-
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.3-1100-jdbc41</version>
+		</dependency>
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>

@@ -54,10 +54,7 @@ public class RestaurantFeed implements Serializable {
 				// before the inserting this row.
 			}
 			this.setPath(urlFlux);
-		} catch (Exception e) {
-		    
-		    e.printStackTrace();
-		    
+		} catch (Exception e) {   
 			System.out.println("[WARN] Couldn't fully instantiate RestaurantFlux, you'll need to configure it manually from admin settings.");
 		}
 	}

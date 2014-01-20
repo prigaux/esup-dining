@@ -135,7 +135,7 @@ public class EditAdminController extends AbstractExceptionController {
     		// If URL is correct, then we can insert this into the database. 
 			ResultSet results = dc.executeQuery("SELECT URLFLUX FROM PATHFLUX");
 			results.next();
-			results.updateString("URLFLUX", url);
+			results.updateString("urlflux", url);
 			results.updateRow();
     	} catch (MalformedURLException e) {
     		response.setRenderParameter("urlError", "true");
@@ -151,16 +151,6 @@ public class EditAdminController extends AbstractExceptionController {
     		response.setRenderParameter("urlError", "true");
     	}
     }
-    @RequestMapping(params = {"action=urlCrous"})
-    public void setURLCrous(ActionRequest request, ActionResponse response, @RequestParam(value = "url-restaurant", required = true) String url1,
-    																		@RequestParam(value = "url-menus", required = true) String url2) throws Exception {
-    	  try {
-    		  URL urlRestaurant = new URL(url1);
-    		  URL urlMenus = new URL(url2);
-    	  } catch (Exception e) {
-    		  response.setRenderParameter("urlError", "true");
-    	  }
-    }
     @RequestMapping(params = {"action=setDefaultArea"})
     public void setDefaultArea(ActionRequest request, ActionResponse response, @RequestParam(value = "zone", required = true) String area) throws Exception {
 		User user = authenticator.getUser();
@@ -168,7 +158,7 @@ public class EditAdminController extends AbstractExceptionController {
     	response.setRenderParameter("action", "adminSettings");
 		response.setRenderParameter("zoneSubmit", "true");
 
-		ResultSet results = dc.executeQuery("SELECT AREANAME FROM PATHFLUX");
+		ResultSet results = dc.executeQuery("SELECT * FROM PATHFLUX");
 		results.next();
 		results.updateString("AREANAME", area);
 		results.updateRow();

@@ -18,6 +18,7 @@ public class DatabaseConnector {
             this.connection = DriverManager.getConnection(db_infos, db_user, db_pwd);
             this.connection.setAutoCommit(true);
             this.statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//            this.createTables();
 	    } catch (Exception e) {
 	        // Problem with the db connection
             e.printStackTrace();
@@ -26,10 +27,10 @@ public class DatabaseConnector {
 
 	public void deleteTables() {
         try {
-            statement.executeUpdate("DROP TABLE FAVORITERESTAURANT");
-            statement.executeUpdate("DROP TABLE USERAREA");
-            statement.executeUpdate("DROP TABLE PATHFLUX");
-            statement.executeUpdate("DROP TABLE NUTRITIONPREFERENCES");
+            statement.executeUpdate("DROP TABLE IF EXISTS FAVORITERESTAURANT");
+            statement.executeUpdate("DROP TABLE IF EXISTS USERAREA");
+            statement.executeUpdate("DROP TABLE IF EXISTS PATHFLUX");
+            statement.executeUpdate("DROP TABLE IF EXISTS NUTRITIONPREFERENCES");
         } catch (SQLException e1) {
             e1.printStackTrace();
         }    
@@ -40,17 +41,17 @@ public class DatabaseConnector {
 	    this.deleteTables();
 	    
 		try {
-			statement.executeUpdate("CREATE TABLE FAVORITERESTAURANT(USERNAME VARCHAR(100), RESTAURANTID VARCHAR(100))");
+			statement.executeUpdate("CREATE TABLE FAVORITERESTAURANT(USERNAME VARCHAR(100), RESTAURANTID VARCHAR(100), CONSTRAINT pk_fav PRIMARY KEY (USERNAME, RESTAURANTID))");
 		} catch (SQLException e) {
 			System.out.println("[INFO] Table favoriteRestaurant already exist");
 		}
 		try {
-			statement.executeUpdate("CREATE TABLE USERAREA (USERNAME VARCHAR(500), AREANAME VARCHAR(200))");
+			statement.executeUpdate("CREATE TABLE USERAREA (USERNAME VARCHAR(500), AREANAME VARCHAR(200), CONSTRAINT pk_userarea PRIMARY KEY (USERNAME, AREANAME))");
 		} catch (SQLException e) {
 			System.out.println("[INFO] Table USERAREA already exist");
 		}
 		try {
-			statement.executeUpdate("CREATE TABLE PATHFLUX (URLFLUX VARCHAR(500), AREANAME VARCHAR(200))");
+			statement.executeUpdate("CREATE TABLE PATHFLUX (URLFLUX VARCHAR(500) PRIMARY KEY, AREANAME VARCHAR(200))");
 		} catch (SQLException e) {
 			System.out.println("[INFO] Table pathFlux already exist");
 		}
