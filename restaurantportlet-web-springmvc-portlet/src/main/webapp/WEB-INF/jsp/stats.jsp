@@ -2,6 +2,20 @@
 
 	<portlet:renderURL var="renderRefreshUrl" />
 	
+	<a href="<portlet:renderURL portletMode="edit"/>" class="icn-fam icn-fam-back">
+		<spring:message code="edit.admin.back"/>
+	</a> - 	
+		<portlet:renderURL var="adminSettings">
+ 				<portlet:param name="action" value="adminSettings"/>
+		</portlet:renderURL>
+	- 
+		<a href="${adminSettings}">
+			<spring:message code="menu.editadmin"/>
+		</a> - 
+	<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
+		<spring:message code="go.back.home"/>
+	</a> 	
+	
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
 

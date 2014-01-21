@@ -137,7 +137,9 @@
 
 							if(navigator.geolocation) {
 								
-								$("<button class='get-located'>Se localiser</button>").appendTo($(".map-container"));
+								$(".map-container").after("<p class='ta-center'><button class='btn btn-default get-located '><span class='glyphicon glyphicon-map-marker'></span> Se localiser</button></p>");
+
+								// $("<button class='get-located'>Se localiser</button>").appendTo(;
 								$(".get-located").click(function(e) {
 									navigator.geolocation.getCurrentPosition(distanceCalculator, positionUndefined);
 									e.preventDefault();

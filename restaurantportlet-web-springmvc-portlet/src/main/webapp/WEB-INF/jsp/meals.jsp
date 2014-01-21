@@ -125,7 +125,7 @@
 																
 																<c:choose>
 																	<c:when test="${codeNumber=='15'}">
-																		class="smart-choice"
+																		class="alert alert-success"
 																	</c:when>
 																	<c:otherwise>
 																		class="alert alert-warning"
@@ -148,7 +148,7 @@
 												</portlet:renderURL>
 
 												<c:if test="${not empty dish.code or not empty dish.ingredients or not empty dish.nutritionitems}">
-												<a href="${viewDish}" class="icn-fam icn-fam-infos">
+												<a href="${viewDish}">
 												</c:if>
 													${dish.name}
 												<c:if test="${not empty dish.code or not empty dish.ingredients or not empty dish.nutritionitems}">

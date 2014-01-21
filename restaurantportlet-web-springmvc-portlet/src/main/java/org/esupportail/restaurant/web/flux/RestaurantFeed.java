@@ -54,9 +54,7 @@ public class RestaurantFeed implements Serializable {
 				// before the inserting this row.
 			}
 			this.setPath(urlFlux);
-		} catch (Exception e) {   
-			System.out.println("[WARN] Couldn't fully instantiate RestaurantFlux, you'll need to configure it manually from admin settings.");
-		}
+		} catch (Exception e) { /* */ }
 	}
 	private RestaurantFeedRoot mapJson() throws JsonParseException, JsonMappingException, IOException {
 		return mapper.readValue(this.jsonStringified, RestaurantFeedRoot.class);
@@ -250,6 +248,6 @@ public class RestaurantFeed implements Serializable {
 	/* automated task */
 	
 	public void run() {
-		System.out.println("Update : " + this.update());
+	    this.update();
 	}
 }

@@ -41,7 +41,6 @@ public class RestaurantCache {
 			
 			restaurantCache.put(new Element(restaurantKey, restaurant));
 
-			System.out.println("restaurant " + restaurantKey + " added to the restaurant cache.");
 		}
 	}
 	
@@ -58,7 +57,6 @@ public class RestaurantCache {
 			
 			if(restaurant!=null) {
 				restaurantCache.put(new Element(key, restaurant));
-				System.out.println("restaurant " + key + " added to the restaurant cache.");
 			}
 
 		}
