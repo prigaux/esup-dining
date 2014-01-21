@@ -11,7 +11,9 @@
 		<c:if test="${restaurantClosed}">
 			<div class="alert alert-warning">
 				<a class="close" data-dismiss="alert">×</a>
-				<spring:message code="restaurant.closed" arguments="${restaurant.closing}"/>
+				<fmt:parseDate value="${menu.date}" var="parsedDate" pattern="yyyy-MM-dd" />
+				<fmt:formatDate value="${parsedDate}" var="localeDate" pattern="${sessionScope.dateLocalePattern}" />
+				<spring:message code="restaurant.closed" arguments="${localeDate}"/>
 			</div>
 		</c:if>
 		
@@ -87,7 +89,8 @@
 				<c:forEach var="menu" items="${menus}">
 					<li>
 						<a href="#menu-${menu.date}">
-							${menu.date}
+							<fmt:parseDate value="${menu.date}" var="parsedDate" pattern="yyyy-MM-dd" />
+							<fmt:formatDate value="${parsedDate}" pattern="${sessionScope.dateLocalePattern}" />
 						</a>
 					</li>
 				</c:forEach>
@@ -96,7 +99,8 @@
 				
 				<div id="menu-${menu.date}">
 					<h2>
-						${menu.date}
+						<fmt:parseDate value="${menu.date}" var="parsedDate" pattern="yyyy-MM-dd" />
+						<fmt:formatDate value="${parsedDate}" pattern="${sessionScope.dateLocalePattern}" />
 					</h2>
 					<div class="meals-accordion">
 						

@@ -8,8 +8,10 @@
 	
 	<c:if test="${restaurantClosed}">
 		<div class="alert alert-warning">
-			<a class="close" data-dismiss="alert">×</a>
-			<spring:message code="restaurant.closed" arguments="${restaurant.closing}"/>
+			<a class="close" data-dismiss="alert">×</a>			
+			<fmt:parseDate value="${menu.date}" var="parsedDate" pattern="yyyy-MM-dd" />
+			<fmt:formatDate value="${parsedDate}" var="localeDate" pattern="${sessionScope.dateLocalePattern}" />
+			<spring:message code="restaurant.closed" arguments="${localeDate}"/>
 		</div>
 	</c:if>
 

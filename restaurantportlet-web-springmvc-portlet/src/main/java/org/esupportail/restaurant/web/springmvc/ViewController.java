@@ -54,7 +54,7 @@ public class ViewController extends AbstractExceptionController {
 	
 	private RestaurantFeedRoot restaurants;
 
-	private IInitializationService initializationService;
+//	private IInitializationService initializationService;
 
 	@Autowired
 	private RestaurantCache cache;
@@ -68,10 +68,10 @@ public class ViewController extends AbstractExceptionController {
 		
 		String areaToDisplay = new String();
 
-		PortletSession session = request.getPortletSession(true);
-		if (session.getAttribute("isAdmin") == null) {
-			initializationService.initialize(request);
-		}
+//		PortletSession session = request.getPortletSession(true);
+//		if (session.getAttribute("isAdmin") == null) {
+//			initializationService.initialize(request);
+//		}
 
 		try {
 			ResultSet results = dc
@@ -295,11 +295,4 @@ public class ViewController extends AbstractExceptionController {
 
 		return new ModelAndView("dish", model);
 	}
-
-	@Required
-	@Resource(name = "sessionSetup")
-	public void setInitializationServices(final IInitializationService service) {
-		this.initializationService = service;
-	}
-
 }
