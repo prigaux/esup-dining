@@ -1,14 +1,14 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 
 <portlet:renderURL var="renderRefreshUrl" />
-	
+
 <h1><spring:message code="edit.title"/></h1>
 
 <a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
 	<spring:message code="go.back.home"/>
 </a>
 
-<c:if test="${sessionScope.isAdmin}">
+<%--<c:if test="${sessionScope.isAdmin}">--%>
 	<h2>
 		<portlet:renderURL var="adminSettings">
  				<portlet:param name="action" value="adminSettings"/>
@@ -18,7 +18,7 @@
 			<spring:message code="menu.editadmin"/>
 		</a>
 	</h2>
-</c:if>
+<%--</c:if>--%>
 
 <c:if test="${not empty areas}">
 	
@@ -60,12 +60,12 @@
 			<td>
 				${restaurant.title}
 			</td>
-			<td>
-				<portlet:actionURL var="removeFavorite">
+			<td class="ta-right">
+			 	<portlet:actionURL var="removeFavorite">
 				  <portlet:param name="action" value="removeFavorite"/>
 				  <portlet:param name="restaurant-id" value="${restaurant.id}"/>
 				</portlet:actionURL>
-				<a href="${removeFavorite}">
+				<a href="${removeFavorite}" class="btn btn-danger" style="color: white;">
 					<spring:message code="edit.delete"/> <span class="glyphicon glyphicon-remove"></span>
 				</a>
 			</td>
@@ -80,19 +80,31 @@
   <portlet:param name="action" value="nutritionPreferences"/>
 </portlet:actionURL>
 <form method="POST" action="${nutritionPreferences}">
-	<c:forEach var="code" items="${nutritionCodes}">
-		<label style="float: none;">
-			<spring:message code="meal.code.${fn:trim(code)}.name" />
-			<input type="checkbox" name="code-${code}" id="code-${code}"
-				
-				<c:forEach var="userPrefCode" items="${nutritionPrefs}">
-					<c:if test="${userPrefCode == code}">
-						checked="checked"
-					</c:if>
-				</c:forEach>
-				
-			/>
-		</label>	
+	<c:forEach var="code" items="${nutritionCodes}" varStatus="status">
+
+		<c:if test="${status.index % 2 == 0}">
+			<c:if test="${!status.first}">
+				</div>
+			</c:if>
+			<c:if test="${!status.last}">
+				<div class="row">
+			</c:if>
+		</c:if>
+
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+			<label style="float: none;">
+				<spring:message code="meal.code.${fn:trim(code)}.name" />
+				<input type="checkbox" name="code-${code}" id="code-${code}"
+					
+					<c:forEach var="userPrefCode" items="${nutritionPrefs}">
+						<c:if test="${userPrefCode == code}">
+							checked="checked"
+						</c:if>
+					</c:forEach>
+					
+				/>
+			</label>	
+		</div>
 	</c:forEach>
 	
 	<c:if test="${nutritSubmit == 'true'}">

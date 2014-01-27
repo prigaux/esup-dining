@@ -11,8 +11,9 @@
 		<c:if test="${restaurantClosed}">
 			<div class="alert alert-warning">
 				<a class="close" data-dismiss="alert">×</a>
-				<fmt:parseDate value="${menu.date}" var="parsedDate" pattern="yyyy-MM-dd" />
+				<fmt:parseDate value="${restaurant.closing}" var="parsedDate" pattern="yyyy-MM-dd" />
 				<fmt:formatDate value="${parsedDate}" var="localeDate" pattern="${sessionScope.dateLocalePattern}" />
+				${localeDate}
 				<spring:message code="restaurant.closed" arguments="${localeDate}"/>
 			</div>
 		</c:if>
@@ -27,7 +28,7 @@
 				    <span class="icon-bar"></span>
 				    <span class="icon-bar"></span>
 		    	</span>
-		    	<a class="navbar-brand" href="#">${restaurant.title}</a>
+		    	<span class="navbar-brand">${restaurant.title}</span>
 		    </div>
 
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -68,16 +69,16 @@
 					</li>
 					<c:if test="${restaurant.accessibility}">
 					<li>
-						<a href="#" class="icn-fam icn-fam-disability">
+						<span class="icn-fam icn-fam-disability">
 							<spring:message code="restaurant.msg.disability"/>
-						</a>
+						</span>
 					</li>
 					</c:if>
 					<c:if test="${restaurant.wifi}">
 					<li>
-						<a href="#" class="icn-fam icn-fam-wifi">
+						<span class="icn-fam icn-fam-wifi">
 							<spring:message code="restaurant.wifi"/>					
-						</a>
+						</span>
 					</li>
 					</c:if>
 				</ul>

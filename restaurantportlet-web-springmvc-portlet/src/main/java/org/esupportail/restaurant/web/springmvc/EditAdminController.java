@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -118,7 +119,13 @@ public class EditAdminController extends AbstractExceptionController {
             restaurantsName.put(r.getId(), r.getTitle());
         }
         
-
+        ResultSet resultsNutrit = dc.executeQuery("SELECT NUTRITIONCODE FROM NUTRITIONPREFERENCES");
+        List<Integer> prefCodeList = new ArrayList<Integer>();
+        
+        while(resultsNutrit.next()) {
+            prefCodeList.add(resultsNutrit.getInt("NUTRITIONCODE"));
+        }
+        model.put("prefCodeList", prefCodeList);
         model.put("stats", nbRestaurant);
         model.put("restaurantsName", restaurantsName);
                      

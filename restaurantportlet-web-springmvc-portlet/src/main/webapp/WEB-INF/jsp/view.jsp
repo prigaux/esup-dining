@@ -17,18 +17,31 @@
 							<span class="glyphicon glyphicon-star starred-icon"></span>
 							<spring:message code="view.favorite.title"/>
 						</th>
+						<th class="ta-right">
+							<spring:message code="view.restaurant.detail"/>
+						</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach var="favRestaurant" items="${favorites}">
-						<portlet:renderURL var="viewRestaurant">
+						<portlet:renderURL var="viewMeals">
 			  				<portlet:param name="action" value="viewMeals"/>
+			  				<portlet:param name="id" value="${favRestaurant.id}"/>
+						</portlet:renderURL>
+						<portlet:renderURL var="viewRestaurant">
+			  				<portlet:param name="action" value="viewRestaurant"/>
 			  				<portlet:param name="id" value="${favRestaurant.id}"/>
 						</portlet:renderURL>
 						<tr>
 							<td>
-								<a href="${viewRestaurant}">
+								<a href="${viewMeals}">
 									${favRestaurant.title}
+								</a>
+							</td>
+							<td class="ta-right">
+								<a href="${viewRestaurant}">
+									<img src="<%= renderRequest.getContextPath() %>/images/information.png"
+										 alt="Detail" />
 								</a>
 							</td>
 						</tr>
@@ -47,6 +60,9 @@
 						<th class="lead">
 							<spring:message code="view.list.title"/> ${area}
 						</th>
+						<th class="ta-right">
+							Détails
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -59,6 +75,12 @@
 							<td<c:if test="${dininghall.additionalProperties['isClosed']}"> data-closed="true" class="warning"</c:if><c:if test="${dininghall.additionalProperties['isClosed']}">class="warning"</c:if>>
 								<a href="${viewRestaurant}">
 									${dininghall.title}
+								</a>
+							</td>							
+							<td class="ta-right">
+								<a href="${viewRestaurant}">
+									<img src="<%= renderRequest.getContextPath() %>/images/information.png"
+										 alt="Detail" />
 								</a>
 							</td>
 						</tr>
@@ -76,6 +98,11 @@
 				  				<portlet:param name="id" value="${dininghall.id}"/>
 							</portlet:renderURL>
 							diningHalls.push(["${dininghall.title}", ${dininghall.lat}, ${dininghall.lon}, "${viewRestaurantFromMaker}"]);
+						</c:forEach>
+
+						var favoriteListLatLng = new Array();
+						<c:forEach var="fav" items="${favorites}">
+							favoriteListLatLng.push(new google.maps.LatLng(parseFloat(${fav.lat}, 10).toFixed(6), parseFloat(${fav.lon}, 10).toFixed(6)));
 						</c:forEach>
 
 						// Event Listener
@@ -205,6 +232,16 @@
 								avoidHighways : false,
 								avoidTolls : false
 							}, sortByDistance);
+
+							service.getDistanceMatrix({
+								origins : [origin],
+								destinations : diningHallsLatLng,
+								travelMode : google.maps.TravelMode.DRIVING,
+								unitSystem : google.maps.UnitSystem.METRIC,
+								durationInTraffic : true,
+								avoidHighways : false,
+								avoidTolls : false
+							}, sortFavoriteByDistance);
 						}
 
 						// Callback from getDistanceMatrix
@@ -216,7 +253,7 @@
 
 							// append distance attribute and text node
 							$diningHallList.find('tbody tr').each(function(index) {
-								$(this).find('td').append(" (" + results[index].distance.text+")");
+								$(this).find('td:first-child').append(" (" + results[index].distance.text+")");
 								$(this).attr('data-distance', results[index].distance.value);
 							});
 
@@ -226,6 +263,25 @@
 							});
 							$diningHallList.find('li').remove();
 							$diningHallList.append(listItems);
+						}
+
+						function sortFavoriteByDistance(response, status) {
+							// store the results in a var
+							var results = response.rows[0].elements;
+							var $diningHallList = $(".fav-dininghall-list");
+
+							// append distance attribute and text node
+							$diningHallList.find('tbody tr').each(function(index) {
+								$(this).find('td:first-child').append(" (" + results[index].distance.text+")");
+								$(this).attr('data-distance', results[index].distance.value);
+							});
+
+							// Dinamically sort by distance attribute numerical value
+							var listItems = $diningHallList.find('tbody tr').sort(function(a,b){ 
+								return $(a).attr('data-distance') - $(b).attr('data-distance'); 
+							});
+							$diningHallList.find('li').remove();
+							$diningHallList.append(listItems);					
 						}
 						
 						function sortByOpenning() {

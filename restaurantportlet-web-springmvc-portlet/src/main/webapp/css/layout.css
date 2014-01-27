@@ -22,7 +22,12 @@
 	.ta-center {
 		text-align: center;
 	}
-	
+	.ta-right {
+		text-align: right;
+	}
+	.ta-left {
+		text-align: left;
+	}
 	.get-located {
 		margin-top: 10px;
 		font-size: 1.4em;
