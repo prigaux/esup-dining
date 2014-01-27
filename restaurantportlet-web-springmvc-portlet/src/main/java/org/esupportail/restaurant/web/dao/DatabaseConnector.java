@@ -11,14 +11,13 @@ public class DatabaseConnector {
 	private Connection connection;
 	private Statement statement;
 	
-	/* not finished yet */
+	// db connection infos in src/main/resources/defaults.properties
 	public DatabaseConnector(String db_driver, String db_infos, String db_user, String db_pwd) {
 	    try {
             Class.forName(db_driver).newInstance();
             this.connection = DriverManager.getConnection(db_infos, db_user, db_pwd);
             this.connection.setAutoCommit(true);
             this.statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//            this.createTables();
 	    } catch (Exception e) {
 	        // Problem with the db connection
             e.printStackTrace();

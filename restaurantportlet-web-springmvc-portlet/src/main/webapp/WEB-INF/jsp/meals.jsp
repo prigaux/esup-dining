@@ -21,12 +21,12 @@
 <nav class="navbar navbar-default" role="navigation">
 		
   			<div class="navbar-header">
-		    	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+		    	<span type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 				    <span class="sr-only">Toggle navigation</span>
 				    <span class="icon-bar"></span>
 				    <span class="icon-bar"></span>
 				    <span class="icon-bar"></span>
-		    	</button>
+		    	</span>
 		    	<a class="navbar-brand" href="#">${restaurant.title}</a>
 		    </div>
 
@@ -156,17 +156,14 @@
 												</c:if>
 													${dish.name}
 												<c:if test="${not empty dish.code or not empty dish.ingredients or not empty dish.nutritionitems}">
+													<c:forEach var="codeNumber" items="${dish.code}">
+														<img src="<%= renderRequest.getContextPath() %><spring:message code="meal.code.${codeNumber}.img" />"
+														     alt="<spring:message code="meal.code.${codeNumber}.description" />"
+															 title="<spring:message code="meal.code.${codeNumber}.name" />"
+														/>									
+													</c:forEach>
 												</a>
-												</c:if>	
-												<c:if test="${not empty dish.code}">
-														<c:forEach var="codeNumber" items="${dish.code}">
-															<img src="<%= renderRequest.getContextPath() %><spring:message code="meal.code.${codeNumber}.img" />"
-															     alt="<spring:message code="meal.code.${codeNumber}.description" />"
-																 title="<spring:message code="meal.code.${codeNumber}.name" />"
-															/>									
-														</c:forEach>
-												</c:if>
-			
+												</c:if>				
 											</li>
 										</c:forEach>
 									</ul>

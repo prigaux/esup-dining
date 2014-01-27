@@ -54,8 +54,6 @@ public class ViewController extends AbstractExceptionController {
 	
 	private RestaurantFeedRoot restaurants;
 
-//	private IInitializationService initializationService;
-
 	@Autowired
 	private RestaurantCache cache;
 
@@ -67,11 +65,6 @@ public class ViewController extends AbstractExceptionController {
 		User user = authenticator.getUser();
 		
 		String areaToDisplay = new String();
-
-//		PortletSession session = request.getPortletSession(true);
-//		if (session.getAttribute("isAdmin") == null) {
-//			initializationService.initialize(request);
-//		}
 
 		try {
 			ResultSet results = dc

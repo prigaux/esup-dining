@@ -29,34 +29,6 @@ public class RestaurantData {
 		
 	}
 	
-	// Buggy method... throw NPE, need to find why.
-	
-	public String getAreaToDisplay(User user) {
-		String areaToDisplay="";
-		
-		try {
-			dc.executeQuery("SELECT * FROM USERAREA");
-		} catch(SQLException e) {
-			//
-		}
-		
-//		try {
-//    		ResultSet results = dc.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='"+user.getLogin()+"';");
-//    		results.next();
-//    		areaToDisplay = results.getString("AREANAME");
-//    	} catch (SQLException e) {
-//    		// we are here if the user didn't set a specific area
-//        	try {
-//        		ResultSet results = dc.executeQuery("SELECT AREANAME FROM PATHFLUX");
-//            	results.next();
-//        		areaToDisplay = results.getString("AREANAME");
-//        	} catch (SQLException e2) {
-//        		// If there is no default area, then the admin must configure the portlet before.
-//        	}
-//    	}
-		return areaToDisplay;
-	}
-	
 	public List<Restaurant> getFavoriteList(User user) {
 		List<Restaurant> favorites = new ArrayList<Restaurant>();
 				

@@ -20,7 +20,6 @@
             <portlet-mode>VIEW</portlet-mode>
             <portlet-mode>EDIT</portlet-mode>
             <portlet-mode>HELP</portlet-mode>
-            <portlet-mode>ABOUT</portlet-mode>
         </supports>
         <supported-locale>fr</supported-locale>
         <supported-locale>en</supported-locale>
