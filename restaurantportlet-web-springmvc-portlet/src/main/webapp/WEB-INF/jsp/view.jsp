@@ -61,7 +61,7 @@
 							<spring:message code="view.list.title"/> ${area}
 						</th>
 						<th class="ta-right">
-							Détails
+							<spring:message code="view.restaurant.detail"/>
 						</th>
 					</tr>
 				</thead>
@@ -289,7 +289,7 @@
 							var listItems = $diningHallList.find('tbody tr').sort(function(a,b){
 								return ($(a).find('td').attr('data-closed') == undefined ? 0 : 1) - ($(b).find('td').attr('data-closed') == undefined ? 0 : 1);
 							});
-							$diningHallList.find('tr').remove();
+							$diningHallList.find('tbody tr').remove();
 							$diningHallList.append(listItems);
 						}
 

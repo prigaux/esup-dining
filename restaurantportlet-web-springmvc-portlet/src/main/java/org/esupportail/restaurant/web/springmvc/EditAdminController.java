@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.portlet.ActionRequest;
@@ -119,12 +119,13 @@ public class EditAdminController extends AbstractExceptionController {
             restaurantsName.put(r.getId(), r.getTitle());
         }
         
-        ResultSet resultsNutrit = dc.executeQuery("SELECT NUTRITIONCODE FROM NUTRITIONPREFERENCES");
-        List<Integer> prefCodeList = new ArrayList<Integer>();
+        ResultSet resultsNutrit = dc.executeQuery("SELECT NUTRITIONCODE, COUNT(*) FROM NUTRITIONPREFERENCES GROUP BY NUTRITIONCODE");
+        Map<Integer, Integer> prefCodeList = new HashMap<Integer, Integer>();
         
         while(resultsNutrit.next()) {
-            prefCodeList.add(resultsNutrit.getInt("NUTRITIONCODE"));
+            prefCodeList.put(resultsNutrit.getInt(1), resultsNutrit.getInt(2));
         }
+        System.out.println(prefCodeList);
         model.put("prefCodeList", prefCodeList);
         model.put("stats", nbRestaurant);
         model.put("restaurantsName", restaurantsName);
