@@ -210,6 +210,13 @@ public class ViewController extends AbstractExceptionController {
 		} catch (Exception e) {
             return new ModelAndView("error", new ModelMap("err", e.getMessage()));
 		}
+		
+		ResultSet results = dc
+                .executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='"
+                        + user.getLogin() + "' AND RESTAURANTID='" + id + "';");
+        if (results.next()) {
+            model.put("isFavorite", true);
+        }
 
 		return new ModelAndView("meals", model);
 	}

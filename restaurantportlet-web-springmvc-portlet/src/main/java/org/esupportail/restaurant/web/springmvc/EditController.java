@@ -136,6 +136,7 @@ public class EditController extends AbstractExceptionController {
 	    	String userLogin = authenticator.getUser().getLogin();
 
 	    	Map parameters = request.getParameterMap();
+	    	  	
 
 	    	int[] code     = {1,2,3,4,5,6,7,9,10,11,12,13,14,15};
 

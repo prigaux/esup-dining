@@ -101,7 +101,6 @@
 		</c:if>		
 		<%-- end short desc --%>
 
-		<div class="row">
 			<%-- Start photo block --%>
 			<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 ta-center">
 				<c:if test="${not empty restaurant.photo.src}">
@@ -173,9 +172,7 @@
 				</c:if>	
 				<%-- end payment method --%>			
 			</div>
-		</div>
 
-		<div class="row">
 			<%-- start table opening --%>			
 			<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 				<c:if test="${not empty restaurant.lat and not empty restaurant.lon}">
@@ -262,9 +259,6 @@
 				</c:if>								
 			</div>
 			<%-- end map --%>
-		</div>
-
 	</c:if>
 
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>
-

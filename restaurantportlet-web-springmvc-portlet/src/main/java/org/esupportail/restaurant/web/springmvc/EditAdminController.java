@@ -58,7 +58,7 @@ public class EditAdminController extends AbstractExceptionController {
 	    		for (Restaurant r : flux.getFlux().getRestaurants()) {
 	    			areaList.add(r.getArea());
 	    		}
-
+	    		
 	    		ResultSet results = dc.executeQuery("SELECT URLFLUX, AREANAME FROM PATHFLUX");
 	    		results.next();
 	    		String area, urlflux;
@@ -125,7 +125,7 @@ public class EditAdminController extends AbstractExceptionController {
         while(resultsNutrit.next()) {
             prefCodeList.put(resultsNutrit.getInt(1), resultsNutrit.getInt(2));
         }
-        System.out.println(prefCodeList);
+        
         model.put("prefCodeList", prefCodeList);
         model.put("stats", nbRestaurant);
         model.put("restaurantsName", restaurantsName);
@@ -159,18 +159,15 @@ public class EditAdminController extends AbstractExceptionController {
     		response.setRenderParameter("urlError", "true");
     	}
     }
+    
     @RequestMapping(params = {"action=setDefaultArea"})
-    public void setDefaultArea(ActionRequest request, ActionResponse response, @RequestParam(value = "zone", required = true) String area) throws Exception {
+    public void setDefaultArea(ActionRequest request, ActionResponse response, /*@RequestParam(value="areas", required=true) String[] areas*/ @RequestParam(value="test", required=false) String test) throws Exception {
 		User user = authenticator.getUser();
 
     	response.setRenderParameter("action", "adminSettings");
 		response.setRenderParameter("zoneSubmit", "true");
-
-		ResultSet results = dc.executeQuery("SELECT * FROM PATHFLUX");
-		results.next();
-		results.updateString("AREANAME", area);
-		results.updateRow();
-
+		System.out.println(test);
+//		System.out.println(areas);
     }
 
     @RequestMapping(params = {"action=forceFeedUpdate"})

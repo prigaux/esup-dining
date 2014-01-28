@@ -33,6 +33,10 @@
 		font-size: 1.4em;
 	}
 
+	.navbar-default .navbar-nav > li > span {
+		padding: 15px;
+	}
+
 /* icon set */
 
 .icn-fam {
