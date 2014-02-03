@@ -51,254 +51,290 @@
 		</div>
 		</c:if>
 		
-		<c:if test="${not empty dininghalls}">
-		<div class="dininghalllist col-lg-6 col-md-6 col-sm-12 col-sm-12">
+		<c:forEach var="dininghalls" items="${restaurantLists}">
+			<c:if test="${not empty dininghalls.value}">
+				
+				<div class="dininghalllist col-lg-6 col-md-6 col-sm-12 col-sm-12" data-zone="${dininghalls.key}">
 
-			<table class="table table-striped table-responsive dininghall-list">
-				<thead>
-					<tr>
-						<th class="lead">
-							<spring:message code="view.list.title"/> ${area}
-						</th>
-						<th class="ta-right">
-							<spring:message code="view.restaurant.detail"/>
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach var="dininghall" items="${dininghalls}">
-						<portlet:renderURL var="viewRestaurant">
-			  				<portlet:param name="action" value="viewMeals"/>
-			  				<portlet:param name="id" value="${dininghall.id}"/>
-						</portlet:renderURL>
-						<tr>
-							<td<c:if test="${dininghall.additionalProperties['isClosed']}"> data-closed="true" class="warning"</c:if><c:if test="${dininghall.additionalProperties['isClosed']}">class="warning"</c:if>>
-								<a href="${viewRestaurant}">
-									${dininghall.title}
-								</a>
-							</td>							
-							<td class="ta-right">
-								<a href="${viewRestaurant}">
-									<img src="<%= renderRequest.getContextPath() %>/images/information.png"
-										 alt="Detail" />
-								</a>
-							</td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-				<script type="text/javascript">
-						
-						var diningHalls = new Array();
+					<table class="table table-striped table-responsive dininghall-list">
+						<thead>
+							<tr>
+								<th class="lead">
+									<spring:message code="view.list.title"/> ${dininghalls.key}
+								</th>
+								<th class="ta-right">
+									<spring:message code="view.restaurant.detail"/>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="dininghall" items="${dininghalls.value}">
+								<portlet:renderURL var="viewRestaurant">
+					  				<portlet:param name="action" value="viewMeals"/>
+					  				<portlet:param name="id" value="${dininghall.id}"/>
+								</portlet:renderURL>
+								<tr>
+									<td<c:if test="${dininghall.additionalProperties['isClosed']}"> data-closed="true" class="warning"</c:if><c:if test="${dininghall.additionalProperties['isClosed']}">class="warning"</c:if>>
+										<a href="${viewRestaurant}">
+											${dininghall.title}
+										</a>
+									</td>							
+									<td class="ta-right">
+										<a href="${viewRestaurant}">
+											<img src="<%= renderRequest.getContextPath() %>/images/information.png"
+												 alt="Detail" />
+										</a>
+									</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+					
+				</div>
+			
+			</c:if>
+		</c:forEach>
+		
+		<script type="text/javascript">
+				
+				var diningHalls = new Array();
+				<c:forEach var="dininghalls" items="${restaurantLists}">
+					<c:if test="${not empty dininghalls.value}">
+						<c:forEach var="dininghall" items="${dininghalls.value}">
 
-						// Data access
-						<c:forEach var="dininghall" items="${dininghalls}">
 							<portlet:renderURL var="viewRestaurantFromMaker">
 				  				<portlet:param name="action" value="viewRestaurant"/>
 				  				<portlet:param name="id" value="${dininghall.id}"/>
 							</portlet:renderURL>
-							diningHalls.push(["${dininghall.title}", ${dininghall.lat}, ${dininghall.lon}, "${viewRestaurantFromMaker}"]);
+
+							diningHalls.push(["${dininghall.title}", ${dininghall.lat}, ${dininghall.lon}, "${viewRestaurantFromMaker}", "${dininghalls.key}"]);
+
 						</c:forEach>
+					</c:if>
+				</c:forEach>
 
-						var favoriteListLatLng = new Array();
-						<c:forEach var="fav" items="${favorites}">
-							favoriteListLatLng.push(new google.maps.LatLng(parseFloat(${fav.lat}, 10).toFixed(6), parseFloat(${fav.lon}, 10).toFixed(6)));
-						</c:forEach>
+				// Data access
+				<c:forEach var="dininghall" items="${dininghalls}">
+					<portlet:renderURL var="viewRestaurantFromMaker">
+		  				<portlet:param name="action" value="viewRestaurant"/>
+		  				<portlet:param name="id" value="${dininghall.id}"/>
+					</portlet:renderURL>
+					diningHalls.push(["${dininghall.title}", ${dininghall.lat}, ${dininghall.lon}, "${viewRestaurantFromMaker}"]);
+				</c:forEach>
 
-						// Event Listener
-						google.maps.event.addDomListener(window, 'load', initialize);
+				var favoriteListLatLng = new Array();
+				<c:forEach var="fav" items="${favorites}">
+					favoriteListLatLng.push(new google.maps.LatLng(parseFloat(${fav.lat}, 10).toFixed(6), parseFloat(${fav.lon}, 10).toFixed(6)));
+				</c:forEach>
+
+				// Event Listener
+				google.maps.event.addDomListener(window, 'load', initialize);
+				
+				var map;
+				var diningHallsLatLng = new Array();
+				var myLatlng = new google.maps.LatLng(parseFloat(diningHalls[0][1]).toFixed(6), parseFloat(diningHalls[0][2]).toFixed(6));
+				
+				var mapCenter = mapCenterCalculator(diningHalls);
+				
+				var mapOptions = 
+				{
+				     center: mapCenter,
+				     mapTypeId: google.maps.MapTypeId.ROADMAP
+			    };
+
+			    var bounds = new google.maps.LatLngBounds ();
+				
+				function initialize() {
+
+					sortByOpenning();
+					
+					// Map init
+
+				    map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+				   
+				    // Markers init
+
+				    for(var i=0; i<diningHalls.length; i++) {
+				    	
+				    	var diningHallPosition = new google.maps.LatLng(diningHalls[i][1],diningHalls[i][2]);				    	
+				    	
+				    	bounds.extend(diningHallPosition);
+
+				    	// For the distance matrix
+				    	diningHallsLatLng.push(diningHallPosition);
+
+				    	var mark = new google.maps.Marker({
+					        position: diningHallPosition,
+					        map: map,
+					        title:diningHalls[i][0],
+					        icon: "<%= renderRequest.getContextPath() + "/images/pin_resto.png" %>"
+					    });
+
+				    	// Event Listeners
+
+				    	google.maps.event.addListener(mark, 'click', function() {
+				    		for(var j=0; j<diningHalls.length; j++) {
+				    			if(diningHalls[j][0] == this.getTitle())
+				    				location.href=diningHalls[j][3];
+				    		}
+				    	});
+				    }
+
+				    map.fitBounds(bounds);
+
+				    // Geolocation feature
+
+					if(navigator.geolocation) {
 						
-						var map;
-						var diningHallsLatLng = new Array();
-						var myLatlng = new google.maps.LatLng(parseFloat(diningHalls[0][1]).toFixed(6), parseFloat(diningHalls[0][2]).toFixed(6));
-						
-						var mapCenter = mapCenterCalculator(diningHalls);
-						
-						var mapOptions = 
-						{
-						     center: mapCenter,
-						     mapTypeId: google.maps.MapTypeId.ROADMAP
-					    };
+						$(".map-container").after("<p class='ta-center'><button class='btn btn-default get-located '><span class='glyphicon glyphicon-map-marker'></span> Se localiser</button></p>");
 
-					    var bounds = new google.maps.LatLngBounds ();
-						
-						function initialize() {
+						// $("<button class='get-located'>Se localiser</button>").appendTo(;
+						$(".get-located").click(function(e) {
+							navigator.geolocation.getCurrentPosition(distanceCalculator, positionUndefined);
+							e.preventDefault();
+							$(this).fadeOut(500);
+							$(this).unbind('click');
+						});
+					}
 
-							sortByOpenning();
-							
-							// Map init
+					// Event Listeners
 
-						    map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-						   
-						    // Markers init
+					window.onresize = function() {
+						map.fitBounds(bounds);
+					}
+				}
+				
+				
+				/* @return : Approximation of the center of all points displayed on the map 
+				   works well if coords are less than 500 miles distant 
+				*/
+				function mapCenterCalculator(coords) {
+					   
+					var lat=0, lng=0;
+					
+					for(var i=0; i<coords.length; ++i) {
+					   lat += coords[i][1];
+					   lng += coords[i][2];
+					}					
 
-						    for(var i=0; i<diningHalls.length; i++) {
-						    	
-						    	var diningHallPosition = new google.maps.LatLng(diningHalls[i][1],diningHalls[i][2]);				    	
-						    	
-						    	bounds.extend(diningHallPosition);
+					lat /= coords.length;
+					lng /= coords.length;
+					
+					return new google.maps.LatLng(lat, lng);
+				}				
 
-						    	// For the distance matrix
-						    	diningHallsLatLng.push(diningHallPosition);
+				function distanceCalculator(position) {
 
-						    	var mark = new google.maps.Marker({
-							        position: diningHallPosition,
-							        map: map,
-							        title:diningHalls[i][0],
-							        icon: "<%= renderRequest.getContextPath() + "/images/pin_resto.png" %>"
-							    });
+					// If geolocation succeeded, we create a maker to the user position
 
-						    	// Event Listeners
+					var origin = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-						    	google.maps.event.addListener(mark, 'click', function() {
-						    		for(var j=0; j<diningHalls.length; j++) {
-						    			if(diningHalls[j][0] == this.getTitle())
-						    				location.href=diningHalls[j][3];
-						    		}
-						    	});
-						    }
+					var mark = new google.maps.Marker({
+				        position: origin,
+				        map: map,
+				        title:"<spring:message code="view.map.currentpos"/>",
+				        zIndex : 99
+				    });
 
-						    map.fitBounds(bounds);
+					// We center the map at his place
 
-						    // Geolocation feature
+					map.setCenter(origin);
+					map.setZoom(14);
 
-							if(navigator.geolocation) {
-								
-								$(".map-container").after("<p class='ta-center'><button class='btn btn-default get-located '><span class='glyphicon glyphicon-map-marker'></span> Se localiser</button></p>");
+					// And calculate the distance from his place to all other dining hall in his area
 
-								// $("<button class='get-located'>Se localiser</button>").appendTo(;
-								$(".get-located").click(function(e) {
-									navigator.geolocation.getCurrentPosition(distanceCalculator, positionUndefined);
-									e.preventDefault();
-									$(this).fadeOut(500);
-									$(this).unbind('click');
-								});
-							}
+					var service = new google.maps.DistanceMatrixService();
 
-							// Event Listeners
+					service.getDistanceMatrix({
+						origins : [origin],
+						destinations : diningHallsLatLng,
+						travelMode : google.maps.TravelMode.DRIVING,
+						unitSystem : google.maps.UnitSystem.METRIC,
+						durationInTraffic : true,
+						avoidHighways : false,
+						avoidTolls : false
+					}, sortByDistance);
 
-							window.onresize = function() {
-								map.fitBounds(bounds);
-							}
-						}
-						
-						
-						/* @return : Approximation of the center of all points displayed on the map 
-						   works well if coords are less than 500 miles distant 
-						*/
-						function mapCenterCalculator(coords) {
-							   
-							var lat=0, lng=0;
-							
-							for(var i=0; i<coords.length; ++i) {
-							   lat += coords[i][1];
-							   lng += coords[i][2];
-							}					
+					service.getDistanceMatrix({
+						origins : [origin],
+						destinations : diningHallsLatLng,
+						travelMode : google.maps.TravelMode.DRIVING,
+						unitSystem : google.maps.UnitSystem.METRIC,
+						durationInTraffic : true,
+						avoidHighways : false,
+						avoidTolls : false
+					}, sortFavoriteByDistance);
+				}
 
-							lat /= coords.length;
-							lng /= coords.length;
-							
-							return new google.maps.LatLng(lat, lng);
-						}				
+				// Callback from getDistanceMatrix
+				function sortByDistance(response, status) {
 
-						function distanceCalculator(position) {
+					// store the results in a var
+					var results = response.rows[0].elements;
 
-							// If geolocation succeeded, we create a maker to the user position
+					$(".dininghall-list").each(function(index) {
 
-							var origin = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+						var $list = $(this);
+						// append distance attribute and text node
+						$list.find('tbody tr').each(function(index) {
+							$(this).find('td:first-child').append(" (" + results[index].distance.text+")");
+							$(this).attr('data-distance', results[index].distance.value);
+						});
 
-							var mark = new google.maps.Marker({
-						        position: origin,
-						        map: map,
-						        title:"<spring:message code="view.map.currentpos"/>",
-						        zIndex : 99
-						    });
+						// Dinamically sort by distance attribute numerical value
+						var listItems = $list.find('tbody tr').sort(function(a,b){ 
+							return $(a).attr('data-distance') - $(b).attr('data-distance'); 
+						});
+						$list.find('li').remove();
+						$list.append(listItems);
 
-							// We center the map at his place
+					});
 
-							map.setCenter(origin);
-							map.setZoom(14);
+				}
 
-							// And calculate the distance from his place to all other dining hall in his area
+				function sortFavoriteByDistance(response, status) {
+					// store the results in a var
+					var results = response.rows[0].elements;
 
-							var service = new google.maps.DistanceMatrixService();
+					$(".fav-dininghall-list").each(function(index) {
 
-							service.getDistanceMatrix({
-								origins : [origin],
-								destinations : diningHallsLatLng,
-								travelMode : google.maps.TravelMode.DRIVING,
-								unitSystem : google.maps.UnitSystem.METRIC,
-								durationInTraffic : true,
-								avoidHighways : false,
-								avoidTolls : false
-							}, sortByDistance);
+						var $list = $(this);
+						// append distance attribute and text node
+						$list.find('tbody tr').each(function(index) {
+							$(this).find('td:first-child').append(" (" + results[index].distance.text+")");
+							$(this).attr('data-distance', results[index].distance.value);
+						});
 
-							service.getDistanceMatrix({
-								origins : [origin],
-								destinations : diningHallsLatLng,
-								travelMode : google.maps.TravelMode.DRIVING,
-								unitSystem : google.maps.UnitSystem.METRIC,
-								durationInTraffic : true,
-								avoidHighways : false,
-								avoidTolls : false
-							}, sortFavoriteByDistance);
-						}
+						// Dinamically sort by distance attribute numerical value
+						var listItems = $list.find('tbody tr').sort(function(a,b){ 
+							return $(a).attr('data-distance') - $(b).attr('data-distance'); 
+						});
+						$list.find('li').remove();
+						$list.append(listItems);
 
-						// Callback from getDistanceMatrix
-						function sortByDistance(response, status) {
+					});				
+				}
+				
+				function sortByOpenning() {
 
-							// store the results in a var
-							var results = response.rows[0].elements;
-							var $diningHallList = $(".dininghall-list");
+					$(".dininghall-list").each(function(index) {
 
-							// append distance attribute and text node
-							$diningHallList.find('tbody tr').each(function(index) {
-								$(this).find('td:first-child').append(" (" + results[index].distance.text+")");
-								$(this).attr('data-distance', results[index].distance.value);
-							});
+						var $list = $(this);
 
-							// Dinamically sort by distance attribute numerical value
-							var listItems = $diningHallList.find('tbody tr').sort(function(a,b){ 
-								return $(a).attr('data-distance') - $(b).attr('data-distance'); 
-							});
-							$diningHallList.find('li').remove();
-							$diningHallList.append(listItems);
-						}
+						var listItems = $list.find('tbody tr').sort(function(a,b){
+							return ($(a).find('td').attr('data-closed') == undefined ? 0 : 1) - ($(b).find('td').attr('data-closed') == undefined ? 0 : 1);
+						});
 
-						function sortFavoriteByDistance(response, status) {
-							// store the results in a var
-							var results = response.rows[0].elements;
-							var $diningHallList = $(".fav-dininghall-list");
+						$list.find('tbody tr').remove();
+						$list.append(listItems);
 
-							// append distance attribute and text node
-							$diningHallList.find('tbody tr').each(function(index) {
-								$(this).find('td:first-child').append(" (" + results[index].distance.text+")");
-								$(this).attr('data-distance', results[index].distance.value);
-							});
+					});				
+				}
 
-							// Dinamically sort by distance attribute numerical value
-							var listItems = $diningHallList.find('tbody tr').sort(function(a,b){ 
-								return $(a).attr('data-distance') - $(b).attr('data-distance'); 
-							});
-							$diningHallList.find('li').remove();
-							$diningHallList.append(listItems);					
-						}
-						
-						function sortByOpenning() {
-							var $diningHallList = $(".dininghall-list");
-							var listItems = $diningHallList.find('tbody tr').sort(function(a,b){
-								return ($(a).find('td').attr('data-closed') == undefined ? 0 : 1) - ($(b).find('td').attr('data-closed') == undefined ? 0 : 1);
-							});
-							$diningHallList.find('tbody tr').remove();
-							$diningHallList.append(listItems);
-						}
-
-						function positionUndefined(err) {
-							console.error(err);
-						}
-				</script>
-			</c:if>
-		</div>
+				function positionUndefined(err) {
+					console.error(err);
+				}
+		</script>
 	</div>
 
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>

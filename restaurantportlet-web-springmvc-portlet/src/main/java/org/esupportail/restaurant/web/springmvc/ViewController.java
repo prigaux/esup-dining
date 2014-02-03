@@ -64,21 +64,21 @@ public class ViewController extends AbstractExceptionController {
 
 		User user = authenticator.getUser();
 		
-		String areaToDisplay = new String();
+		String[] areaToDisplay;
 
 		try {
 			ResultSet results = dc
 					.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='"
 							+ user.getLogin() + "';");
 			results.next();
-			areaToDisplay = results.getString("AREANAME");
+			areaToDisplay = results.getString("AREANAME").split(",");
 		} catch (SQLException e) {
 			// we are here if the user doesn't set a specific area for himself
 			ResultSet results = dc
 					.executeQuery("SELECT AREANAME FROM PATHFLUX");
 			results.next();
 			try {
-				areaToDisplay = results.getString("AREANAME");
+				areaToDisplay = results.getString("AREANAME").split(",");
 			} catch (SQLException e2) {
 				// If there is no default area, then the admin must configure
 				// the portlet before.
@@ -119,17 +119,20 @@ public class ViewController extends AbstractExceptionController {
 		    
 			List<Restaurant> dininghallList = new ArrayList<Restaurant>();
 
+			
+			Map<String, List<Restaurant>> areasToDisplayList = new HashMap<String, List<Restaurant>>();
+			
+			for(int i = 0; i<areaToDisplay.length; i++) {
+			    areasToDisplayList.put(areaToDisplay[i], new ArrayList<Restaurant>());		    
+			}		
+			
 			for (Restaurant restaurant : restaurants.getRestaurants()) {
-				if (restaurant.getArea().equalsIgnoreCase(areaToDisplay)) {
-				    
-				    // Check if the restaurant is currently closed
-				    // create an additionnal property
-				    restaurant.setAdditionalProperties("isClosed", flux.isClosed(restaurant));                  
-	                
-				    dininghallList.add(restaurant);
-				}
+			    if(areasToDisplayList.containsKey(restaurant.getArea())) {
+			        restaurant.setAdditionalProperties("isClosed", flux.isClosed(restaurant));                  
+			        areasToDisplayList.get(restaurant.getArea()).add(restaurant);
+			    }
 			}
-			model.put("dininghalls", dininghallList);
+			model.put("restaurantLists", areasToDisplayList);
 
 		} catch (Exception e) {
             return new ModelAndView("error", new ModelMap("err", e.getMessage()));

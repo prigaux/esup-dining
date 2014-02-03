@@ -20,54 +20,33 @@
 	</a>
 
 <br/>
+
 <c:if test="${not empty urlfluxdb}">	
-		<portlet:actionURL var="setDefaultArea">
+		<portlet:actionURL var="setAreas">
 		  <portlet:param name="action" value="setDefaultArea"/>
 		</portlet:actionURL>
+
+		<form method="post" action="${setAreas}"> 
 		
-		<form method="post" action="${setDefaultArea}" enctype="multipart/form-data"> 
-			<fieldset>
-				<legend><spring:message code="edit.form.zone.legend"/></legend>
-				<%--<label for="field-zone"><spring:message code="edit.form.zone.label"/></label>
-				<select id="field-zone" name="zone">
-					<c:forEach var="area" items="${areas}">
-						<option value="${area}"
-							<c:if test="${area == defaultArea}">
-								selected="selected"
-							</c:if>
-						>
-							${area}
-						</option>
-					</c:forEach>
-				</select>
-
-				<c:forEach var="area" items="${areas}" varStatus="status">
-
-					<c:if test="${status.index % 2 == 0}">
-						<c:if test="${!status.first}">
-							</div>
-						</c:if>
-						<c:if test="${!status.last}">
-							<div class="row">
-						</c:if>
-					</c:if>
-
-					<label for="area-${status.index}" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-						<input type="checkbox" id="area-${status.index}" name="areas" value="${area}">
-						${area}
-					</label>
-
-				</c:forEach>--%>
-
-				<input type="checkbox" id="test" name="test" value="testvalue"/>
-
-				<c:if test="${zoneSubmit == 'true'}">
-					<label class="is-valid icn-fam icn-fam-valid">
-						<spring:message code="edit.msg.success"/>
-					</label>
-				</c:if>
-				<input type="submit" value="<spring:message code="edit.form.submit"/>"/>
-			</fieldset>
+			<c:forEach var="areaValue" items="${areaList}" varStatus="status">
+				<label for="field-areas-${status.index}">
+					<input type="checkbox" value="${areaValue}" name="chkArea[]" id="field-areas-${status.index}"
+						<c:forEach var="areaDb" items="${defaultArea}">
+							<c:if test="${areaDb == areaValue}">checked="checked"</c:if>
+						</c:forEach>
+					>
+					${areaValue}
+				</label>
+			</c:forEach>
+			
+			<br/>
+			<c:if test="${zoneSubmit}">
+				<label class="is-valid icn-fam icn-fam-valid">
+					<spring:message code="edit.msg.success"/>
+				</label>
+			</c:if>
+			
+			<input type="submit"/>
 		</form>
 </c:if>
 

@@ -1,11 +1,9 @@
 package org.esupportail.restaurant.web.springmvc;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -16,8 +14,6 @@ import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
@@ -58,14 +54,17 @@ public class EditAdminController extends AbstractExceptionController {
 	    		for (Restaurant r : flux.getFlux().getRestaurants()) {
 	    			areaList.add(r.getArea());
 	    		}
+
+                model.put("areaList", areaList);
 	    		
 	    		ResultSet results = dc.executeQuery("SELECT URLFLUX, AREANAME FROM PATHFLUX");
 	    		results.next();
-	    		String area, urlflux;
+	    		String urlflux;
+	    		String[] areanames;
 	    		try {
-	    			area = results.getString("AREANAME");
+	    			areanames = results.getString("AREANAME").split(",");
 	    		} catch (SQLException e) {
-	    			area = null;
+	    			areanames = null;
 	    		}
 	    		try {
 	    			urlflux = results.getString("URLFLUX");
@@ -73,9 +72,8 @@ public class EditAdminController extends AbstractExceptionController {
 	    			urlflux = null;
 	    		}
 
-	    		model.put("areas", areaList);
 	        	model.put("urlfluxdb", urlflux);
-	        	model.put("defaultArea", area);
+	        	model.put("defaultArea", areanames);
 
 	    	} catch (NullPointerException e) { /**/ }
 
@@ -145,31 +143,33 @@ public class EditAdminController extends AbstractExceptionController {
 			results.next();
 			results.updateString("urlflux", url);
 			results.updateRow();
-    	} catch (MalformedURLException e) {
-    		response.setRenderParameter("urlError", "true");
     	} catch (SQLException e) {
     		dc.executeUpdate("INSERT INTO PATHFLUX (URLFLUX) VALUES ('"+ url +"')");
-    	} catch (JsonParseException e) {
-    		response.setRenderParameter("urlError", "true");
-    	} catch (JsonMappingException e) {
-    		response.setRenderParameter("urlError", "true");
-    	} catch (IOException e) {
-    		response.setRenderParameter("urlError", "true");
     	} catch (Exception e) {
     		response.setRenderParameter("urlError", "true");
     	}
     }
     
     @RequestMapping(params = {"action=setDefaultArea"})
-    public void setDefaultArea(ActionRequest request, ActionResponse response, /*@RequestParam(value="areas", required=true) String[] areas*/ @RequestParam(value="test", required=false) String test) throws Exception {
-		User user = authenticator.getUser();
-
-    	response.setRenderParameter("action", "adminSettings");
-		response.setRenderParameter("zoneSubmit", "true");
-		System.out.println(test);
-//		System.out.println(areas);
-    }
-
+    public void setDefaultArea(ActionRequest request, ActionResponse response, @RequestParam(value = "chkArea[]", required = false) String[] listAreas) throws Exception {
+        String areanames = "";
+        if(listAreas != null) {
+            for(int i=0; i<listAreas.length; i++) {
+                areanames += listAreas[i] + (i<listAreas.length-1 ? "," : "");
+            }
+        }
+        System.out.println(areanames);
+        
+        response.setRenderParameter("action", "adminSettings");
+        response.setRenderParameter("zoneSubmit", "true");
+        
+        ResultSet results = dc.executeQuery("SELECT AREANAME FROM PATHFLUX");
+        results.next();
+        results.updateString("AREANAME", areanames);
+        results.updateRow();
+        
+    }    
+    
     @RequestMapping(params = {"action=forceFeedUpdate"})
     public void feedUpdate(ActionRequest request, ActionResponse response) throws Exception {
 
