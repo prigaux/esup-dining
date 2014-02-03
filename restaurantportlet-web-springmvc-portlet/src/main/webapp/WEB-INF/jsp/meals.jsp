@@ -18,8 +18,8 @@
 			</div>
 		</c:if>
 		
-		
-<nav class="navbar navbar-default" role="navigation">
+		<c:if test="${!restaurantClosed}">
+			<nav class="navbar navbar-default" role="navigation">
 		
   			<div class="navbar-header">
 		    	<span type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -176,6 +176,7 @@
 	
 			</c:forEach>
 		</div>
+		</c:if>
 	</c:if>	
 
 <script type="text/javascript">

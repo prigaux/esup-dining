@@ -25,7 +25,7 @@
 		</a>
 	</c:if>
 
-	<c:if test="${not empty restaurant}">		
+	<c:if test="${not empty restaurant && !restaurantClosed}">		
 			
 		<nav class="navbar navbar-default" role="navigation">
 		
