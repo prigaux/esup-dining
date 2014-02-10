@@ -20,6 +20,7 @@ public class WebController {
 	@Autowired
 	private DatabaseConnector dc;
 
+    /* this method is used in user edit param and in the restaurant and meal view */
     @RequestMapping(value = {"EDIT", "VIEW"}, params = {"action=removeFavorite"})
     public final void removeFavorite(final ActionRequest request, final ActionResponse response, @RequestParam(value = "restaurant-id", required = true) final String id) throws Exception {
 

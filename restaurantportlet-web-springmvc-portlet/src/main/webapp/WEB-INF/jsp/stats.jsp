@@ -55,8 +55,6 @@
 		  		</c:forEach>
 		  ]);
 
-		  alert("xD");
-
 		  var optionsNutrit = {
 		  	'title' : 'Preferences nutritives des utilisateurs',
 		  	'width' : 500,

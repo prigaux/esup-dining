@@ -27,6 +27,7 @@ public class RestaurantPojos {
     	}
     }
 
+    // Create Java Class based on the JSON Schema
    private void generatePOJO() {
         JCodeModel codeModel = new JCodeModel();
         // method give in the javadoc, looks dirty but recommanded

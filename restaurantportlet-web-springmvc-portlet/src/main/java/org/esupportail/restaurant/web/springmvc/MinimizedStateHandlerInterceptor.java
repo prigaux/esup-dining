@@ -20,9 +20,11 @@ public class MinimizedStateHandlerInterceptor extends HandlerInterceptorAdapter 
 
 	private IInitializationService initializationService;
 
+    // Is executed before every render
+    // Set admin rights and check if the portlet is minimized
     @Override
     public boolean preHandleRender(RenderRequest request, RenderResponse response, Object handler) throws Exception {
-        
+
         PortletSession session = request.getPortletSession(true);
         if (session.getAttribute("isAdmin") == null) {
             initializationService.initialize(request);

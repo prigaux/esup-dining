@@ -119,10 +119,12 @@ public class EditController extends AbstractExceptionController {
 
 	    	} catch (NullPointerException e) { /**/ }
 
+	    	/* param from setUserArea action */
 	    	String zoneSubmit = request.getParameter("zoneSubmit");
 	    	if (zoneSubmit != null) {
 	    		model.put("zoneSubmit", zoneSubmit);
 	    	}
+	    	/* param from nutritionPreferences action */
 	    	String nutritSubmit = request.getParameter("nutritSubmit");
 	    	if (nutritSubmit != null) {
 	    		model.put("nutritSubmit", nutritSubmit);
@@ -149,6 +151,8 @@ public class EditController extends AbstractExceptionController {
 	    			} catch (SQLException e) { /**/ }
 
 	    		} else {
+	    			/* uncheck boxes need to be deleted from the db
+	    			   if it goes into the catch it mean the row didn't exist and it doesn't need specific treatment */
 	    			try {
 	    				dc.executeUpdate("DELETE FROM nutritionPreferences WHERE USERNAME='"+ userLogin +"' AND  NUTRITIONCODE='"+ code[i] +"';");
 	    			} catch (SQLException e) { /**/ }

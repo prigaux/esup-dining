@@ -32,7 +32,8 @@
     	<!--
 	        Administrative role mapping.  This mapping is required if you
 	        want to use the administrative features.
-	    -->
+	        Must see : https://wiki.jasig.org/display/UPM40/Consuming+uPortal+Groups+as+Roles
+        -->
 	    <security-role-ref>
 	        <role-name>restaurantPortletAdmin</role-name>
 	        <role-link>Everyone</role-link>

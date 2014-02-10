@@ -50,6 +50,7 @@ public class EditAdminController extends AbstractExceptionController {
 
 	    	try {
 
+                /* Get all area in the current feed */
 	    		Set<String> areaList = new HashSet<String>();
 	    		for (Restaurant r : flux.getFlux().getRestaurants()) {
 	    			areaList.add(r.getArea());
@@ -77,14 +78,17 @@ public class EditAdminController extends AbstractExceptionController {
 
 	    	} catch (NullPointerException e) { /**/ }
 
+            /* Action urlFlux set urlError if form URL was not well-formed */
 	    	String hasError = request.getParameter("urlError");
 	    	if (hasError != null)
 	    		model.put("urlError", hasError);
 	    	
+            /* Action setDefaultArea set urlError if form URL was not well-formed */
 	    	String zoneSubmit = request.getParameter("zoneSubmit");
 	    	if (zoneSubmit != null)
 	    		model.put("zoneSubmit", zoneSubmit);
 	    	
+            /* From ForceFeedUpdate */
 	    	if (request.getParameter("update") != null) {
 		    	Boolean isUpdated = new Boolean(request.getParameter("update"));
 		    	if (isUpdated.booleanValue()) {
@@ -97,8 +101,11 @@ public class EditAdminController extends AbstractExceptionController {
     }
     @RequestMapping(params = {"action=adminStats"})
     public ModelAndView renderStatsAdminView(RenderRequest request, RenderResponse response) throws Exception {
+       
         ModelMap model = new ModelMap();
         
+        /* Favorite Restaurants stats */
+
         ResultSet results = dc.executeQuery("SELECT RESTAURANTID FROM FAVORITERESTAURANT");
         
         HashMap<Integer, Integer> nbRestaurant = new HashMap<Integer, Integer>();
@@ -116,6 +123,8 @@ public class EditAdminController extends AbstractExceptionController {
         for(Restaurant r : flux.getFlux().getRestaurants()) {
             restaurantsName.put(r.getId(), r.getTitle());
         }
+
+        /* Nutrition preferences stats */
         
         ResultSet resultsNutrit = dc.executeQuery("SELECT NUTRITIONCODE, COUNT(*) FROM NUTRITIONPREFERENCES GROUP BY NUTRITIONCODE");
         Map<Integer, Integer> prefCodeList = new HashMap<Integer, Integer>();
@@ -144,6 +153,7 @@ public class EditAdminController extends AbstractExceptionController {
 			results.updateString("urlflux", url);
 			results.updateRow();
     	} catch (SQLException e) {
+            // We get a SQLException if the row doesn't exist in the table
     		dc.executeUpdate("INSERT INTO PATHFLUX (URLFLUX) VALUES ('"+ url +"')");
     	} catch (Exception e) {
     		response.setRenderParameter("urlError", "true");
@@ -158,7 +168,6 @@ public class EditAdminController extends AbstractExceptionController {
                 areanames += listAreas[i] + (i<listAreas.length-1 ? "," : "");
             }
         }
-        System.out.println(areanames);
         
         response.setRenderParameter("action", "adminSettings");
         response.setRenderParameter("zoneSubmit", "true");
@@ -167,17 +176,13 @@ public class EditAdminController extends AbstractExceptionController {
         results.next();
         results.updateString("AREANAME", areanames);
         results.updateRow();
-        
     }    
     
     @RequestMapping(params = {"action=forceFeedUpdate"})
     public void feedUpdate(ActionRequest request, ActionResponse response) throws Exception {
 
-    	User user = authenticator.getUser();
-    	Boolean isUpdated;
-
-		isUpdated = flux.update();
-
+		Boolean isUpdated = flux.update();
+        
     	response.setRenderParameter("action", "adminSettings");
     	response.setRenderParameter("update", isUpdated.toString());
     }

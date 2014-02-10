@@ -12,10 +12,7 @@
 <c:set var="n"><portlet:namespace/></c:set>
 
 <%-- Inclusion CSS --%>
-<link type="text/css" rel="stylesheet" href="${pageContext.servletContext.contextPath}/css/bootstrap.3.0.1.dev.modified.css">
-<link type="text/css" rel="stylesheet" href="${pageContext.servletContext.contextPath}/css/layout.css">
-<link type="text/css" rel="stylesheet" href="${pageContext.servletContext.contextPath}/css/theme.css">
-<link type="text/css" rel="stylesheet" href="${pageContext.servletContext.contextPath}/css/state.css">
+<link type="text/css" rel="stylesheet" href="${pageContext.servletContext.contextPath}/css/style.css">
 
 <%-- Inclusion JS --%>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -24,7 +21,7 @@
 <script type="text/javascript">$().carousel || document.write('<script src="${pageContext.servletContext.contextPath}/js/bootstrap.3.0.1.min.js"><\/script>')</script>
 
 <%-- Portlet container --%>
-<div class="portlet-container sm">
+<div class="pc sm">
 
 
 <script type="text/javascript">
@@ -45,17 +42,10 @@
 			var portletWidth = $that.width()
 			
 			$that.removeClass("xs sm md lg");
-			
-			if(portletWidth < 768)
-				$that.addClass("xs");
-			if(portletWidth >= 768 && portletWidth < 992)
-				$that.addClass("sm");
-			if(portletWidth >= 992 && portletWidth < 1200)
-				$that.addClass("md");
-			if(portletWidth >= 1200)
-				$that.addClass("lg");
-		
+			if(portletWidth < 768) { $that.addClass("xs"); }
+			if(portletWidth >= 768 && portletWidth < 992) { $that.addClass("sm"); }
+			if(portletWidth >= 992 && portletWidth < 1200) { $that.addClass("md"); }
+			if(portletWidth >= 1200) { $that.addClass("lg"); }	
 		});
 	}
-	
 </script>
