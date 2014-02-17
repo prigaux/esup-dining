@@ -1,66 +1,70 @@
 package org.esupportail.restaurant.web.flux;
 
-import java.net.URL;
+import java.util.List;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
-// # WARNING !!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Not finished. 
-// updateCache() not working
-// #todo : refactor code, rename variable, make update work
+import org.esupportail.restaurant.web.model.Restaurant;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class RestaurantCache {
 	
-	private static RestaurantCache instance;
-	private URL url;
-	private Cache fluxCache;
-	private CacheManager singletonManager;
+	public static final String RESTAURANT_CACHE_NAME = "restaurant_cache";
 	
-	private RestaurantCache() {		
-		singletonManager = CacheManager.create();
-		singletonManager.addCache("restaurantFlux");
-		fluxCache = singletonManager.getCache("restaurantFlux");
+	@Autowired
+	private CacheManager cacheManager;
+	private Cache restaurantCache;
+	
+	@Autowired
+	private RestaurantFeed flux;
+	
+	public RestaurantCache(RestaurantFeed feed) {
+		this.cacheManager = new CacheManager();
+		this.flux = feed;
+		this.cacheManager.addCache(RESTAURANT_CACHE_NAME);
+		this.restaurantCache = this.cacheManager.getCache(RESTAURANT_CACHE_NAME);		
 	}
 	
-	public static RestaurantCache getInstance() {
-		if(instance == null)
-			instance = new RestaurantCache();
-		return instance;
+	public RestaurantFeed getFeed() {
+		return this.flux;
 	}
 	
-	public void init() {
-		RestaurantFlux flux = new RestaurantFlux(this.url);	
-		Element elFlux = new Element("restaurantFlux", flux);	
-		this.fluxCache.put(elFlux);		
-	}
-	
-	public void setUrl(URL url) {
-		this.url = url;
-	}
-	
-	public URL getUrl() {
-		return this.url;
-	}
-	
-	public RestaurantFlux getCachedElement() {
-		return (RestaurantFlux) this.fluxCache.get("restaurantFlux").getValue();
-	}
-	
-	public void update() throws Exception {
-		// Get cached JSON File
-		Element elCache = fluxCache.get("restaurantFlux");
-		RestaurantFlux fluxFromCache = (RestaurantFlux) elCache.getValue();
+	public void cacheRestaurant() {
 		
-		// Access the non-cached JSON File
-		RestaurantFlux fluxFromUrl = new RestaurantFlux(this.url);	
+		List<Restaurant> restaurantList = flux.getFlux().getRestaurants();
 		
-		// If content is != we put the non-cached version to the cache.
-		if(!fluxFromCache.equals(fluxFromUrl)) {
-			Element newEl = new Element("restaurantFlux", fluxFromUrl);
-			this.fluxCache.put(newEl);
+		for(Restaurant restaurant : restaurantList) {
+			
+			int restaurantKey = restaurant.getId();
+			
+			restaurantCache.put(new Element(restaurantKey, restaurant));
+
 		}
-		
 	}
+	
+	public Restaurant getCachedRestaurant(int key) {
+		
+		Restaurant restaurant;
+		
+		Element el = restaurantCache.get(key);
+		if(el != null) {
+			restaurant = (Restaurant) el.getObjectValue();
+		} else {
+			
+			restaurant = flux.getRestaurantById(key);
+			
+			if(restaurant!=null) {
+				restaurantCache.put(new Element(key, restaurant));
+			}
+
+		}
+		return restaurant;
+	}
+	
+	public void cacheReset(String cacheName) {
+		cacheManager.getCache(cacheName).removeAll();
+	}
+	
 }

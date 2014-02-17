@@ -1,22 +1,20 @@
-<%@ include file="/WEB-INF/jsp/include.jsp"%>
+<%@ include file="/WEB-INF/jsp/header.jsp"%>
 
-<div class="portlet-title">
-  <h2>
-    <spring:message code="about.title"/>
-  </h2>
-</div>
+  <h1><spring:message code="help.title"/></h1>
 
-<div class="portlet-section">
+  <ul>
+    <c:forEach var="codeNumber" items="${code}">
+      <li>
+        <strong>
+          <img src="<%= renderRequest.getContextPath() %><spring:message code="meal.code.${fn:trim(codeNumber)}.img" />"
+           alt="<spring:message code="meal.code.${fn:trim(codeNumber)}.description" />"
+         title="<spring:message code="meal.code.${fn:trim(codeNumber)}.name" />"
+      /> <spring:message code="meal.code.${fn:trim(codeNumber)}.name"/>  </strong>
+       <br>
+      <spring:message code="meal.code.${fn:trim(codeNumber)}.description" />
+        
+      </li>
+    </c:forEach>
+  </ul>
 
-  <div class="portlet-section-body">
-    <p>
-      EsupPortail Consortium
-      <a href="http://www.esup-portail.org">
-        http://www.esup-portail.org
-      </a>
-      .
-    </p>
-  </div>
-
-</div>
-
+<%@ include file="/WEB-INF/jsp/footer.jsp"%>

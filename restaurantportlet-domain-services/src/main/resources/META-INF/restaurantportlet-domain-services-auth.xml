@@ -25,6 +25,12 @@
         <property name="uidPortalAttribute" value="${auth.portal.uidAttribute}" />
     </bean>
     
+	<bean
+	    id="authenticationService"
+	    class="org.esupportail.commons.services.authentication.CasifiedPortalAuthenticationService" >
+	  <property name="uidPortalAttribute" value="uid" />
+	</bean>
+    
 	<bean id="OfflineFixedUserAuthenticationService"
 		class="org.esupportail.commons.services.authentication.OfflineFixedUserAuthenticationService">
 		<property name="authId" value="loginuser" />

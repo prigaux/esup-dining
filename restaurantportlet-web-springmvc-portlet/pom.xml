@@ -8,37 +8,9 @@
     </parent>
     <artifactId>restaurantportlet-web-springmvc-portlet</artifactId>
     <packaging>war</packaging>
-    <repositories>
-        <repository>
-            <id>jlehtinen.net</id>
-            <url>http://repo.jlehtinen.net/maven2/</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>jlehtinen.net</id>
-            <url>http://repo.jlehtinen.net/maven2/</url>
-        </pluginRepository>
-    </pluginRepositories>
+    
     <build>
         <plugins>
-            <plugin>
-                <groupId>net.jlehtinen.portlet</groupId>
-                <artifactId>portlet-prototyping-maven-plugin</artifactId>
-                <version>0.6</version>
-                <configuration>
-                    <!-- Comma-separated list of portlets to be prototyped -->
-                    <portletNames>restaurantportlet</portletNames>
-                    <!-- To use custom CSS in the portal -->
-                    <cssUrls>
-                        <url>/pluto/pluto.css</url>
-                        <url>/pluto/portlet-spec-1.0.css</url>
-                        <url>/pluto/portlet-spec-2.0.css</url>
-                    </cssUrls>
-                    <portletXml>${basedir}/src/main/webapp/WEB-INF/portlet.xml</portletXml>
-                    <webAppSourceDirectory>${project.build.outputDirectory}/../${project.artifactId}-${project.version}</webAppSourceDirectory>
-                </configuration>
-            </plugin>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1</version>
@@ -55,30 +27,64 @@
                     <warName>${project.parent.artifactId}</warName>
                 </configuration>
             </plugin>
+
+
+            <plugin>
+                <groupId>net.jlehtinen.portlet</groupId>
+                <artifactId>portlet-prototyping-maven-plugin</artifactId>
+                <version>0.6</version>
+            </plugin>
+
         </plugins>
     </build>
     <dependencies>
-	    <dependency>
-		    <groupId>org.quartz-scheduler</groupId>
-		    <artifactId>quartz</artifactId>
-		    <version>2.2.1</version>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.3-1100-jdbc41</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.quartz-scheduler</groupId>
-		    <artifactId>quartz-jobs</artifactId>
-		    <version>2.2.1</version>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.3.1</version>
 		</dependency>
+
+    	<dependency>
+          <groupId>com.googlecode.jsonschema2pojo</groupId>
+          <artifactId>jsonschema2pojo-core</artifactId>
+          <version>0.3.7</version>
+        </dependency>
+
         <dependency>
             <groupId>org.esupportail</groupId>
             <artifactId>esup-commons2-springmvc-portlet</artifactId>
             <version>${esupcommons.version}</version>
             <type>pom</type>
         </dependency>
+
+        <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc-portlet</artifactId>
+			<version>3.0.6.RELEASE</version>
+		</dependency>
+
         <dependency>
             <groupId>org.esupportail</groupId>
             <artifactId>esup-commons2-web</artifactId>
             <version>${esupcommons.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+        <dependency>
+        	<groupId>commons-io</groupId>
+        	<artifactId>commons-io</artifactId>
+        	<version>2.4</version>
+        </dependency>
+            
         <!-- ===== Compile Time Dependencies ============================== -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -103,13 +109,7 @@
         <!-- the other slf4j jars -->
         <!-- using log4j as backend -->
         <!-- Servlet -->
-        <!-- Jackson JSON Mapper -->
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.5.3</version>
-        </dependency>
-        <dependency>
+	   <dependency>
             <groupId>taglibs</groupId>
             <artifactId>standard</artifactId>
             <version>1.1.2</version>
@@ -135,10 +135,16 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-        	<groupId>org.json</groupId>
-        	<artifactId>org.json</artifactId>
-        	<version>chargebee-1.0</version>
+            <groupId>com.googlecode.ehcache-spring-annotations</groupId>
+            <artifactId>ehcache-spring-annotations</artifactId>
+            <version>1.2.0</version>
         </dependency>
+        <dependency> 
+		    <groupId>net.sourceforge.javautil</groupId> 
+		    <artifactId>common</artifactId> 
+		    <version>0.0.5</version> 
+		    <scope>compile</scope> 
+		</dependency> 
     </dependencies>
     <properties>
         <portlet.name>${project.artifactId}</portlet.name>

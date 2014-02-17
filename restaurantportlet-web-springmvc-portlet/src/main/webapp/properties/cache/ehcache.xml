@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+	<diskStore path="/tmp" />
+	
+	<!-- 86400 = 60 * 60 * 24 -->
+	
+	<cache name="fluxRestaurant"
+		maxElementsInMemory="100" eternal="false" timeToIdleSeconds="86400"
+		timeToLiveSeconds="86400" overflowToDisk="false" />
+	
+	<defaultCache maxElementsInMemory="10000" eternal="false"
+		timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="false"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU" />	
+		
+</ehcache>

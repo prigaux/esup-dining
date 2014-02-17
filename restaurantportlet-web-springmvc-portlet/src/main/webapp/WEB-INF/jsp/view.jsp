@@ -2,52 +2,116 @@
 
 	<portlet:renderURL var="renderRefreshUrl" />
 
-	${nothingToDisplay}
-	<c:if test="${empty nothingToDisplay}">
-
-		<div id="map-canvas"></div>
+	<div class="row">
+		<div class="map-container col-lg-6 col-md-6 col-sm-12 col-sm-12">
+			<div id="map-canvas"></div>
+		</div>
 		
-		<h1 class="main-title">
-			Mes restaurants favoris
-		</h1>
-
 		<c:if test="${not empty favorites}">
-		
-			<ul class="dininghall-list">
-				<c:forEach var="favRestaurant" items="${favorites}">
-					<li class="lead">
+		<div class="favorites col-lg-6 col-md-6 col-sm-12 col-sm-12">
+	
+			<table class="table table-striped table-responsive fav-dininghall-list">
+				<thead>
+					<tr>
+						<th class="lead">
+							<span class="glyphicon glyphicon-star starred-icon"></span>
+							<spring:message code="view.favorite.title"/>
+						</th>
+						<th class="ta-right">
+							<spring:message code="view.restaurant.detail"/>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="favRestaurant" items="${favorites}">
+						<portlet:renderURL var="viewMeals">
+			  				<portlet:param name="action" value="viewMeals"/>
+			  				<portlet:param name="id" value="${favRestaurant.id}"/>
+						</portlet:renderURL>
 						<portlet:renderURL var="viewRestaurant">
 			  				<portlet:param name="action" value="viewRestaurant"/>
 			  				<portlet:param name="id" value="${favRestaurant.id}"/>
 						</portlet:renderURL>
-						
-						<a href="${viewRestaurant}">
-							${favRestaurant.title}
-						</a>
-					</li>
-				</c:forEach>
-			</ul>
+						<tr>
+							<td>
+								<a href="${viewMeals}">
+									${favRestaurant.title}
+								</a>
+							</td>
+							<td class="ta-right">
+								<a href="${viewRestaurant}">
+									<img src="<%= renderRequest.getContextPath() %>/images/information.png"
+										 alt="Detail" />
+								</a>
+							</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
 		</c:if>
-		<h1 class="main-title">
-			<spring:message code="view.list.title"/> ${area}
-		</h1>
-		<c:if test="${not empty dininghalls}">
-			<ul class="dininghall-list">
-				<c:forEach var="dininghall" items="${dininghalls}">
-					<li class="lead">
-						<portlet:renderURL var="viewRestaurant">
-			  				<portlet:param name="action" value="viewRestaurant"/>
-			  				<portlet:param name="id" value="${dininghall.id}"/>
-						</portlet:renderURL>
-						<a href="${viewRestaurant}">
-							${dininghall.title}
-						</a>
-					</li>
-				</c:forEach>
-			</ul>
-			<script type="text/javascript">
+		
+		<c:forEach var="dininghalls" items="${restaurantLists}">
+			<c:if test="${not empty dininghalls.value}">
+				
+				<div class="dininghalllist col-lg-6 col-md-6 col-sm-12 col-sm-12" data-zone="${dininghalls.key}">
 
+					<table class="table table-striped table-responsive dininghall-list">
+						<thead>
+							<tr>
+								<th class="lead">
+									<spring:message code="view.list.title"/> ${dininghalls.key}
+								</th>
+								<th class="ta-right">
+									<spring:message code="view.restaurant.detail"/>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="dininghall" items="${dininghalls.value}">
+								<portlet:renderURL var="viewRestaurant">
+					  				<portlet:param name="action" value="viewMeals"/>
+					  				<portlet:param name="id" value="${dininghall.id}"/>
+								</portlet:renderURL>
+								<tr>
+									<td<c:if test="${dininghall.additionalProperties['isClosed']}"> data-closed="true" class="warning"</c:if><c:if test="${dininghall.additionalProperties['isClosed']}">class="warning"</c:if>>
+										<a href="${viewRestaurant}">
+											${dininghall.title}
+										</a>
+									</td>							
+									<td class="ta-right">
+										<a href="${viewRestaurant}">
+											<img src="<%= renderRequest.getContextPath() %>/images/information.png"
+												 alt="Detail" />
+										</a>
+									</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+					
+				</div>
+			
+			</c:if>
+		</c:forEach>
+		
+		<script type="text/javascript">
+				
 				var diningHalls = new Array();
+				<c:forEach var="dininghalls" items="${restaurantLists}">
+					<c:if test="${not empty dininghalls.value}">
+						<c:forEach var="dininghall" items="${dininghalls.value}">
+
+							<portlet:renderURL var="viewRestaurantFromMaker">
+				  				<portlet:param name="action" value="viewRestaurant"/>
+				  				<portlet:param name="id" value="${dininghall.id}"/>
+							</portlet:renderURL>
+
+							diningHalls.push(["${dininghall.title}", ${dininghall.lat}, ${dininghall.lon}, "${viewRestaurantFromMaker}", "${dininghalls.key}"]);
+
+						</c:forEach>
+					</c:if>
+				</c:forEach>
 
 				// Data access
 				<c:forEach var="dininghall" items="${dininghalls}">
@@ -58,21 +122,32 @@
 					diningHalls.push(["${dininghall.title}", ${dininghall.lat}, ${dininghall.lon}, "${viewRestaurantFromMaker}"]);
 				</c:forEach>
 
+				var favoriteListLatLng = new Array();
+				<c:forEach var="fav" items="${favorites}">
+					favoriteListLatLng.push(new google.maps.LatLng(parseFloat(${fav.lat}, 10).toFixed(6), parseFloat(${fav.lon}, 10).toFixed(6)));
+				</c:forEach>
+
 				// Event Listener
 				google.maps.event.addDomListener(window, 'load', initialize);
 				
 				var map;
 				var diningHallsLatLng = new Array();
 				var myLatlng = new google.maps.LatLng(parseFloat(diningHalls[0][1]).toFixed(6), parseFloat(diningHalls[0][2]).toFixed(6));
+				
+				var mapCenter = mapCenterCalculator(diningHalls);
+				
 				var mapOptions = 
 				{
-				     center: myLatlng,
-				     zoom: 12,
+				     center: mapCenter,
 				     mapTypeId: google.maps.MapTypeId.ROADMAP
 			    };
 
+			    var bounds = new google.maps.LatLngBounds ();
+				
 				function initialize() {
 
+					sortByOpenning();
+					
 					// Map init
 
 				    map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
@@ -81,7 +156,9 @@
 
 				    for(var i=0; i<diningHalls.length; i++) {
 				    	
-				    	var diningHallPosition = new google.maps.LatLng(diningHalls[i][1],diningHalls[i][2]);
+				    	var diningHallPosition = new google.maps.LatLng(diningHalls[i][1],diningHalls[i][2]);				    	
+				    	
+				    	bounds.extend(diningHallPosition);
 
 				    	// For the distance matrix
 				    	diningHallsLatLng.push(diningHallPosition);
@@ -103,11 +180,15 @@
 				    	});
 				    }
 
+				    map.fitBounds(bounds);
+
 				    // Geolocation feature
 
 					if(navigator.geolocation) {
 						
-						$("<button class='get-located btn btn-primary'>Se localiser <span class='glyphicon glyphicon-map-marker'></span></button>").appendTo($(".main-title"));
+						$(".map-container").after("<p class='ta-center'><button class='btn btn-default get-located '><span class='glyphicon glyphicon-map-marker'></span> Se localiser</button></p>");
+
+						// $("<button class='get-located'>Se localiser</button>").appendTo(;
 						$(".get-located").click(function(e) {
 							navigator.geolocation.getCurrentPosition(distanceCalculator, positionUndefined);
 							e.preventDefault();
@@ -119,9 +200,28 @@
 					// Event Listeners
 
 					window.onresize = function() {
-						map.setCenter(myLatlng);
+						map.fitBounds(bounds);
 					}
 				}
+				
+				
+				/* @return : Approximation of the center of all points displayed on the map 
+				   works well if coords are less than 500 miles distant 
+				*/
+				function mapCenterCalculator(coords) {
+					   
+					var lat=0, lng=0;
+					
+					for(var i=0; i<coords.length; ++i) {
+					   lat += coords[i][1];
+					   lng += coords[i][2];
+					}					
+
+					lat /= coords.length;
+					lng /= coords.length;
+					
+					return new google.maps.LatLng(lat, lng);
+				}				
 
 				function distanceCalculator(position) {
 
@@ -132,7 +232,7 @@
 					var mark = new google.maps.Marker({
 				        position: origin,
 				        map: map,
-				        title:"My current position",
+				        title:"<spring:message code="view.map.currentpos"/>",
 				        zIndex : 99
 				    });
 
@@ -154,6 +254,16 @@
 						avoidHighways : false,
 						avoidTolls : false
 					}, sortByDistance);
+
+					service.getDistanceMatrix({
+						origins : [origin],
+						destinations : diningHallsLatLng,
+						travelMode : google.maps.TravelMode.DRIVING,
+						unitSystem : google.maps.UnitSystem.METRIC,
+						durationInTraffic : true,
+						avoidHighways : false,
+						avoidTolls : false
+					}, sortFavoriteByDistance);
 				}
 
 				// Callback from getDistanceMatrix
@@ -161,35 +271,70 @@
 
 					// store the results in a var
 					var results = response.rows[0].elements;
-					var $diningHallList = $(".dininghall-list");
 
-					// append distance attribute and text node
-					$diningHallList.find('li').each(function(index) {
-						$(this).append("- Distance : " + results[index].distance.text);
-						$(this).attr('data-distance', results[index].distance.value);
+					$(".dininghall-list").each(function(index) {
+
+						var $list = $(this);
+						// append distance attribute and text node
+						$list.find('tbody tr').each(function(index) {
+							$(this).find('td:first-child').append(" (" + results[index].distance.text+")");
+							$(this).attr('data-distance', results[index].distance.value);
+						});
+
+						// Dinamically sort by distance attribute numerical value
+						var listItems = $list.find('tbody tr').sort(function(a,b){ 
+							return $(a).attr('data-distance') - $(b).attr('data-distance'); 
+						});
+						$list.find('li').remove();
+						$list.append(listItems);
+
 					});
 
-					// Dinamically sort by distance attribute numerical value
-					var listItems = $diningHallList.find('li').sort(function(a,b){ 
-						return $(a).attr('data-distance') - $(b).attr('data-distance'); 
-					});
-					$diningHallList.find('li').remove();
-					$diningHallList.append(listItems);
+				}
+
+				function sortFavoriteByDistance(response, status) {
+					// store the results in a var
+					var results = response.rows[0].elements;
+
+					$(".fav-dininghall-list").each(function(index) {
+
+						var $list = $(this);
+						// append distance attribute and text node
+						$list.find('tbody tr').each(function(index) {
+							$(this).find('td:first-child').append(" (" + results[index].distance.text+")");
+							$(this).attr('data-distance', results[index].distance.value);
+						});
+
+						// Dinamically sort by distance attribute numerical value
+						var listItems = $list.find('tbody tr').sort(function(a,b){ 
+							return $(a).attr('data-distance') - $(b).attr('data-distance'); 
+						});
+						$list.find('li').remove();
+						$list.append(listItems);
+
+					});				
+				}
+				
+				function sortByOpenning() {
+
+					$(".dininghall-list").each(function(index) {
+
+						var $list = $(this);
+
+						var listItems = $list.find('tbody tr').sort(function(a,b){
+							return ($(a).find('td').attr('data-closed') == undefined ? 0 : 1) - ($(b).find('td').attr('data-closed') == undefined ? 0 : 1);
+						});
+
+						$list.find('tbody tr').remove();
+						$list.append(listItems);
+
+					});				
 				}
 
 				function positionUndefined(err) {
 					console.error(err);
 				}
-
-			</script>
-		</c:if>
-
-		<c:if test="${empty dininghalls}">
-			<p>
-				<spring:message code="view.list.empty"/>
-			</p>
-		</c:if>
-	
-	</c:if>
+		</script>
+	</div>
 
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>

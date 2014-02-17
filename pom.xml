@@ -7,6 +7,11 @@
     <packaging>pom</packaging>
     <description>An Blank Application to start your project</description>
     <repositories>
+    	<repository> 
+		    <id>javautil</id> 
+		    <name>Java Util Repository</name> 
+		    <url>http://downloads.sourceforge.net/project/javautil/</url> 
+		</repository> 
         <repository>
             <id>esup-snapshots</id>
             <url>https://mvn.esup-portail.org/content/repositories/snapshots</url>
@@ -25,7 +30,19 @@
             <releases>
             </releases>
         </repository>
+        <repository>
+            <id>jlehtinen.net</id>
+            <url>http://repo.jlehtinen.net/maven2/</url>
+        </repository>
     </repositories>
+    
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jlehtinen.net</id>
+            <url>http://repo.jlehtinen.net/maven2/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <distributionManagement>
         <repository>
             <id>esup</id>
@@ -101,7 +118,7 @@
         </plugins>
     </build>
     <properties>
-        <esupcommons.version>0.3.2</esupcommons.version>
+        <esupcommons.version>0.3.3</esupcommons.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
   <modules>
