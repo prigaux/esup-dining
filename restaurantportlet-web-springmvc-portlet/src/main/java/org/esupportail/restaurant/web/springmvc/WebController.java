@@ -23,10 +23,11 @@ public class WebController {
     /* this method is used in user edit param and in the restaurant and meal view */
     @RequestMapping(value = {"EDIT", "VIEW"}, params = {"action=removeFavorite"})
     public final void removeFavorite(final ActionRequest request, final ActionResponse response, @RequestParam(value = "restaurant-id", required = true) final String id) throws Exception {
-
-        dc.executeUpdate("DELETE FROM FAVORITERESTAURANT "
-    				   + "WHERE RESTAURANTID=" + id 
-    				   + "AND USERNAME='"+ authenticator.getUser().getLogin() +"'");    	
+        try {
+            dc.executeUpdate("DELETE FROM FAVORITERESTAURANT "
+        				   + "WHERE RESTAURANTID=" + id 
+        				   + "AND USERNAME='"+ authenticator.getUser().getLogin() +"'");    	
+        } catch (NullPointerException e) { /* Useful is the user isn't logged in */ }
     }
 
 }

@@ -64,7 +64,7 @@ public class ViewController extends AbstractExceptionController {
 
 		User user = authenticator.getUser();
 		
-		String[] areaToDisplay;
+		String[] areaToDisplay = null;
 
 		try {
 			ResultSet results = dc
@@ -72,7 +72,7 @@ public class ViewController extends AbstractExceptionController {
 							+ user.getLogin() + "';");
 			results.next();
 			areaToDisplay = results.getString("AREANAME").split(",");
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// we are here if the user doesn't set a specific area for himself
 			ResultSet results = dc
 					.executeQuery("SELECT AREANAME FROM PATHFLUX");
@@ -84,7 +84,7 @@ public class ViewController extends AbstractExceptionController {
 				// the portlet before.
 			    return new ModelAndView("error", new ModelMap("err", e2.getMessage()));
 			}
-		}
+		} 
 
 		try {
 			ResultSet favList = dc
@@ -134,6 +134,7 @@ public class ViewController extends AbstractExceptionController {
 			}
 			model.put("restaurantLists", areasToDisplayList);
 
+		} catch (NullPointerException e) { /* */   
 		} catch (Exception e) {
             return new ModelAndView("error", new ModelMap("err", e.getMessage()));
 		}
@@ -152,17 +153,22 @@ public class ViewController extends AbstractExceptionController {
 
 		Restaurant restaurant = cache.getCachedRestaurant(id);
 		model.put("restaurant", restaurant);
-		ResultSet results = dc
-				.executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='"
-						+ user.getLogin() + "' AND RESTAURANTID='" + id + "';");
-		if (results.next()) {
-			model.put("isFavorite", true);
-		}
-
-		if (flux.isClosed(restaurant)) {
-		    model.put("restaurantClosed", true);
-		}
 		
+		try {
+	        
+	        ResultSet results = dc
+	                .executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='"
+	                        + user.getLogin() + "' AND RESTAURANTID='" + id + "';");
+	        if (results.next()) {
+	            model.put("isFavorite", true);
+	        }
+
+	        if (flux.isClosed(restaurant)) {
+	            model.put("restaurantClosed", true);
+	        }
+	        		    
+		} catch (NullPointerException e) { /* Useful is the user isn't logged in */ }
+
 		return new ModelAndView("restaurant", model);
 	}
 
@@ -189,7 +195,9 @@ public class ViewController extends AbstractExceptionController {
 
 			model.put("nutritionPrefs", nutritionPrefs);
 
-		} catch (SQLException e) { /**/}
+		} catch (SQLException e) { /**/ 
+		} catch (NullPointerException e) { /* Useful is the user isn't logged in */ }
+		  
 
 		try {
 			Restaurant restaurant = cache.getCachedRestaurant(id);
@@ -214,12 +222,14 @@ public class ViewController extends AbstractExceptionController {
             return new ModelAndView("error", new ModelMap("err", e.getMessage()));
 		}
 		
-		ResultSet results = dc
-                .executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='"
-                        + user.getLogin() + "' AND RESTAURANTID='" + id + "';");
-        if (results.next()) {
-            model.put("isFavorite", true);
-        }
+		try {
+	      ResultSet results = dc
+	                .executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='"
+	                        + user.getLogin() + "' AND RESTAURANTID='" + id + "';");
+	        if (results.next()) {
+	            model.put("isFavorite", true);
+	        }
+		} catch (NullPointerException e) { /* Useful is the user isn't logged in */ }
 
 		return new ModelAndView("meals", model);
 	}
@@ -236,7 +246,7 @@ public class ViewController extends AbstractExceptionController {
 					+ user.getLogin() + "', '" + id + "');");
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} catch (NullPointerException e) { /* Useful is the user isn't logged in */ }
 
 		response.setRenderParameter("id", id);
 		response.setRenderParameter("action", "viewRestaurant");
@@ -295,6 +305,7 @@ public class ViewController extends AbstractExceptionController {
 			model.put("nutritionPrefs", nutritionPrefs);
 
 		} catch (SQLException e) { /**/ }
+		catch (NullPointerException e) { /* Useful is the user isn't logged in */ }
 
 		return new ModelAndView("dish", model);
 	}
