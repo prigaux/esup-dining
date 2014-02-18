@@ -20,7 +20,7 @@
 	</h2>
 <%--</c:if>--%>
 
-<c:if test="${not empty areas}">
+<c:if test="${not empty areaList}">
 	
 	<portlet:actionURL var="setUserArea">
 	  <portlet:param name="action" value="setUserArea"/>
@@ -29,7 +29,20 @@
 	<form method="post" action="${setUserArea}">
 		<fieldset>
 			<legend><spring:message code="edit.form.zone.legend"/></legend>
-			<label for="field-zone"><spring:message code="edit.form.zone.label"/></label>
+			
+			
+			<c:forEach var="areaValue" items="${areaList}" varStatus="status">
+				<label for="field-areas-${status.index}">
+					<input type="checkbox" value="${areaValue}" name="chkArea[]" id="field-areas-${status.index}"
+						<c:forEach var="areaDb" items="${defaultArea}">
+							<c:if test="${areaDb == areaValue}">checked="checked"</c:if>
+						</c:forEach>
+					>
+					${areaValue}
+				</label>
+			</c:forEach>
+			
+			<%--<label for="field-zone"><spring:message code="edit.form.zone.label"/></label>
 			<select id="field-zone" name="zone">
 				<c:forEach var="area" items="${areas}">
 					<option value="${area}"
@@ -40,7 +53,7 @@
 						${area}
 					</option>
 				</c:forEach>
-			</select>
+			</select>--%>
 				<c:if test="${zoneSubmit == 'true'}">
 					<label class="is-valid icn-fam icn-fam-valid">
 						<spring:message code="edit.msg.success"/>

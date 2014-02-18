@@ -40,22 +40,22 @@ public class DatabaseConnector {
 	    this.deleteTables();
 	    
 		try {
-			statement.executeUpdate("CREATE TABLE FAVORITERESTAURANT(USERNAME VARCHAR(100), RESTAURANTID VARCHAR(100), CONSTRAINT pk_fav PRIMARY KEY (USERNAME, RESTAURANTID))");
+			statement.executeUpdate("CREATE TABLE IF NOT EXISTS FAVORITERESTAURANT(USERNAME VARCHAR(100), RESTAURANTID VARCHAR(100), CONSTRAINT pk_fav PRIMARY KEY (USERNAME, RESTAURANTID))");
 		} catch (SQLException e) {
 			System.out.println("[INFO] Table favoriteRestaurant already exist");
 		}
 		try {
-			statement.executeUpdate("CREATE TABLE USERAREA (USERNAME VARCHAR(500), AREANAME VARCHAR(200), CONSTRAINT pk_userarea PRIMARY KEY (USERNAME, AREANAME))");
+			statement.executeUpdate("CREATE TABLE IF NOT EXISTS USERAREA (USERNAME VARCHAR(500), AREANAME VARCHAR(200), CONSTRAINT pk_userarea PRIMARY KEY (USERNAME, AREANAME))");
 		} catch (SQLException e) {
 			System.out.println("[INFO] Table USERAREA already exist");
 		}
 		try {
-			statement.executeUpdate("CREATE TABLE PATHFLUX (URLFLUX VARCHAR(500) PRIMARY KEY, AREANAME VARCHAR(200))");
+			statement.executeUpdate("CREATE TABLE IF NOT EXISTS PATHFLUX (URLFLUX VARCHAR(500) PRIMARY KEY, AREANAME VARCHAR(200))");
 		} catch (SQLException e) {
 			System.out.println("[INFO] Table pathFlux already exist");
 		}
 		try {
-			statement.executeUpdate("CREATE TABLE nutritionPreferences (USERNAME varchar(100), NUTRITIONCODE INTEGER, CONSTRAINT pk_nutrition PRIMARY KEY (USERNAME, NUTRITIONCODE))");
+			statement.executeUpdate("CREATE TABLE IF NOT EXISTS nutritionPreferences (USERNAME varchar(100), NUTRITIONCODE INTEGER, CONSTRAINT pk_nutrition PRIMARY KEY (USERNAME, NUTRITIONCODE))");
 		} catch (SQLException e ) {
 			System.out.println("[INFO] Table nutritionPreferences already exist");
 		}

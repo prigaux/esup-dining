@@ -64,25 +64,25 @@ public class EditController extends AbstractExceptionController {
 			} catch(SQLException e) { /**/ }
 
 	    	try {
-	    		Set<String> areaList = new HashSet<String>();
-	    		for (Restaurant r : flux.getFlux().getRestaurants()) {
-	    			areaList.add(r.getArea());
-	    		}
+	    	    Set<String> areaList = new HashSet<String>();
+                for (Restaurant r : flux.getFlux().getRestaurants()) {
+                    areaList.add(r.getArea());
+                }
 
-	    		model.put("areas", areaList);
+                model.put("areaList", areaList);
 
-	    		String userArea = new String();
+	    		String userArea[] = null;
 	    		try {
 	    			ResultSet results = dc.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='"+user.getLogin()+"';");
 	    			results.next();
-	    			userArea = results.getString("AREANAME");
+	    			userArea = results.getString("AREANAME").split(",");
 	    			results.close();
 	    		} catch (SQLException e) {
 	    			// here we are if the user doesn't already have a specific area setting.
 	    			ResultSet results = dc.executeQuery("SELECT AREANAME FROM PATHFLUX");
 	    			results.next();
 	    			try {
-	    				userArea = results.getString("AREANAME");
+	    				userArea = results.getString("AREANAME").split(",");
 	    			} catch (SQLException e2) {
 	    				// No default area for all user, admin must configure the portlet. 
 	    				// No need to throw an exception
@@ -119,10 +119,12 @@ public class EditController extends AbstractExceptionController {
 
 	    	} catch (NullPointerException e) { /**/ }
 
+	    	/* param from setUserArea action */
 	    	String zoneSubmit = request.getParameter("zoneSubmit");
 	    	if (zoneSubmit != null) {
 	    		model.put("zoneSubmit", zoneSubmit);
 	    	}
+	    	/* param from nutritionPreferences action */
 	    	String nutritSubmit = request.getParameter("nutritSubmit");
 	    	if (nutritSubmit != null) {
 	    		model.put("nutritSubmit", nutritSubmit);
@@ -136,7 +138,8 @@ public class EditController extends AbstractExceptionController {
 	    	String userLogin = authenticator.getUser().getLogin();
 
 	    	Map parameters = request.getParameterMap();
-
+	    	  	
+	    	
 	    	int[] code     = {1,2,3,4,5,6,7,9,10,11,12,13,14,15};
 
 	    	for(int i=0; i<code.length; i++) {
@@ -148,6 +151,8 @@ public class EditController extends AbstractExceptionController {
 	    			} catch (SQLException e) { /**/ }
 
 	    		} else {
+	    			/* uncheck boxes need to be deleted from the db
+	    			   if it goes into the catch it mean the row didn't exist and it doesn't need specific treatment */
 	    			try {
 	    				dc.executeUpdate("DELETE FROM nutritionPreferences WHERE USERNAME='"+ userLogin +"' AND  NUTRITIONCODE='"+ code[i] +"';");
 	    			} catch (SQLException e) { /**/ }
@@ -159,19 +164,27 @@ public class EditController extends AbstractExceptionController {
 	    }
 
 	    @RequestMapping(params = {"action=setUserArea"})
-	    public void setUserArea(ActionRequest request, ActionResponse response, @RequestParam(value = "zone", required = true) String area) throws Exception {
-
-	    	User user = authenticator.getUser();
-
-	    	try {
-	    		ResultSet results = dc.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='" + user.getLogin() + "';");
-	    		results.next();
-	    		results.updateString("AREANAME", area);
-	    		results.updateRow();
-	    		results.close();
-	    	} catch (SQLException e) {
-	    		dc.executeUpdate("INSERT INTO USERAREA (USERNAME, AREANAME) VALUES ('"+user.getLogin()+"', '"+area+"');");
-	    	}
+	    public void setUserArea(ActionRequest request, ActionResponse response, @RequestParam(value = "chkArea[]", required = false) String[] listAreas) throws Exception {
+	        
+            User user = authenticator.getUser();
+	        
+            String areanames = "";
+	        
+            if(listAreas != null) {
+	            for(int i=0; i<listAreas.length; i++) {
+	                areanames += listAreas[i] + (i<listAreas.length-1 ? "," : "");
+	            }
+	        }
+	        
+	        try {
+    	        ResultSet results = dc.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='" + user.getLogin() + "';");
+                results.next();
+    	        results.updateString("AREANAME", areanames);
+    	        results.updateRow();
+                results.close();
+    	    } catch (SQLException e) {
+                dc.executeUpdate("INSERT INTO USERAREA (USERNAME, AREANAME) VALUES ('"+user.getLogin()+"', '"+areanames+"');");
+    	    }
 
 	    	response.setRenderParameter("zoneSubmit", "true");
 	    }
