@@ -50,6 +50,22 @@ ant deployPortletApp -DportletApp=path/to/restaurant-portlet-web-springmvc-portl
 
 And then register the portlet
 
+### Database
+
+Configure your database as said in the Testing chapter. 
+
+On the application launch you will be able to deploy automatically action on your db. 
+Change the `db.init` parameter in `src/main/resources/applicationContext.xml`
+
+It accepts 4 values
++ create
++ drop
++ delete
++ update
++ validate (no change done on the db)
+
+Each of this parameter value refers to a `.sql` file located in `src/main/resources/database/*.sql`
+
 ### Configuration
 
 Add you portlet to the dashboard and go in *EDIT mode* , to configure the portlet the user will to have `restaurantPortletAdmin` role. Default Everyone has this role, you can update this by changing the following lines in `restaurantportlet-web-springmvc-portlet/src/main/webapp/WEB-INF/portlet.xml`
