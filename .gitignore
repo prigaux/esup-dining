@@ -22,3 +22,5 @@ restaurantportlet-web-springmvc-portlet/.properties
 restaurantportlet-web-springmvc-portlet/restaurant.lck
 restaurantportlet-web-springmvc-portlet/restaurant.script
 restaurantportlet-web-springmvc-portlet/restaurant.log
+restaurantportlet-web-springmvc-portlet/nb-configuration.xml
+nbactions.xml
