@@ -16,7 +16,7 @@ public class DatabaseConnector implements InitializingBean {
 
     private Connection connection;
     private Statement statement;
-    private static String dbInitType;
+    private String dbInitType;
     
     private static final String INIT_VALIDATE = "validate";
     private static final String INIT_CREATE   = "create";
@@ -56,7 +56,7 @@ public class DatabaseConnector implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
+        
         if (dbInitType.equalsIgnoreCase(DatabaseConnector.INIT_CREATE))
             this.createTables();
         
@@ -73,22 +73,22 @@ public class DatabaseConnector implements InitializingBean {
     
     private void createTables() {
         this.dropTables();
-        String[] sqlStatements = this.getFileContent(DatabaseConnector.FILE_CREATE);
+        String[] sqlStatements = this.getSQLStatements(DatabaseConnector.FILE_CREATE);
         this.multipleStatementExecute(sqlStatements);
     }
     
     private void updateTables() {
-        String[] sqlStatements = this.getFileContent(DatabaseConnector.FILE_UPDATE);
+        String[] sqlStatements = this.getSQLStatements(DatabaseConnector.FILE_UPDATE);
         this.multipleStatementExecute(sqlStatements);
     }
     
     private void dropTables() {
-        String[] sqlStatements = this.getFileContent(DatabaseConnector.FILE_DROP);
+        String[] sqlStatements = this.getSQLStatements(DatabaseConnector.FILE_DROP);
         this.multipleStatementExecute(sqlStatements);
     }
     
     private void deleteTables() {
-        String[] sqlStatements = this.getFileContent(DatabaseConnector.FILE_DELETE);
+        String[] sqlStatements = this.getSQLStatements(DatabaseConnector.FILE_DELETE);
         this.multipleStatementExecute(sqlStatements);
     }
     
@@ -104,7 +104,9 @@ public class DatabaseConnector implements InitializingBean {
      
     }
 
-    private String[] getFileContent(String url) {
+//  @return String array of sql statements
+//  This method will read file content, and remove any SQL comment and then split each SQL statement into an array cell.  
+    private String[] getSQLStatements(String url) {
         
         String fileContent = "";
         
@@ -120,10 +122,12 @@ public class DatabaseConnector implements InitializingBean {
                 
                 int indexOfComment = currentLine.indexOf("--");
                 
+                // One line comment
                 if(currentLine.startsWith("#") || indexOfComment == 0) {
                     currentLine="";
                 }
                 
+                // One line comment but some instructions are before it.
                 if(indexOfComment > 0) {
                     currentLine = currentLine.substring(0, indexOfComment-1);
                 }
@@ -131,8 +135,10 @@ public class DatabaseConnector implements InitializingBean {
                 int indexOfLongComment = currentLine.indexOf("/*");
                 int indexOfLongCommentEnd = currentLine.indexOf("*/");
                 
+                // Multiple line comment with start/end delimiter
                 if(indexOfLongComment != -1 && indexOfLongCommentEnd == -1) {
                     
+                    // Check if there is some instructions before the starting delimiter
                     if(indexOfLongComment == 0) {
                         currentLine = "";
                     } else {
@@ -140,13 +146,16 @@ public class DatabaseConnector implements InitializingBean {
                         fileContent+=currentLine;
                     } 
                     
+                    // iterate over lines until with find the end delimiter
                     do {
                         currentLine = br.readLine();
                     } while (currentLine != null && !currentLine.contains("*/"));
                     
                     int lastIndexComment = currentLine.indexOf("*/");
+                    
                     if(lastIndexComment != -1) {
                         
+                        // Check if there is somme content after the end delimiter on the current line
                         if(currentLine.endsWith("*/")) {
                             currentLine = "";
                         } else {
@@ -154,7 +163,7 @@ public class DatabaseConnector implements InitializingBean {
                         }
                         
                     }
- 
+                 // One line comment with start/end delimiter   
                 } else if (indexOfLongComment != -1 && indexOfLongCommentEnd != -1) { 
                    currentLine = currentLine.substring(0, indexOfLongComment) + currentLine.substring(indexOfLongCommentEnd+2, currentLine.length());                   
                 }

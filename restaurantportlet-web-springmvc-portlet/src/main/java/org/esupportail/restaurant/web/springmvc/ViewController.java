@@ -1,7 +1,5 @@
 package org.esupportail.restaurant.web.springmvc;
 
-import java.io.File;
-import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -15,26 +13,20 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Resource;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.esupportail.restaurant.domain.beans.User;
 import org.esupportail.restaurant.services.auth.Authenticator;
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
-import org.esupportail.restaurant.web.dao.IInitializationService;
 import org.esupportail.restaurant.web.flux.RestaurantCache;
-import org.esupportail.restaurant.web.flux.RestaurantData;
 import org.esupportail.restaurant.web.flux.RestaurantFeed;
-import org.esupportail.restaurant.web.flux.RestaurantParser;
 import org.esupportail.restaurant.web.model.Manus;
 import org.esupportail.restaurant.web.model.Restaurant;
 import org.esupportail.restaurant.web.model.RestaurantFeedRoot;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
