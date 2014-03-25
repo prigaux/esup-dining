@@ -2,6 +2,7 @@
 target/
 .settings/
 .classpath
+### Eclipse ###
 .project
 /esup-blank-web-jsf-mixed/esup-blank.log
 

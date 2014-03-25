@@ -10,13 +10,13 @@ You will be able to :
 
 ## Datas
 
-You will need to insert JSON data for this portlet to work, you can watch the [JSON schema](https://github.com/gsouquet/RestaurantPortlet/blob/master/restaurantportlet-web-springmvc-portlet/src/main/resources/schema/portlet-schema.json) to see how you will need to format your datas.
+You will need to insert JSON data for this portlet to work, you can watch the [JSON schema](https://github.com/gsouquet/RestaurantPortlet/blob/master/src/main/resources/schema/portlet-schema.json) to see how you will need to format your datas.
 
 ## Testing
 
 You can test this portlet with Pluto portlet prototyping which is a jetty plugin.
 
-Please use HSQL for test purpose, in `restaurantportlet-web-springmvc-portlet/src/main/resources/defaults.properties` use this configuration
+Please use HSQL for test purpose, in `src/main/resources/defaults.properties` use this configuration
 
 ```
 auth.bean=OfflineFixedUserAuthenticationService
@@ -32,7 +32,6 @@ db.password=
 Then just type in a command line interface 
 
 ```
-cd restaurantportlet-web-springmvc-portlet/
 mvn clean package portlet-prototyping:run
 ```
 
@@ -45,7 +44,7 @@ The server will be launched and available at `http://localhost:8080/pluto`
 This portlet is made to run in uPortal 4, to do so just run in your portal
 
 ```
-ant deployPortletApp -DportletApp=path/to/restaurant-portlet-web-springmvc-portlet/target/restaurantportlet.war
+ant deployPortletApp -DportletApp=path/to/[...]/target/restaurantportlet.war
 ```
 
 And then register the portlet

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://ehcache-spring-gms.googlecode.com/svn/schema/ehcache-spring
+     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+	xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p">
+
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:defaults.properties</value>
+				<value>classpath:config.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor" />
+
+        <bean id="app_context" class="org.esupportail.commons.context.ApplicationContextHolder"/>
+
+	<import resource="classpath*:META-INF/restaurantportlet-domain-services-domain.xml" />
+	<import resource="classpath*:META-INF/restaurantportlet-domain-services-abstractBeans.xml" />
+	<import resource="classpath*:META-INF/restaurantportlet-domain-services-application.xml" />
+	<import resource="classpath*:META-INF/restaurantportlet-domain-services-auth.xml" />
+	
+	<!-- | Message source for this context, loaded from localized "messages_xx" 
+		files + -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>messages</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- | Standard JSP view resolver + -->
+	<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="cache" value="true" />
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean id="requiredAnnotationBeanPostProcessor" class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
+
+	<bean id="sessionSetup" class="org.esupportail.restaurant.web.dao.SessionSetupInitializationService">
+		<constructor-arg index="0" type="java.lang.String" value="${user.admin.role}"/>
+		<constructor-arg index="1" type="java.lang.String" value="${date.locale.pattern}"/>
+	</bean>
+	
+	<!-- Added -->
+    
+   	<bean id="DatabaseConnector" class="org.esupportail.restaurant.web.dao.DatabaseConnector" scope="singleton">
+            <constructor-arg index="0" type="java.lang.String" value="${db.driver}"/>
+            <constructor-arg index="1" type="java.lang.String" value="${db.infos}"/>
+            <constructor-arg index="2" type="java.lang.String" value="${db.username}"/>
+            <constructor-arg index="3" type="java.lang.String" value="${db.password}"/>
+	</bean>
+	
+	<bean class="org.esupportail.restaurant.web.flux.RestaurantPojos" />
+
+	<bean id="cacheManager" scope="singleton" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<description>
+			This bean is used to configure EhCache.
+		</description>
+		<property name="configLocation" value="classpath:/cache/ehcache.xml" />
+	</bean>
+
+    <bean id="flux" class="org.esupportail.restaurant.web.flux.RestaurantFeed">
+    	<property name="dc" ref="DatabaseConnector" />
+    </bean>
+
+	<bean id="restaurantCache" class="org.esupportail.restaurant.web.flux.RestaurantCache">
+		<constructor-arg index="0" ref="flux"/>
+	</bean>
+
+	<!-- Cron task that launch "run" method in RestaurantFeed to update the feed every 5mn -->
+	
+	<bean id="doIt" class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+		<property name="targetObject" ref="flux" />
+		<property name="targetMethod" value="run" />
+	</bean>
+
+	<bean id="scheduledTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<property name="delay" value="300000" />
+		<!-- run every 5 minutes -->
+		<property name="period" value="300000" />
+		<property name="timerTask" ref="doIt" />
+	</bean>
+
+	<bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
+		<property name="scheduledTimerTasks">
+			<list>
+				<ref bean="scheduledTask" />
+			</list>
+		</property>
+	</bean>
+
+</beans>
