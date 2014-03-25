@@ -54,17 +54,15 @@ And then register the portlet
 
 Configure your database as said in the Testing chapter. 
 
-On the application launch you will be able to deploy automatically action on your db. 
-Change the `db.init` parameter in `src/main/resources/applicationContext.xml`
+You can perform multiple actions on the database using a maven goal,
 
-It accepts 4 values
-+ create
-+ drop
-+ delete
-+ update
-+ validate (no change done on the db)
+```
+mvn exec:java -Dexec.args="[arg]"
+```
 
-Each of this parameter value refers to a `.sql` file located in `src/main/resources/database/*.sql`
+`[arg]` can take this values `create`, `update`, `delete`, `drop`
+
+Each of these arguments refers to a `*.sql` file located in `src/main/resources/database/*.sql`
 
 ### Configuration
 

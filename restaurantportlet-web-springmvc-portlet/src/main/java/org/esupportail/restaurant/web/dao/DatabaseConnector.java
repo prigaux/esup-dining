@@ -1,8 +1,9 @@
 package org.esupportail.restaurant.web.dao;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -12,27 +13,25 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.InitializingBean;
 
-public class DatabaseConnector implements InitializingBean {
+public class DatabaseConnector {
 
     private Connection connection;
     private Statement statement;
     private String dbInitType;
     
-    private static final String INIT_VALIDATE = "validate";
-    private static final String INIT_CREATE   = "create";
-    private static final String INIT_UPDATE   = "update";
-    private static final String INIT_DROP     = "drop";
-    private static final String INIT_DELETE   = "delete";
-
-    private static final String PATH_FILE = "src/main/resources/database/";
+    public static final String INIT_VALIDATE = "validate";
+    public static final String INIT_CREATE   = "create";
+    public static final String INIT_UPDATE   = "update";
+    public static final String INIT_DROP     = "drop";
+    public static final String INIT_DELETE   = "delete";
     
-    private static final String FILE_CREATE = DatabaseConnector.PATH_FILE + "create.sql";
-    private static final String FILE_UPDATE = DatabaseConnector.PATH_FILE + "update.sql";
-    private static final String FILE_DELETE = DatabaseConnector.PATH_FILE + "delete.sql";
-    private static final String FILE_DROP   = DatabaseConnector.PATH_FILE + "drop.sql";
+    private static final String FILE_CREATE = "/database/create.sql";
+    private static final String FILE_UPDATE = "/database/update.sql";
+    private static final String FILE_DELETE = "/database/delete.sql";
+    private static final String FILE_DROP   = "/database/drop.sql";
     
     // db connection infos in src/main/resources/defaults.properties
-    public DatabaseConnector(String db_driver, String db_infos, String db_user, String db_pwd, String db_init_type) {
+    public DatabaseConnector(String db_driver, String db_infos, String db_user, String db_pwd) {
         try {
             Class.forName(db_driver).newInstance();
             this.connection = DriverManager.getConnection(db_infos, db_user, db_pwd);
@@ -42,8 +41,6 @@ public class DatabaseConnector implements InitializingBean {
             // Problem with the db connection
             e.printStackTrace();
         }
-
-        this.dbInitType = db_init_type;
     }
 
     public ResultSet executeQuery(String query) throws SQLException {
@@ -53,42 +50,29 @@ public class DatabaseConnector implements InitializingBean {
     public void executeUpdate(String update) throws SQLException {
         statement.executeUpdate(update);
     }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        
-        if (dbInitType.equalsIgnoreCase(DatabaseConnector.INIT_CREATE))
-            this.createTables();
-        
-        if (dbInitType.equalsIgnoreCase(DatabaseConnector.INIT_UPDATE))
-            this.updateTables();
-
-        if (dbInitType.equalsIgnoreCase(DatabaseConnector.INIT_DROP))
-            this.dropTables();
-
-        if (dbInitType.equalsIgnoreCase(DatabaseConnector.INIT_DELETE))
-            this.deleteTables();
-
+    
+    private InputStream getResourceIS(String filename) {
+        return this.getClass().getResourceAsStream(filename);
     }
     
-    private void createTables() {
+    public void createTables() {
         this.dropTables();
-        String[] sqlStatements = this.getSQLStatements(DatabaseConnector.FILE_CREATE);
+        String[] sqlStatements = this.getSQLStatements(this.getResourceIS(DatabaseConnector.FILE_CREATE));
         this.multipleStatementExecute(sqlStatements);
     }
     
-    private void updateTables() {
-        String[] sqlStatements = this.getSQLStatements(DatabaseConnector.FILE_UPDATE);
+    public void updateTables() {
+        String[] sqlStatements = this.getSQLStatements(getResourceIS(DatabaseConnector.FILE_UPDATE));
         this.multipleStatementExecute(sqlStatements);
     }
     
-    private void dropTables() {
-        String[] sqlStatements = this.getSQLStatements(DatabaseConnector.FILE_DROP);
+    public void dropTables() {
+        String[] sqlStatements = this.getSQLStatements(getResourceIS(DatabaseConnector.FILE_DROP));
         this.multipleStatementExecute(sqlStatements);
     }
     
-    private void deleteTables() {
-        String[] sqlStatements = this.getSQLStatements(DatabaseConnector.FILE_DELETE);
+    public void deleteTables() {
+        String[] sqlStatements = this.getSQLStatements(getResourceIS(DatabaseConnector.FILE_DELETE));
         this.multipleStatementExecute(sqlStatements);
     }
     
@@ -106,7 +90,7 @@ public class DatabaseConnector implements InitializingBean {
 
 //  @return String array of sql statements
 //  This method will read file content, and remove any SQL comment and then split each SQL statement into an array cell.  
-    private String[] getSQLStatements(String url) {
+    private String[] getSQLStatements(InputStream is) {
         
         String fileContent = "";
         
@@ -116,7 +100,7 @@ public class DatabaseConnector implements InitializingBean {
             
             String currentLine;
             
-            br = new BufferedReader(new FileReader(url));
+            br = new BufferedReader(new InputStreamReader(is));
             while( (currentLine = br.readLine()) != null ) {
                 
                 
@@ -182,5 +166,5 @@ public class DatabaseConnector implements InitializingBean {
         }
         return fileContent.split(";");
     }
-    
+
 }
