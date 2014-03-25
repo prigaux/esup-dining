@@ -1,27 +1,78 @@
-*~
-target/
-.settings/
-.classpath
+# Created by http://www.gitignore.io
+### OSX ###
+
+.DS_Store
+
+
 ### Eclipse ###
+*.pydevproject
 .project
-/esup-blank-web-jsf-mixed/esup-blank.log
+.metadata
+.gradle
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
 
-restaurantportlet-web-springmvc-portlet.log
+# External tool builders
+.externalToolBuilders/
 
-restaurantportlet-web-springmvc-portlet.lck
+# Locally stored "Eclipse launch configurations"
+*.launch
 
-restaurantportlet-web-springmvc-portlet.properties
+# CDT-specific
+.cproject
 
-restaurantportlet-web-springmvc-portlet.script
-.log
-.lck
-.properties
-restaurantportlet-web-springmvc-portlet.tmp/
-restaurantportlet-web-springmvc-portlet.tmp/*
-restaurantportlet-web-springmvc-portlet/restaurant.properties
-restaurantportlet-web-springmvc-portlet/.properties
-restaurantportlet-web-springmvc-portlet/restaurant.lck
-restaurantportlet-web-springmvc-portlet/restaurant.script
-restaurantportlet-web-springmvc-portlet/restaurant.log
-restaurantportlet-web-springmvc-portlet/nb-configuration.xml
+# PDT-specific
+.buildpath
+
+# sbteclipse plugin 
+.target
+
+# TeXlipse plugin
+.texlipse
+
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
 nbactions.xml
+nb-configuration.xml
+
+
+### Java ###
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.next
+release.properties
+
+### HSQL ###
+restaurant.log
+restaurant.properties
+restaurant.script
+restaurant.tmp/
+
