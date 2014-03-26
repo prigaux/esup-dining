@@ -30,20 +30,31 @@ public class BatchMain {
         if (args.length == 0 || !argValue.contains(args[0])) {
             System.out.println("[ERROR] Incorrect argument, try again using -Dexec.args=\"...\""
                              + ", argument can take this values : " + argValue.toString());
-            return;
+           return;
         }
         
         DatabaseConnector dbConnector = springContext.getBean("DatabaseConnector", DatabaseConnector.class);
         
-        if (DatabaseConnector.INIT_CREATE.equals(args[0]))
-            dbConnector.createTables();
-        if (DatabaseConnector.INIT_UPDATE.equals(args[0]))
-            dbConnector.updateTables();
-        if (DatabaseConnector.INIT_DELETE.equals(args[0]))
-            dbConnector.deleteTables();
-        if (DatabaseConnector.INIT_DROP.equals(args[0]))
-            dbConnector.dropTables();
+        String returnSequence = "[INFO] All sql statements have been executed. Your tables are now ";
         
-        return;
+        if (DatabaseConnector.INIT_CREATE.equals(args[0])) {
+            dbConnector.createTables();
+            returnSequence += "created";
+        }
+        if (DatabaseConnector.INIT_UPDATE.equals(args[0])) {
+            dbConnector.updateTables();
+            returnSequence += "updated";
+        }
+        if (DatabaseConnector.INIT_DELETE.equals(args[0])) {
+            dbConnector.deleteTables();
+            returnSequence += "empty";
+        }
+        if (DatabaseConnector.INIT_DROP.equals(args[0])) {
+            dbConnector.dropTables();
+            returnSequence += "deleted";
+        }
+        System.out.println(returnSequence);
+        
+        System.exit(0);
     }
 }

@@ -1,4 +1,4 @@
-package org.esupportail.restaurant.web.flux;
+package org.esupportail.restaurant.web.feed;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,8 +19,8 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
-import org.esupportail.restaurant.web.model.Restaurant;
-import org.esupportail.restaurant.web.model.RestaurantFeedRoot;
+import org.esupportail.restaurant.web.models.Restaurant;
+import org.esupportail.restaurant.web.models.RestaurantFeedRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 

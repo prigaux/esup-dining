@@ -1,4 +1,4 @@
-package org.esupportail.restaurant.web.springmvc;
+package org.esupportail.restaurant.web.controllers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

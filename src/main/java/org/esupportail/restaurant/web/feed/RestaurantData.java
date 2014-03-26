@@ -1,4 +1,4 @@
-package org.esupportail.restaurant.web.flux;
+package org.esupportail.restaurant.web.feed;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +9,7 @@ import java.util.Set;
 
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
 import org.esupportail.restaurant.web.domain.beans.User;
-import org.esupportail.restaurant.web.model.Restaurant;
+import org.esupportail.restaurant.web.models.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class RestaurantData {

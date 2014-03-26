@@ -1,5 +1,5 @@
 
-package org.esupportail.restaurant.web.model;
+package org.esupportail.restaurant.web.models;
 
 import java.util.ArrayList;
 import java.util.HashMap;

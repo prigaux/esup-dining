@@ -1,4 +1,4 @@
-package org.esupportail.restaurant.web.springmvc;
+package org.esupportail.restaurant.web.controllers;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;

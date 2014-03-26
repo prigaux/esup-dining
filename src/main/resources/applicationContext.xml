@@ -61,7 +61,7 @@
             <constructor-arg index="3" type="java.lang.String" value="${db.password}"/>
 	</bean>
 	
-	<bean class="org.esupportail.restaurant.web.flux.RestaurantPojos" />
+	<bean class="org.esupportail.restaurant.web.feed.RestaurantPojos" />
 
 	<bean id="cacheManager" scope="singleton" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
 		<description>
@@ -70,11 +70,11 @@
 		<property name="configLocation" value="classpath:/cache/ehcache.xml" />
 	</bean>
 
-    <bean id="flux" class="org.esupportail.restaurant.web.flux.RestaurantFeed">
+    <bean id="flux" class="org.esupportail.restaurant.web.feed.RestaurantFeed">
     	<property name="dc" ref="DatabaseConnector" />
     </bean>
 
-	<bean id="restaurantCache" class="org.esupportail.restaurant.web.flux.RestaurantCache">
+	<bean id="restaurantCache" class="org.esupportail.restaurant.web.feed.RestaurantCache">
 		<constructor-arg index="0" ref="flux"/>
 	</bean>
 

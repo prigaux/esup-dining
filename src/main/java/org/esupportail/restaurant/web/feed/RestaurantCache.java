@@ -1,4 +1,4 @@
-package org.esupportail.restaurant.web.flux;
+package org.esupportail.restaurant.web.feed;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
-import org.esupportail.restaurant.web.model.Restaurant;
+import org.esupportail.restaurant.web.models.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class RestaurantCache {

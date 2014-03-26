@@ -1,5 +1,5 @@
 
-package org.esupportail.restaurant.web.model;
+package org.esupportail.restaurant.web.models;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,53 +16,53 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "alt",
-    "src"
+    "email",
+    "tel"
 })
-public class Photo {
+public class Contact {
 
     /**
      * 
      */
-    @JsonProperty("alt")
-    private String alt;
+    @JsonProperty("email")
+    private String email;
     /**
      * 
      */
-    @JsonProperty("src")
-    private String src;
+    @JsonProperty("tel")
+    private String tel;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * 
      */
-    @JsonProperty("alt")
-    public String getAlt() {
-        return alt;
+    @JsonProperty("email")
+    public String getEmail() {
+        return email;
     }
 
     /**
      * 
      */
-    @JsonProperty("alt")
-    public void setAlt(String alt) {
-        this.alt = alt;
+    @JsonProperty("email")
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /**
      * 
      */
-    @JsonProperty("src")
-    public String getSrc() {
-        return src;
+    @JsonProperty("tel")
+    public String getTel() {
+        return tel;
     }
 
     /**
      * 
      */
-    @JsonProperty("src")
-    public void setSrc(String src) {
-        this.src = src;
+    @JsonProperty("tel")
+    public void setTel(String tel) {
+        this.tel = tel;
     }
 
     @Override

@@ -1,5 +1,5 @@
 
-package org.esupportail.restaurant.web.model;
+package org.esupportail.restaurant.web.models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,37 +18,65 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "foodcategory",
-    "name"
+    "code",
+    "ingredients",
+    "name",
+    "nutritionitems"
 })
-public class Meal {
+public class Dish {
 
     /**
      * 
      */
-    @JsonProperty("foodcategory")
-    private List<Foodcategory> foodcategory = new ArrayList<Foodcategory>();
+    @JsonProperty("code")
+    private List<Integer> code = new ArrayList<Integer>();
+    /**
+     * 
+     */
+    @JsonProperty("ingredients")
+    private String ingredients;
     /**
      * 
      */
     @JsonProperty("name")
     private String name;
+    /**
+     * 
+     */
+    @JsonProperty("nutritionitems")
+    private List<Nutritionitem> nutritionitems = new ArrayList<Nutritionitem>();
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * 
      */
-    @JsonProperty("foodcategory")
-    public List<Foodcategory> getFoodcategory() {
-        return foodcategory;
+    @JsonProperty("code")
+    public List<Integer> getCode() {
+        return code;
     }
 
     /**
      * 
      */
-    @JsonProperty("foodcategory")
-    public void setFoodcategory(List<Foodcategory> foodcategory) {
-        this.foodcategory = foodcategory;
+    @JsonProperty("code")
+    public void setCode(List<Integer> code) {
+        this.code = code;
+    }
+
+    /**
+     * 
+     */
+    @JsonProperty("ingredients")
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    /**
+     * 
+     */
+    @JsonProperty("ingredients")
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
     }
 
     /**
@@ -65,6 +93,22 @@ public class Meal {
     @JsonProperty("name")
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * 
+     */
+    @JsonProperty("nutritionitems")
+    public List<Nutritionitem> getNutritionitems() {
+        return nutritionitems;
+    }
+
+    /**
+     * 
+     */
+    @JsonProperty("nutritionitems")
+    public void setNutritionitems(List<Nutritionitem> nutritionitems) {
+        this.nutritionitems = nutritionitems;
     }
 
     @Override

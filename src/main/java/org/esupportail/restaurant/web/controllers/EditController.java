@@ -1,4 +1,4 @@
-package org.esupportail.restaurant.web.springmvc;
+package org.esupportail.restaurant.web.controllers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,8 +16,8 @@ import javax.portlet.RenderResponse;
 import org.esupportail.restaurant.web.dao.DatabaseConnector;
 import org.esupportail.restaurant.web.domain.beans.User;
 import org.esupportail.restaurant.web.domainservices.services.auth.Authenticator;
-import org.esupportail.restaurant.web.flux.RestaurantFeed;
-import org.esupportail.restaurant.web.model.Restaurant;
+import org.esupportail.restaurant.web.feed.RestaurantFeed;
+import org.esupportail.restaurant.web.models.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

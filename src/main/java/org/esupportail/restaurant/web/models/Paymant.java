@@ -1,9 +1,7 @@
 
-package org.esupportail.restaurant.web.model;
+package org.esupportail.restaurant.web.models;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -18,53 +16,31 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "date",
-    "meal"
+    "name"
 })
-public class Manus {
+public class Paymant {
 
     /**
      * 
      */
-    @JsonProperty("date")
-    private String date;
-    /**
-     * 
-     */
-    @JsonProperty("meal")
-    private List<Meal> meal = new ArrayList<Meal>();
+    @JsonProperty("name")
+    private String name;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * 
      */
-    @JsonProperty("date")
-    public String getDate() {
-        return date;
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
     /**
      * 
      */
-    @JsonProperty("date")
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    /**
-     * 
-     */
-    @JsonProperty("meal")
-    public List<Meal> getMeal() {
-        return meal;
-    }
-
-    /**
-     * 
-     */
-    @JsonProperty("meal")
-    public void setMeal(List<Meal> meal) {
-        this.meal = meal;
+    @JsonProperty("name")
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

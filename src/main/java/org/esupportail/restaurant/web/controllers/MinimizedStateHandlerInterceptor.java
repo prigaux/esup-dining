@@ -1,4 +1,4 @@
-package org.esupportail.restaurant.web.springmvc;
+package org.esupportail.restaurant.web.controllers;
 
 import javax.annotation.Resource;
 import javax.portlet.PortletMode;
