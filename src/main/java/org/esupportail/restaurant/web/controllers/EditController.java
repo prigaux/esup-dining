@@ -44,9 +44,12 @@ public class EditController extends AbstractExceptionController {
         User user = authenticator.getUser();
         model.put("user", user);
 
-        int[] code = {1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15};
-        model.put("nutritionCodes", code);
+        int[] allergenCodes = {1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 13, 14};
+        model.put("allergenCodes", allergenCodes);
 
+        int[] preferenceCodes = {12, 15};
+        model.put("preferenceCodes", preferenceCodes);
+        
         try {
 
             ResultSet prefUser = dc.executeQuery("SELECT NUTRITIONCODE FROM nutritionPreferences WHERE USERNAME='" + user.getLogin() + "';");
