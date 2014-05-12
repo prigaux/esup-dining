@@ -1,0 +1,136 @@
+/* I. General styles */
+
+	.pc .row,
+	.portlet-container .row {
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+	}
+
+	img {
+		max-width: 100%;
+	}
+	/* max-width: 100%; trick is buggy with sprite images */
+	#map-canvas img,
+	.sprite {
+		max-width: none;
+	}
+	#map-canvas {
+		width: 100%;
+		height: 350px;
+	}
+	
+	.ta-center {
+		text-align: center;
+	}
+	.ta-right {
+		text-align: right;
+	}
+	.ta-left {
+		text-align: left;
+	}
+	.get-located {
+		margin-top: 10px;
+		font-size: 1.4em;
+	}
+
+	.navbar-default .navbar-nav > li > span {
+		padding: 15px;
+	}
+
+/* icon set */
+
+.icn-fam {
+	background-position: 0 center;
+	background-repeat: no-repeat;
+	padding-left: 20px !important;
+}
+
+/* Don't look beyond this point... it looks horrible ! */
+
+#opening {
+	width: 100%;
+	text-align: center;
+}
+#opening th {
+	font-weight: bold;
+}
+
+
+.tab-header {
+	display: table;
+	padding: 0;
+	width: 100%;
+}
+.tab-header li {
+	display: table-cell;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	text-align: center;
+	background: #DDD;
+}
+.tab-header a {
+	padding: .5em 0;
+	display: block;
+}
+.tab-header .ui-state-active {
+	background: #FFF;
+}
+
+.accordion-title {
+	padding: .5em 1em;
+	background: #DDD;
+	border-bottom: 2px solid #AAA;
+}
+
+/* State CSS */
+
+.is-invalid {
+	color: #F00 !important;
+	font-weight: bold;
+}
+
+.is-valid {
+	color: #0F0 !important;
+	font-weight: bold;
+}
+
+table .is-openned {
+	background: #A6FFDE;
+}
+
+table .is-closed {
+	background: #FFA6AA;
+}
+
+.smart-choice {
+	background: #00FF6A;
+}
+.warning {
+	background: #FFD859;
+}
+
+[data-closed] a:before {
+	display: inline-block;
+	vertical-align: middle;
+	width: 16px;
+	height: 16px;
+	background: url("../images/closed.png") no-repeat 0 0;
+	content:'';
+}
+
+/* Theme relative CSS */ 
+
+.icn-fam-back       { background-image: url("../images/resultset_previous.png"); }
+.icn-fam-meal       { background-image: url("../images/script.png");             }
+.icn-fam-fav        { background-image: url("../images/star.png");               }
+.icn-fam-infos      { background-image: url("../images/information.png");        }
+.icn-fam-valid      { background-image: url("../images/accept.png");             }
+.icn-fam-invalid    { background-image: url("../images/exclamation.png");        }
+.icn-fam-disability { background-image: url("../images/disability.png");         }       
+.icn-fam-wifi	   	{ background-image: url("../images/wifi.png");         		 }      
+.icn-fam-stats	   	{ background-image: url("../images/stats.png");         		 }       
+
+.starred-icon {
+	color: #E5DD6E;
+}

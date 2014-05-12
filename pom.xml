@@ -37,7 +37,6 @@
                     <configuration>
                         <executable>java</executable>
                         <mainClass>org.esupportail.restaurant.web.batch.BatchMain</mainClass>
-                        <classpathScope>compile</classpathScope>
                     </configuration>
             </plugin>
             <plugin>
@@ -80,6 +79,13 @@
             <version>${esupcommons.version}</version>
         </dependency>
         <!-- ===== Compile Time Dependencies ============================== -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.4</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>javax.portlet</groupId>
             <artifactId>portlet-api</artifactId>
