@@ -8,7 +8,7 @@
 	<spring:message code="go.back.home"/>
 </a>
 
-<%--c:if test="${sessionScope.isAdmin}"--%>
+<c:if test="${sessionScope.isAdmin}">
 	<h2>
 		<portlet:renderURL var="adminSettings">
  				<portlet:param name="action" value="adminSettings"/>
@@ -18,7 +18,7 @@
 			<spring:message code="menu.editadmin"/>
 		</a>
 	</h2>
-<%--/c:if--%>
+</c:if>
 
 <c:if test="${not empty areaList}">
 	
