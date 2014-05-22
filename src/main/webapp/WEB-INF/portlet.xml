@@ -7,8 +7,8 @@
                         http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
 
     <portlet>
-        <portlet-name>restaurant-portlet</portlet-name>
-        <display-name xml:lang="fr">restaurant-portlet</display-name>
+        <portlet-name>esup-dining-portlet</portlet-name>
+        <display-name xml:lang="fr">esup-dining-portlet</display-name>
         <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
         <init-param>
             <name>contextConfigLocation</name>
@@ -24,9 +24,9 @@
         <supported-locale>fr</supported-locale>
         <supported-locale>en</supported-locale>
         <portlet-info>
-            <title>restaurant-portlet</title>
-            <short-title>restaurant-portlet</short-title>
-            <keywords>restaurant-portlet</keywords>
+            <title>esup-dining-portlet</title>
+            <short-title>esup-dining-portlet</short-title>
+            <keywords>esup-dining-portlet</keywords>
         </portlet-info>
     
     	<!--

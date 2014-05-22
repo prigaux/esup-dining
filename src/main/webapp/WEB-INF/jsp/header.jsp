@@ -13,7 +13,7 @@
 
 <%-- Inclusion CSS --%>
 <link type="text/css" rel="stylesheet" href="${pageContext.servletContext.contextPath}/css/bootstrap.min.css">
-<link type="text/css" rel="stylesheet" href="${pageContext.servletContext.contextPath}/css/restaurant-portlet.css">
+<link type="text/css" rel="stylesheet" href="${pageContext.servletContext.contextPath}/css/esup-dining-portlet.css">
 
 <%-- Inclusion JS --%>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>

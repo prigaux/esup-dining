@@ -1,4 +1,4 @@
-# ESUP-Restaurant
+# Esup-Dining-Portlet
 
 This portlet aims to deliver to student the meals available in dining halls.
 
@@ -44,7 +44,7 @@ The server will be launched and available at `http://localhost:8080/pluto`
 This portlet is made to run in uPortal 4, to do so just run in your portal
 
 ```
-ant deployPortletApp -DportletApp=path/to/[...]/target/restaurantportlet.war
+ant deployPortletApp -DportletApp=path/to/[...]/target/esup-dining-portlet.war
 ```
 
 And then register the portlet
