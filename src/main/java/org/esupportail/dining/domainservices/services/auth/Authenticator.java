@@ -13,7 +13,7 @@ public interface Authenticator {
 
 	/**
 	 * @return the authenticated user.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	User getUser() throws Exception;
 

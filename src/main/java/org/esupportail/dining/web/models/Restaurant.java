@@ -1,487 +1,472 @@
-
 package org.esupportail.dining.web.models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Generated;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
-@JsonPropertyOrder({
-    "access",
-    "accessibility",
-    "wifi",
-    "address",
-    "area",
-    "closing",
-    "contact",
-    "description",
-    "id",
-    "lat",
-    "lon",
-    "payment",
-    "menus",
-    "opening",
-    "operationalhours",
-    "photo",
-    "shortdesc",
-    "title",
-    "type"
-})
+@JsonPropertyOrder({ "access", "accessibility", "wifi", "address", "area",
+		"closing", "contact", "description", "id", "lat", "lon", "payment",
+		"menus", "opening", "operationalhours", "photo", "shortdesc", "title",
+		"type" })
 public class Restaurant {
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("access")
-    private String access;
-    /**
+	@JsonProperty("access")
+	private String access;
+	/**
      * 
      */
-    @JsonProperty("accessibility")
-    private Boolean accessibility;
-    /**
+	@JsonProperty("accessibility")
+	private Boolean accessibility;
+	/**
      * 
      */
-    @JsonProperty("wifi")
-    private Boolean wifi;
-    /**
+	@JsonProperty("wifi")
+	private Boolean wifi;
+	/**
      * 
      */
-    @JsonProperty("address")
-    private String address;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("area")
-    private String area;
-    /**
-     * 
-     */
-    @JsonProperty("closing")
-    private String closing;
-    /**
+	@JsonProperty("address")
+	private String address;
+	/**
+	 * 
+	 * (Required)
+	 * 
+	 */
+	@JsonProperty("area")
+	private String area;
+	/**
      * 
      */
-    @JsonProperty("contact")
-    private Contact contact;
-    /**
+	@JsonProperty("closing")
+	private String closing;
+	/**
      * 
      */
-    @JsonProperty("description")
-    private String description;
-    /**
-     * 
-     * (Required)
+	@JsonProperty("contact")
+	private Contact contact;
+	/**
      * 
      */
-    @JsonProperty("id")
-    private Integer id;
-    /**
+	@JsonProperty("description")
+	private String description;
+	/**
+	 * 
+	 * (Required)
+	 * 
+	 */
+	@JsonProperty("id")
+	private Integer id;
+	/**
      * 
      */
-    @JsonProperty("lat")
-    private Double lat;
-    /**
+	@JsonProperty("lat")
+	private Double lat;
+	/**
      * 
      */
-    @JsonProperty("lon")
-    private Double lon;
-    /**
+	@JsonProperty("lon")
+	private Double lon;
+	/**
      * 
      */
-    @JsonProperty("payment")
-    private List<Paymant> payment = new ArrayList<Paymant>();
-    /**
+	@JsonProperty("payment")
+	private List<Paymant> payment = new ArrayList<Paymant>();
+	/**
      * 
      */
-    @JsonProperty("menus")
-    private List<Manus> menus = new ArrayList<Manus>();
-    /**
+	@JsonProperty("menus")
+	private List<Manus> menus = new ArrayList<Manus>();
+	/**
      * 
      */
-    @JsonProperty("opening")
-    private String opening;
-    /**
+	@JsonProperty("opening")
+	private String opening;
+	/**
      * 
      */
-    @JsonProperty("operationalhours")
-    private String operationalhours;
-    /**
+	@JsonProperty("operationalhours")
+	private String operationalhours;
+	/**
      * 
      */
-    @JsonProperty("photo")
-    private Photo photo;
-    /**
+	@JsonProperty("photo")
+	private Photo photo;
+	/**
      * 
      */
-    @JsonProperty("shortdesc")
-    private String shortdesc;
-    /**
-     * 
-     * (Required)
+	@JsonProperty("shortdesc")
+	private String shortdesc;
+	/**
+	 * 
+	 * (Required)
+	 * 
+	 */
+	@JsonProperty("title")
+	private String title;
+	/**
      * 
      */
-    @JsonProperty("title")
-    private String title;
-    /**
-     * 
-     */
-    @JsonProperty("type")
-    private String type;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+	@JsonProperty("type")
+	private String type;
+	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("access")
-    public String getAccess() {
-        return access;
-    }
+	@JsonProperty("access")
+	public String getAccess() {
+		return access;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("access")
-    public void setAccess(String access) {
-        this.access = access;
-    }
+	@JsonProperty("access")
+	public void setAccess(String access) {
+		this.access = access;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("accessibility")
-    public Boolean getAccessibility() {
-        return accessibility;
-    }
+	@JsonProperty("accessibility")
+	public Boolean getAccessibility() {
+		return accessibility;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("accessibility")
-    public void setAccessibility(Boolean accessibility) {
-        this.accessibility = accessibility;
-    }
+	@JsonProperty("accessibility")
+	public void setAccessibility(Boolean accessibility) {
+		this.accessibility = accessibility;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("wifi")
-    public Boolean getWifi() {
-        return wifi;
-    }
+	@JsonProperty("wifi")
+	public Boolean getWifi() {
+		return wifi;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("wifi")
-    public void setWifi(Boolean wifi) {
-        this.wifi = wifi;
-    }
+	@JsonProperty("wifi")
+	public void setWifi(Boolean wifi) {
+		this.wifi = wifi;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("address")
-    public String getAddress() {
-        return address;
-    }
+	@JsonProperty("address")
+	public String getAddress() {
+		return address;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("address")
-    public void setAddress(String address) {
-        this.address = address;
-    }
+	@JsonProperty("address")
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-    /**
-     * 
-     * (Required)
+	/**
+	 * 
+	 * (Required)
+	 * 
+	 */
+	@JsonProperty("area")
+	public String getArea() {
+		return area;
+	}
+
+	/**
+	 * 
+	 * (Required)
+	 * 
+	 */
+	@JsonProperty("area")
+	public void setArea(String area) {
+		this.area = area;
+	}
+
+	/**
      * 
      */
-    @JsonProperty("area")
-    public String getArea() {
-        return area;
-    }
+	@JsonProperty("closing")
+	public String getClosing() {
+		return closing;
+	}
 
-    /**
-     * 
-     * (Required)
+	/**
      * 
      */
-    @JsonProperty("area")
-    public void setArea(String area) {
-        this.area = area;
-    }
+	@JsonProperty("closing")
+	public void setClosing(String closing) {
+		this.closing = closing;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("closing")
-    public String getClosing() {
-        return closing;
-    }
+	@JsonProperty("contact")
+	public Contact getContact() {
+		return contact;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("closing")
-    public void setClosing(String closing) {
-        this.closing = closing;
-    }
+	@JsonProperty("contact")
+	public void setContact(Contact contact) {
+		this.contact = contact;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("contact")
-    public Contact getContact() {
-        return contact;
-    }
+	@JsonProperty("description")
+	public String getDescription() {
+		return description;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("contact")
-    public void setContact(Contact contact) {
-        this.contact = contact;
-    }
+	@JsonProperty("description")
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    /**
+	/**
+	 * 
+	 * (Required)
+	 * 
+	 */
+	@JsonProperty("id")
+	public Integer getId() {
+		return id;
+	}
+
+	/**
+	 * 
+	 * (Required)
+	 * 
+	 */
+	@JsonProperty("id")
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	/**
      * 
      */
-    @JsonProperty("description")
-    public String getDescription() {
-        return description;
-    }
+	@JsonProperty("lat")
+	public Double getLat() {
+		return lat;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("description")
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	@JsonProperty("lat")
+	public void setLat(Double lat) {
+		this.lat = lat;
+	}
 
-    /**
-     * 
-     * (Required)
+	/**
      * 
      */
-    @JsonProperty("id")
-    public Integer getId() {
-        return id;
-    }
+	@JsonProperty("lon")
+	public Double getLon() {
+		return lon;
+	}
 
-    /**
-     * 
-     * (Required)
+	/**
      * 
      */
-    @JsonProperty("id")
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	@JsonProperty("lon")
+	public void setLon(Double lon) {
+		this.lon = lon;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("lat")
-    public Double getLat() {
-        return lat;
-    }
+	@JsonProperty("payment")
+	public List<Paymant> getPayment() {
+		return payment;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("lat")
-    public void setLat(Double lat) {
-        this.lat = lat;
-    }
+	@JsonProperty("payment")
+	public void setPayment(List<Paymant> payment) {
+		this.payment = payment;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("lon")
-    public Double getLon() {
-        return lon;
-    }
+	@JsonProperty("menus")
+	public List<Manus> getMenus() {
+		return menus;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("lon")
-    public void setLon(Double lon) {
-        this.lon = lon;
-    }
+	@JsonProperty("menus")
+	public void setMenus(List<Manus> menus) {
+		this.menus = menus;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("payment")
-    public List<Paymant> getPayment() {
-        return payment;
-    }
+	@JsonProperty("opening")
+	public String getOpening() {
+		return opening;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("payment")
-    public void setPayment(List<Paymant> payment) {
-        this.payment = payment;
-    }
+	@JsonProperty("opening")
+	public void setOpening(String opening) {
+		this.opening = opening;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("menus")
-    public List<Manus> getMenus() {
-        return menus;
-    }
+	@JsonProperty("operationalhours")
+	public String getOperationalhours() {
+		return operationalhours;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("menus")
-    public void setMenus(List<Manus> menus) {
-        this.menus = menus;
-    }
+	@JsonProperty("operationalhours")
+	public void setOperationalhours(String operationalhours) {
+		this.operationalhours = operationalhours;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("opening")
-    public String getOpening() {
-        return opening;
-    }
+	@JsonProperty("photo")
+	public Photo getPhoto() {
+		return photo;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("opening")
-    public void setOpening(String opening) {
-        this.opening = opening;
-    }
+	@JsonProperty("photo")
+	public void setPhoto(Photo photo) {
+		this.photo = photo;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("operationalhours")
-    public String getOperationalhours() {
-        return operationalhours;
-    }
+	@JsonProperty("shortdesc")
+	public String getShortdesc() {
+		return shortdesc;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("operationalhours")
-    public void setOperationalhours(String operationalhours) {
-        this.operationalhours = operationalhours;
-    }
+	@JsonProperty("shortdesc")
+	public void setShortdesc(String shortdesc) {
+		this.shortdesc = shortdesc;
+	}
 
-    /**
+	/**
+	 * 
+	 * (Required)
+	 * 
+	 */
+	@JsonProperty("title")
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * 
+	 * (Required)
+	 * 
+	 */
+	@JsonProperty("title")
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	/**
      * 
      */
-    @JsonProperty("photo")
-    public Photo getPhoto() {
-        return photo;
-    }
+	@JsonProperty("type")
+	public String getType() {
+		return type;
+	}
 
-    /**
+	/**
      * 
      */
-    @JsonProperty("photo")
-    public void setPhoto(Photo photo) {
-        this.photo = photo;
-    }
+	@JsonProperty("type")
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    /**
-     * 
-     */
-    @JsonProperty("shortdesc")
-    public String getShortdesc() {
-        return shortdesc;
-    }
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
 
-    /**
-     * 
-     */
-    @JsonProperty("shortdesc")
-    public void setShortdesc(String shortdesc) {
-        this.shortdesc = shortdesc;
-    }
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this);
+	}
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("title")
-    public String getTitle() {
-        return title;
-    }
+	@Override
+	public boolean equals(Object other) {
+		return EqualsBuilder.reflectionEquals(this, other);
+	}
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("title")
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	@JsonAnyGetter
+	public Map<String, Object> getAdditionalProperties() {
+		return this.additionalProperties;
+	}
 
-    /**
-     * 
-     */
-    @JsonProperty("type")
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * 
-     */
-    @JsonProperty("type")
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperties(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
+	@JsonAnySetter
+	public void setAdditionalProperties(String name, Object value) {
+		this.additionalProperties.put(name, value);
+	}
 
 }

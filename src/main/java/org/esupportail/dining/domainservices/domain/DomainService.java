@@ -12,7 +12,7 @@ import org.esupportail.dining.domain.beans.User;
  * 
  */
 public interface DomainService extends Serializable {
-	
+
 	/**
 	 * @param uid
 	 * @return a user.

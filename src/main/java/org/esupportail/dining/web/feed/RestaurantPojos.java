@@ -8,35 +8,37 @@ import com.sun.codemodel.JCodeModel;
 
 public class RestaurantPojos {
 
-    private final File jsonSchema = new File("src/main/resources/schema/portlet-schema.json"); 
-    private final File outputFolder = new File("src/main/java");
+	private final File jsonSchema = new File(
+			"src/main/resources/schema/portlet-schema.json");
+	private final File outputFolder = new File("src/main/java");
 
-    public RestaurantPojos() throws Exception {
-//        if(outputFolder.listFiles().length > 0) this.deleteFilesFromFolder(outputFolder);
-//        this.generatePOJO();  
-    }
+	public RestaurantPojos() throws Exception {
+		// if(outputFolder.listFiles().length > 0)
+		// this.deleteFilesFromFolder(outputFolder);
+		// this.generatePOJO();
+	}
 
+	private void deleteFilesFromFolder(File folder) {
+		for (File f : folder.listFiles()) {
+			boolean success = f.delete();
+			if (!success) {
+				System.out.println(f + " couldn't be deleted.");
+			}
+		}
+	}
 
-    private void deleteFilesFromFolder(File folder) {
-        for(File f : folder.listFiles()) {
-            boolean success = f.delete();
-    		if(!success) {
-    		    System.out.println(f + " couldn't be deleted.");
-    		}
-    	}
-    }
-
-    // Create Java Class based on the JSON Schema
-   private void generatePOJO() {
-        JCodeModel codeModel = new JCodeModel();
-        // method give in the javadoc, looks dirty but recommanded
-        URL jsonSchemaUrl;
+	// Create Java Class based on the JSON Schema
+	private void generatePOJO() {
+		JCodeModel codeModel = new JCodeModel();
+		// method give in the javadoc, looks dirty but recommanded
+		URL jsonSchemaUrl;
 		try {
 			jsonSchemaUrl = jsonSchema.toURI().toURL();
-			new SchemaMapper().generate(codeModel, "RestaurantFeedRoot", "org.esupportail.restaurant.web.model", jsonSchemaUrl);
+			new SchemaMapper().generate(codeModel, "RestaurantFeedRoot",
+					"org.esupportail.restaurant.web.model", jsonSchemaUrl);
 			codeModel.build(this.outputFolder);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    }
+	}
 }

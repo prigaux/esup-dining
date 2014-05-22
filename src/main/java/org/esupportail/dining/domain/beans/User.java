@@ -122,6 +122,7 @@ public class User implements Serializable {
 	public boolean isAdmin() {
 		return this.admin;
 	}
+
 	/**
 	 * @return the language
 	 */

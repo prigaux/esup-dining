@@ -43,19 +43,20 @@ public class ViewController extends AbstractExceptionController {
 	private DatabaseConnector dc;
 	@Autowired
 	private RestaurantFeed flux;
-	
+
 	private RestaurantFeedRoot restaurants;
 
 	@Autowired
 	private RestaurantCache cache;
 
 	@RequestMapping
-	public ModelAndView renderMainView(RenderRequest request, RenderResponse response) throws Exception {
-	  
+	public ModelAndView renderMainView(RenderRequest request,
+			RenderResponse response) throws Exception {
+
 		ModelMap model = new ModelMap();
 
 		User user = authenticator.getUser();
-		
+
 		String[] areaToDisplay = null;
 
 		try {
@@ -74,9 +75,10 @@ public class ViewController extends AbstractExceptionController {
 			} catch (SQLException e2) {
 				// If there is no default area, then the admin must configure
 				// the portlet before.
-			    return new ModelAndView("error", new ModelMap("err", e2.getMessage()));
+				return new ModelAndView("error", new ModelMap("err",
+						e2.getMessage()));
 			}
-		} 
+		}
 
 		try {
 			ResultSet favList = dc
@@ -106,29 +108,32 @@ public class ViewController extends AbstractExceptionController {
 		model.put("area", areaToDisplay);
 
 		try {
-		    
-		    restaurants = flux.getFlux();
-		    
+
+			restaurants = flux.getFlux();
+
 			List<Restaurant> dininghallList = new ArrayList<Restaurant>();
 
-			
 			Map<String, List<Restaurant>> areasToDisplayList = new HashMap<String, List<Restaurant>>();
-			
-			for(int i = 0; i<areaToDisplay.length; i++) {
-			    areasToDisplayList.put(areaToDisplay[i], new ArrayList<Restaurant>());		    
-			}		
-			
+
+			for (int i = 0; i < areaToDisplay.length; i++) {
+				areasToDisplayList.put(areaToDisplay[i],
+						new ArrayList<Restaurant>());
+			}
+
 			for (Restaurant restaurant : restaurants.getRestaurants()) {
-			    if(areasToDisplayList.containsKey(restaurant.getArea())) {
-			        restaurant.setAdditionalProperties("isClosed", flux.isClosed(restaurant));                  
-			        areasToDisplayList.get(restaurant.getArea()).add(restaurant);
-			    }
+				if (areasToDisplayList.containsKey(restaurant.getArea())) {
+					restaurant.setAdditionalProperties("isClosed",
+							flux.isClosed(restaurant));
+					areasToDisplayList.get(restaurant.getArea())
+							.add(restaurant);
+				}
 			}
 			model.put("restaurantLists", areasToDisplayList);
 
-		} catch (NullPointerException e) { /* */   
+		} catch (NullPointerException e) { /* */
 		} catch (Exception e) {
-            return new ModelAndView("error", new ModelMap("err", e.getMessage()));
+			return new ModelAndView("error",
+					new ModelMap("err", e.getMessage()));
 		}
 
 		return new ModelAndView("view", model);
@@ -145,21 +150,28 @@ public class ViewController extends AbstractExceptionController {
 
 		Restaurant restaurant = cache.getCachedRestaurant(id);
 		model.put("restaurant", restaurant);
-		
-		try {
-	        
-	        ResultSet results = dc
-	                .executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='"
-	                        + user.getLogin() + "' AND RESTAURANTID='" + id + "';");
-	        if (results.next()) {
-	            model.put("isFavorite", true);
-	        }
 
-	        if (flux.isClosed(restaurant)) {
-	            model.put("restaurantClosed", true);
-	        }
-	        		    
-		} catch (NullPointerException e) { /* Useful is the user isn't logged in */ }
+		try {
+
+			ResultSet results = dc
+					.executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='"
+							+ user.getLogin()
+							+ "' AND RESTAURANTID='"
+							+ id
+							+ "';");
+			if (results.next()) {
+				model.put("isFavorite", true);
+			}
+
+			if (flux.isClosed(restaurant)) {
+				model.put("restaurantClosed", true);
+			}
+
+		} catch (NullPointerException e) { /*
+											 * Useful is the user isn't logged
+											 * in
+											 */
+		}
 
 		return new ModelAndView("restaurant", model);
 	}
@@ -187,9 +199,12 @@ public class ViewController extends AbstractExceptionController {
 
 			model.put("nutritionPrefs", nutritionPrefs);
 
-		} catch (SQLException e) { /**/ 
-		} catch (NullPointerException e) { /* Useful is the user isn't logged in */ }
-		  
+		} catch (SQLException e) { /**/
+		} catch (NullPointerException e) { /*
+											 * Useful is the user isn't logged
+											 * in
+											 */
+		}
 
 		try {
 			Restaurant restaurant = cache.getCachedRestaurant(id);
@@ -205,23 +220,31 @@ public class ViewController extends AbstractExceptionController {
 				}
 			}
 			model.put("menus", menuList);
-	
+
 			if (flux.isClosed(restaurant)) {
-	            model.put("restaurantClosed", true);
-	        }
-			
+				model.put("restaurantClosed", true);
+			}
+
 		} catch (Exception e) {
-            return new ModelAndView("error", new ModelMap("err", e.getMessage()));
+			return new ModelAndView("error",
+					new ModelMap("err", e.getMessage()));
 		}
-		
+
 		try {
-	      ResultSet results = dc
-	                .executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='"
-	                        + user.getLogin() + "' AND RESTAURANTID='" + id + "';");
-	        if (results.next()) {
-	            model.put("isFavorite", true);
-	        }
-		} catch (NullPointerException e) { /* Useful is the user isn't logged in */ }
+			ResultSet results = dc
+					.executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='"
+							+ user.getLogin()
+							+ "' AND RESTAURANTID='"
+							+ id
+							+ "';");
+			if (results.next()) {
+				model.put("isFavorite", true);
+			}
+		} catch (NullPointerException e) { /*
+											 * Useful is the user isn't logged
+											 * in
+											 */
+		}
 
 		return new ModelAndView("meals", model);
 	}
@@ -238,7 +261,11 @@ public class ViewController extends AbstractExceptionController {
 					+ user.getLogin() + "', '" + id + "');");
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (NullPointerException e) { /* Useful is the user isn't logged in */ }
+		} catch (NullPointerException e) { /*
+											 * Useful is the user isn't logged
+											 * in
+											 */
+		}
 
 		response.setRenderParameter("id", id);
 		response.setRenderParameter("action", "viewRestaurant");
@@ -296,8 +323,12 @@ public class ViewController extends AbstractExceptionController {
 
 			model.put("nutritionPrefs", nutritionPrefs);
 
-		} catch (SQLException e) { /**/ }
-		catch (NullPointerException e) { /* Useful is the user isn't logged in */ }
+		} catch (SQLException e) { /**/
+		} catch (NullPointerException e) { /*
+											 * Useful is the user isn't logged
+											 * in
+											 */
+		}
 
 		return new ModelAndView("dish", model);
 	}

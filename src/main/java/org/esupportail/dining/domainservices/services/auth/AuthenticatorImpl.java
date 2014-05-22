@@ -32,15 +32,13 @@ public class AuthenticatorImpl implements Serializable, InitializingBean,
 	 * The session attribute to store the auth info.
 	 */
 	private static final String AUTH_INFO_ATTRIBUTE = AuthenticatorImpl.class
-			.getName()
-			+ ".authInfo";
+			.getName() + ".authInfo";
 
 	/**
 	 * The session attribute to store the user.
 	 */
 	private static final String USER_ATTRIBUTE = AuthenticatorImpl.class
-			.getName()
-			+ ".user";
+			.getName() + ".user";
 
 	/**
 	 * A logger.
@@ -60,8 +58,9 @@ public class AuthenticatorImpl implements Serializable, InitializingBean,
 	}
 
 	public void afterPropertiesSet() throws Exception {
-		Assert.notNull(authenticationService, "property authenticationService of class "
-				+ this.getClass().getName() + " can not be null");
+		Assert.notNull(authenticationService,
+				"property authenticationService of class "
+						+ this.getClass().getName() + " can not be null");
 	}
 
 	public User getUser() throws Exception {

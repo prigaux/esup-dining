@@ -20,30 +20,34 @@ public class MinimizedStateHandlerInterceptor extends HandlerInterceptorAdapter 
 
 	private IInitializationService initializationService;
 
-    // Is executed before every render
-    // Set admin rights and check if the portlet is minimized
-    @Override
-    public boolean preHandleRender(RenderRequest request, RenderResponse response, Object handler) throws Exception {
+	// Is executed before every render
+	// Set admin rights and check if the portlet is minimized
+	@Override
+	public boolean preHandleRender(RenderRequest request,
+			RenderResponse response, Object handler) throws Exception {
 
-        PortletSession session = request.getPortletSession(true);
-        if (session.getAttribute("isAdmin") == null) {
-            initializationService.initialize(request);
-        }
+		PortletSession session = request.getPortletSession(true);
+		if (session.getAttribute("isAdmin") == null) {
+			initializationService.initialize(request);
+		}
 
-        // If the user isn't logged in we won't render the edit mode
-        if(authenticator.getUser() == null && PortletMode.EDIT.equals(request.getPortletMode()))
-            return false;
-        
-        if (WindowState.MINIMIZED.equals(request.getWindowState()))
-            return false;
+		// If the user isn't logged in we won't render the edit mode
+		if (authenticator.getUser() == null
+				&& PortletMode.EDIT.equals(request.getPortletMode())) {
+			return false;
+		}
 
-        return true;
-    }
+		if (WindowState.MINIMIZED.equals(request.getWindowState())) {
+			return false;
+		}
 
-    @Required
-    @Resource(name = "sessionSetup")
-    public void setInitializationServices(final IInitializationService service) {
-        this.initializationService = service;
-    }
-    
+		return true;
+	}
+
+	@Required
+	@Resource(name = "sessionSetup")
+	public void setInitializationServices(final IInitializationService service) {
+		this.initializationService = service;
+	}
+
 }
