@@ -121,27 +121,26 @@
 									
 									<ul>
 										<c:forEach var="dish" items="${foodCategory.dishes}">
-											<li
-												<c:if test="${not empty dish.code}">
-													<c:forEach var="codeNumber" items="${dish.code}">
-														<c:forEach var="userCodeNumber" items="${nutritionPrefs}">
+										<c:if test="${not empty dish.code}">
+												<c:forEach var="codeNumber" items="${dish.code}">
+													<c:forEach var="userCodeNumber" items="${nutritionPrefs}">
+														
+														<c:if test="${codeNumber==userCodeNumber}">
 															
-															<c:if test="${codeNumber==userCodeNumber}">
-																
-																<c:choose>
-																	<c:when test="${codeNumber=='15'}">
-																		class="alert alert-success"
-																	</c:when>
-																	<c:otherwise>
-																		class="alert alert-warning"
-																	</c:otherwise>
-																</c:choose>
-															</c:if>
-															
-														</c:forEach>								
-													</c:forEach>
-												</c:if>
-											>
+															<c:choose>
+																<c:when test="${codeNumber=='15'}">
+																	<c:set var="elementClassName" value='alert alert-success"'/>
+																</c:when>
+																<c:otherwise>
+																	<c:set var="elementClassName" value='alert alert-warning"'/>
+																</c:otherwise>
+															</c:choose>
+														</c:if>
+														
+													</c:forEach>								
+												</c:forEach>
+											</c:if>
+											<li class="${elementClassName}">
 
 												<portlet:renderURL var="viewDish">
 													<portlet:param name="action" value="viewDish"/>
