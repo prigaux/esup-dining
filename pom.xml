@@ -36,7 +36,7 @@
                     </executions>
                     <configuration>
                         <executable>java</executable>
-                        <mainClass>org.esupportail.restaurant.web.batch.DBManager</mainClass>
+                        <mainClass>org.esupportail.dining.batch.DBManager</mainClass>
                     </configuration>
             </plugin>
             <plugin>

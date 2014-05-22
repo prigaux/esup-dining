@@ -47,21 +47,21 @@
 
 	<bean id="requiredAnnotationBeanPostProcessor" class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
 
-	<bean id="sessionSetup" class="org.esupportail.restaurant.web.dao.SessionSetupInitializationService">
+	<bean id="sessionSetup" class="org.esupportail.dining.web.dao.SessionSetupInitializationService">
 		<constructor-arg index="0" type="java.lang.String" value="${user.admin.role}"/>
 		<constructor-arg index="1" type="java.lang.String" value="${date.locale.pattern}"/>
 	</bean>
 	
 	<!-- Added -->
     
-   	<bean id="DatabaseConnector" class="org.esupportail.restaurant.web.dao.DatabaseConnector" scope="singleton">
+   	<bean id="DatabaseConnector" class="org.esupportail.dining.web.dao.DatabaseConnector" scope="singleton">
             <constructor-arg index="0" type="java.lang.String" value="${db.driver}"/>
             <constructor-arg index="1" type="java.lang.String" value="${db.infos}"/>
             <constructor-arg index="2" type="java.lang.String" value="${db.username}"/>
             <constructor-arg index="3" type="java.lang.String" value="${db.password}"/>
 	</bean>
 	
-	<bean class="org.esupportail.restaurant.web.feed.RestaurantPojos" />
+	<bean class="org.esupportail.dining.web.feed.RestaurantPojos" />
 
 	<bean id="cacheManager" scope="singleton" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
 		<description>
@@ -70,11 +70,11 @@
 		<property name="configLocation" value="classpath:/cache/ehcache.xml" />
 	</bean>
 
-    <bean id="flux" class="org.esupportail.restaurant.web.feed.RestaurantFeed">
+    <bean id="flux" class="org.esupportail.dining.web.feed.RestaurantFeed">
     	<property name="dc" ref="DatabaseConnector" />
     </bean>
 
-	<bean id="restaurantCache" class="org.esupportail.restaurant.web.feed.RestaurantCache">
+	<bean id="restaurantCache" class="org.esupportail.dining.web.feed.RestaurantCache">
 		<constructor-arg index="0" ref="flux"/>
 	</bean>
 
