@@ -13,7 +13,6 @@ public class SessionSetupInitializationService implements IInitializationService
         this.dateLocalePattern = dateLocalePattern;
     }
 
-	@Override
 	public void initialize(PortletRequest request) {
 		PortletSession session = request.getPortletSession(true);
 		session.setAttribute("isAdmin", request.isUserInRole(this.userAdminRole), PortletSession.APPLICATION_SCOPE);

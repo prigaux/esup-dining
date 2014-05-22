@@ -22,7 +22,6 @@ import org.esupportail.restaurant.web.dao.DatabaseConnector;
 import org.esupportail.restaurant.web.models.Restaurant;
 import org.esupportail.restaurant.web.models.RestaurantFeedRoot;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 public class RestaurantFeed implements Serializable {
 
@@ -234,6 +233,7 @@ public class RestaurantFeed implements Serializable {
 		return true;
 	}
 	
+	@Override
 	public String toString() {
 		return this.jsonStringified;
 	}	

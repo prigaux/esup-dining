@@ -1,7 +1,6 @@
 package org.esupportail.restaurant.web.feed;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.googlecode.jsonschema2pojo.SchemaMapper;

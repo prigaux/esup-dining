@@ -59,13 +59,11 @@ public class AuthenticatorImpl implements Serializable, InitializingBean,
 		super();
 	}
 
-	@Override
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(authenticationService, "property authenticationService of class "
 				+ this.getClass().getName() + " can not be null");
 	}
 
-	@Override
 	public User getUser() throws Exception {
 		try {
 			AuthInfo authInfo = (AuthInfo) ContextUtils

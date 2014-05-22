@@ -42,12 +42,10 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 		users = new ArrayList<User>();
 	}
 
-	@Override
 	public void afterPropertiesSet() throws Exception {
 		// nothing to do yet.
 	}
 
-	@Override
 	public User getUser(String uid) {
 		User user = null;
 		for (User userInList : users) {
