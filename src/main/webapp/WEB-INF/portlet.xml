@@ -35,7 +35,7 @@
 	        Must see : https://wiki.jasig.org/display/UPM40/Consuming+uPortal+Groups+as+Roles
         -->
 	    <security-role-ref>
-	        <role-name>restaurantPortletAdmin</role-name>
+	        <role-name>diningPortletAdmin</role-name>
 	        <role-link>Everyone</role-link>
 	    </security-role-ref>
     </portlet>

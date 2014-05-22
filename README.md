@@ -65,11 +65,11 @@ Each of these arguments refers to a `*.sql` file located in `src/main/resources/
 
 ### Configuration
 
-Add you portlet to the dashboard and go in *EDIT mode* , to configure the portlet the user will to have `restaurantPortletAdmin` role. Default Everyone has this role, you can update this by changing the following lines in `src/main/webapp/WEB-INF/portlet.xml`
+Add you portlet to the dashboard and go in *EDIT mode* , to configure the portlet the user will to have `diningPortletAdmin` role. Default Everyone has this role, you can update this by changing the following lines in `src/main/webapp/WEB-INF/portlet.xml`
 
 ```
 <security-role-ref>
-    <role-name>restaurantPortletAdmin</role-name>
+    <role-name>diningPortletAdmin</role-name>
     <role-link>Everyone</role-link>
 </security-role-ref>
 ```
