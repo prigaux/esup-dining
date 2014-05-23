@@ -60,9 +60,9 @@ public class DBManager {
 
 		if (args.length == 0 || !argValue.contains(args[0])) {
 			System.out
-					.println("[ERROR] Incorrect argument, try again using -Dexec.args=\"...\""
-							+ ", argument can take this values : "
-							+ argValue.toString());
+			.println("[ERROR] Incorrect argument, try again using -Dexec.args=\"...\""
+					+ ", argument can take this values : "
+					+ argValue.toString());
 			return;
 		}
 
@@ -179,7 +179,10 @@ public class DBManager {
 						currentLine = br.readLine();
 					} while (currentLine != null && !currentLine.contains("*/"));
 
-					int lastIndexComment = currentLine.indexOf("*/");
+					int lastIndexComment = -1;
+					if(currentLine != null) {
+						lastIndexComment = currentLine.indexOf("*/");
+					}
 
 					if (lastIndexComment != -1) {
 
