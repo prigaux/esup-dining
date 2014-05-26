@@ -10,7 +10,7 @@ You will be able to :
 
 ## Datas
 
-You will need to insert JSON data for this portlet to work, you can watch the [JSON schema](https://github.com/gsouquet/RestaurantPortlet/blob/master/src/main/resources/schema/portlet-schema.json) to see how you will need to format your datas.
+You will need to insert JSON data for this portlet to work, you can watch the [JSON schema](https://github.com/gsouquet/esup-dining-portlet/blob/master/src/main/resources/schema/portlet-schema.json) to see how you will need to format your datas.
 
 ## Testing
 
