@@ -1,0 +1,74 @@
+Copyright (C) 2014 Université de La Rochelle http://www.univ-lr.fr
+Copyright (C) 2014 Esup Portail http://www.esup-portail.org
+@Author (C) 2014 Germain Souquet <germain.souquet@univ-lr.fr>
+@Contributor (C) 2014 Mathilde Guérin <mathilde.guerin@univ-lr.fr>
+
+Licensed under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at:
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on
+an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License.
+
+This project includes:
+  AOP alliance under Public Domain
+  Bean Validation API under Apache License, Version 2.0
+  Codemodel Core under CDDL v1.1 / GPL v2 dual license
+  Commons Lang under The Apache Software License, Version 2.0
+  Commons Logging under The Apache Software License, Version 2.0
+  Data Mapper for Jackson under The Apache Software License, Version 2.0
+  ehcache under The Apache Software License, Version 2.0
+  Ehcache Core under The Apache Software License, Version 2.0
+  Ehcache Spring Annotations - Core under Apache 2
+  esup-commons-auth under Apache License, Version 2.0
+  esup-commons-core under Apache License, Version 2.0
+  esup-commons-springmvc-portlet under Apache License, Version 2.0
+  esup-commons-web under Apache License, Version 2.0
+  esup-dining-portlet under Apache License, Version 2.0
+  esup-uportal-ws-client under Apache License, Version 2.0
+  FindBugs-Annotations under GNU Lesser Public License
+  Gson under The Apache Software License, Version 2.0
+  Guava (Google Common Libraries) under The Apache Software License, Version 2.0
+  ICU4J under ICU License
+  JA-SIG CAS Client for Java - Core under JA-SIG License for Use
+  Jackson under The Apache Software License, Version 2.0
+  Jackson-annotations under The Apache Software License, Version 2.0
+  Jackson-core under The Apache Software License, Version 2.0
+  jackson-databind under The Apache Software License, Version 2.0 or GNU Lesser General Public License, Version 2.1
+  JavaBeans Activation Framework (JAF) under Common Development and Distribution License (CDDL) v1.0
+  JavaMail API under Sun Binary Code License
+  javax.inject under The Apache Software License, Version 2.0
+  jdom under Apache style license
+  jsonschema2pojo-core under Apache License, Version 2.0
+  jsr168forwardport.org.springframework.web.portlet under Apache License, Version 2.0
+  jstl under Commons Development and Distribution License, Version 1.0
+  log4j under Apache License, Version 2.0
+  Pluto Portlet Tag Library under The Apache Software License, Version 2.0
+  Portlet API under Commons Development and Distribution License, Version 1.0
+  PostgreSQL JDBC Driver under BSD License
+  ROME, RSS and atOM utilitiEs for Java under The Apache Software License, Version 2.0
+  servlet-api under Commons Development and Distribution License, Version 1.0
+  SLF4J API Module under MIT License
+  SLF4J Simple Binding under Apache License, Version 2.0
+  spring-aop under Apache License, Version 2.0
+  spring-asm under Apache License, Version 2.0
+  spring-beans under Apache License, Version 2.0
+  spring-context under Apache License, Version 2.0
+  spring-context-support under Apache License, Version 2.0
+  spring-core under Apache License, Version 2.0
+  spring-expression under Apache License, Version 2.0
+  spring-test under Apache License, Version 2.0
+  spring-web under Apache License, Version 2.0
+  spring-webmvc under Apache License, Version 2.0
+  spring-webmvc-portlet under Apache License, Version 2.0
+  standard under Apache License, Version 2.0
+
+
+This project also includes code of the following entities:
+  bootstrap under The Apache Software License, Version 2.0
