@@ -21,8 +21,8 @@ import javax.portlet.RenderResponse;
 import org.esupportail.dining.domain.beans.User;
 import org.esupportail.dining.domainservices.services.auth.Authenticator;
 import org.esupportail.dining.web.dao.DatabaseConnector;
-import org.esupportail.dining.web.feed.RestaurantCache;
-import org.esupportail.dining.web.feed.RestaurantFeed;
+import org.esupportail.dining.web.feed.DiningCache;
+import org.esupportail.dining.web.feed.DiningFeed;
 import org.esupportail.dining.web.models.Manus;
 import org.esupportail.dining.web.models.Restaurant;
 import org.esupportail.dining.web.models.RestaurantFeedRoot;
@@ -42,12 +42,12 @@ public class ViewController extends AbstractExceptionController {
 	@Autowired
 	private DatabaseConnector dc;
 	@Autowired
-	private RestaurantFeed flux;
+	private DiningFeed feed;
 
-	private RestaurantFeedRoot restaurants;
+	private RestaurantFeedRoot dinings;
 
 	@Autowired
-	private RestaurantCache cache;
+	private DiningCache cache;
 
 	@RequestMapping
 	public ModelAndView renderMainView(RenderRequest request,
@@ -55,19 +55,20 @@ public class ViewController extends AbstractExceptionController {
 
 		ModelMap model = new ModelMap();
 
-		User user = authenticator.getUser();
+		User user = this.authenticator.getUser();
 
 		String[] areaToDisplay = null;
 
+		// get area to display
 		try {
-			ResultSet results = dc
+			ResultSet results = this.dc
 					.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='"
 							+ user.getLogin() + "';");
 			results.next();
 			areaToDisplay = results.getString("AREANAME").split(",");
 		} catch (Exception e) {
 			// we are here if the user doesn't set a specific area for himself
-			ResultSet results = dc
+			ResultSet results = this.dc
 					.executeQuery("SELECT AREANAME FROM PATHFLUX");
 			results.next();
 			try {
@@ -80,14 +81,15 @@ public class ViewController extends AbstractExceptionController {
 			}
 		}
 
+		// Get favorite for the curent user;
 		try {
-			ResultSet favList = dc
+			ResultSet favList = this.dc
 					.executeQuery("SELECT RESTAURANTID FROM FAVORITERESTAURANT WHERE USERNAME='"
 							+ user.getLogin() + "';");
 			List<Restaurant> favorites = new ArrayList<Restaurant>();
 
 			if (favList.next()) {
-				for (Restaurant r : flux.getFlux().getRestaurants()) {
+				for (Restaurant r : this.feed.getFeed().getRestaurants()) {
 
 					do {
 						if (r.getId() == favList.getInt("RESTAURANTID")) {
@@ -109,7 +111,7 @@ public class ViewController extends AbstractExceptionController {
 
 		try {
 
-			restaurants = flux.getFlux();
+			this.dinings = this.feed.getFeed();
 
 			List<Restaurant> dininghallList = new ArrayList<Restaurant>();
 
@@ -120,12 +122,12 @@ public class ViewController extends AbstractExceptionController {
 						new ArrayList<Restaurant>());
 			}
 
-			for (Restaurant restaurant : restaurants.getRestaurants()) {
+			for (Restaurant restaurant : this.dinings.getRestaurants()) {
 				if (areasToDisplayList.containsKey(restaurant.getArea())) {
 					restaurant.setAdditionalProperties("isClosed",
-							flux.isClosed(restaurant));
+							this.feed.isClosed(restaurant));
 					areasToDisplayList.get(restaurant.getArea())
-							.add(restaurant);
+					.add(restaurant);
 				}
 			}
 			model.put("restaurantLists", areasToDisplayList);
@@ -143,17 +145,17 @@ public class ViewController extends AbstractExceptionController {
 	public ModelAndView renderRestaurantView(RenderRequest request,
 			RenderResponse response,
 			@RequestParam(value = "id", required = true) int id)
-			throws Exception {
+					throws Exception {
 		ModelMap model = new ModelMap();
 
-		User user = authenticator.getUser();
+		User user = this.authenticator.getUser();
 
-		Restaurant restaurant = cache.getCachedRestaurant(id);
+		Restaurant restaurant = this.cache.getCachedDining(id);
 		model.put("restaurant", restaurant);
 
 		try {
 
-			ResultSet results = dc
+			ResultSet results = this.dc
 					.executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='"
 							+ user.getLogin()
 							+ "' AND RESTAURANTID='"
@@ -163,14 +165,14 @@ public class ViewController extends AbstractExceptionController {
 				model.put("isFavorite", true);
 			}
 
-			if (flux.isClosed(restaurant)) {
+			if (this.feed.isClosed(restaurant)) {
 				model.put("restaurantClosed", true);
 			}
 
 		} catch (NullPointerException e) { /*
-											 * Useful is the user isn't logged
-											 * in
-											 */
+		 * Useful is the user isn't logged
+		 * in
+		 */
 		}
 
 		return new ModelAndView("restaurant", model);
@@ -180,14 +182,14 @@ public class ViewController extends AbstractExceptionController {
 	public ModelAndView renderMealsView(RenderRequest request,
 			RenderResponse response,
 			@RequestParam(value = "id", required = true) int id)
-			throws Exception {
+					throws Exception {
 
 		ModelMap model = new ModelMap();
-		User user = authenticator.getUser();
+		User user = this.authenticator.getUser();
 
 		try {
 
-			ResultSet prefUser = dc
+			ResultSet prefUser = this.dc
 					.executeQuery("SELECT NUTRITIONCODE FROM nutritionPreferences WHERE USERNAME='"
 							+ user.getLogin() + "';");
 
@@ -201,13 +203,13 @@ public class ViewController extends AbstractExceptionController {
 
 		} catch (SQLException e) { /**/
 		} catch (NullPointerException e) { /*
-											 * Useful is the user isn't logged
-											 * in
-											 */
+		 * Useful is the user isn't logged
+		 * in
+		 */
 		}
 
 		try {
-			Restaurant restaurant = cache.getCachedRestaurant(id);
+			Restaurant restaurant = this.cache.getCachedDining(id);
 			model.put("restaurant", restaurant);
 			List<Manus> menuList = new ArrayList<Manus>();
 			Date dateNow = new Date();
@@ -221,7 +223,7 @@ public class ViewController extends AbstractExceptionController {
 			}
 			model.put("menus", menuList);
 
-			if (flux.isClosed(restaurant)) {
+			if (this.feed.isClosed(restaurant)) {
 				model.put("restaurantClosed", true);
 			}
 
@@ -231,7 +233,7 @@ public class ViewController extends AbstractExceptionController {
 		}
 
 		try {
-			ResultSet results = dc
+			ResultSet results = this.dc
 					.executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='"
 							+ user.getLogin()
 							+ "' AND RESTAURANTID='"
@@ -241,9 +243,9 @@ public class ViewController extends AbstractExceptionController {
 				model.put("isFavorite", true);
 			}
 		} catch (NullPointerException e) { /*
-											 * Useful is the user isn't logged
-											 * in
-											 */
+		 * Useful is the user isn't logged
+		 * in
+		 */
 		}
 
 		return new ModelAndView("meals", model);
@@ -252,19 +254,19 @@ public class ViewController extends AbstractExceptionController {
 	@RequestMapping(params = { "action=setFavorite" })
 	public void setFavorite(ActionRequest request, ActionResponse response,
 			@RequestParam(value = "id", required = true) String id)
-			throws Exception {
+					throws Exception {
 
-		User user = authenticator.getUser();
+		User user = this.authenticator.getUser();
 
 		try {
-			dc.executeUpdate("INSERT INTO FAVORITERESTAURANT VALUES ('"
+			this.dc.executeUpdate("INSERT INTO FAVORITERESTAURANT VALUES ('"
 					+ user.getLogin() + "', '" + id + "');");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (NullPointerException e) { /*
-											 * Useful is the user isn't logged
-											 * in
-											 */
+		 * Useful is the user isn't logged
+		 * in
+		 */
 		}
 
 		response.setRenderParameter("id", id);
@@ -280,9 +282,9 @@ public class ViewController extends AbstractExceptionController {
 			@RequestParam(value = "nutritionitems", required = false) String nutritionitems,
 			@RequestParam(value = "code", required = false) String code,
 			@RequestParam(value = "id", required = true) int id)
-			throws Exception {
+					throws Exception {
 
-		User user = authenticator.getUser();
+		User user = this.authenticator.getUser();
 		ModelMap model = new ModelMap();
 
 		model.put("restaurantId", id);
@@ -312,7 +314,7 @@ public class ViewController extends AbstractExceptionController {
 
 		try {
 
-			ResultSet prefUser = dc
+			ResultSet prefUser = this.dc
 					.executeQuery("SELECT NUTRITIONCODE FROM nutritionPreferences WHERE USERNAME='"
 							+ user.getLogin() + "';");
 			Set<String> nutritionPrefs = new HashSet<String>();
@@ -325,9 +327,9 @@ public class ViewController extends AbstractExceptionController {
 
 		} catch (SQLException e) { /**/
 		} catch (NullPointerException e) { /*
-											 * Useful is the user isn't logged
-											 * in
-											 */
+		 * Useful is the user isn't logged
+		 * in
+		 */
 		}
 
 		return new ModelAndView("dish", model);

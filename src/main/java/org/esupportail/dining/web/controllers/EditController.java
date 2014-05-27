@@ -16,7 +16,7 @@ import javax.portlet.RenderResponse;
 import org.esupportail.dining.domain.beans.User;
 import org.esupportail.dining.domainservices.services.auth.Authenticator;
 import org.esupportail.dining.web.dao.DatabaseConnector;
-import org.esupportail.dining.web.feed.RestaurantFeed;
+import org.esupportail.dining.web.feed.DiningFeed;
 import org.esupportail.dining.web.models.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,7 +34,7 @@ public class EditController extends AbstractExceptionController {
 	@Autowired
 	private DatabaseConnector dc;
 	@Autowired
-	private RestaurantFeed flux;
+	private DiningFeed feed;
 
 	@RequestMapping
 	public ModelAndView renderEditView(RenderRequest request,
@@ -42,7 +42,7 @@ public class EditController extends AbstractExceptionController {
 
 		ModelMap model = new ModelMap();
 
-		User user = authenticator.getUser();
+		User user = this.authenticator.getUser();
 		model.put("user", user);
 
 		int[] allergenCodes = { 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 13, 14 };
@@ -53,7 +53,7 @@ public class EditController extends AbstractExceptionController {
 
 		try {
 
-			ResultSet prefUser = dc
+			ResultSet prefUser = this.dc
 					.executeQuery("SELECT NUTRITIONCODE FROM nutritionPreferences WHERE USERNAME='"
 							+ user.getLogin() + "';");
 
@@ -71,7 +71,7 @@ public class EditController extends AbstractExceptionController {
 
 		try {
 			Set<String> areaList = new HashSet<String>();
-			for (Restaurant r : flux.getFlux().getRestaurants()) {
+			for (Restaurant r : this.feed.getFeed().getRestaurants()) {
 				areaList.add(r.getArea());
 			}
 
@@ -79,7 +79,7 @@ public class EditController extends AbstractExceptionController {
 
 			String userArea[] = null;
 			try {
-				ResultSet results = dc
+				ResultSet results = this.dc
 						.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='"
 								+ user.getLogin() + "';");
 				results.next();
@@ -88,7 +88,7 @@ public class EditController extends AbstractExceptionController {
 			} catch (SQLException e) {
 				// here we are if the user doesn't already have a specific area
 				// setting.
-				ResultSet results = dc
+				ResultSet results = this.dc
 						.executeQuery("SELECT AREANAME FROM PATHFLUX");
 				results.next();
 				try {
@@ -105,7 +105,7 @@ public class EditController extends AbstractExceptionController {
 
 			Set<String> favResults = new HashSet<String>();
 			try {
-				ResultSet results = dc
+				ResultSet results = this.dc
 						.executeQuery("SELECT RESTAURANTID FROM FAVORITERESTAURANT WHERE USERNAME='"
 								+ user.getLogin() + "'");
 				while (results.next()) {
@@ -117,7 +117,7 @@ public class EditController extends AbstractExceptionController {
 			}
 			model.put("favList", favResults);
 
-			List<Restaurant> listRestaurant = flux.getFlux().getRestaurants();
+			List<Restaurant> listRestaurant = this.feed.getFeed().getRestaurants();
 			List<Restaurant> listFavRestaurant = new ArrayList<Restaurant>();
 
 			for (Restaurant r : listRestaurant) {
@@ -150,7 +150,7 @@ public class EditController extends AbstractExceptionController {
 	public void setUserNutritionPreferences(ActionRequest request,
 			ActionResponse response) throws Exception {
 
-		String userLogin = authenticator.getUser().getLogin();
+		String userLogin = this.authenticator.getUser().getLogin();
 
 		Map parameters = request.getParameterMap();
 
@@ -161,7 +161,7 @@ public class EditController extends AbstractExceptionController {
 			if (parameters.get("code-" + code[i]) != null) {
 
 				try {
-					dc.executeUpdate("INSERT INTO nutritionPreferences (USERNAME, NUTRITIONCODE) VALUES ('"
+					this.dc.executeUpdate("INSERT INTO nutritionPreferences (USERNAME, NUTRITIONCODE) VALUES ('"
 							+ userLogin + "', '" + code[i] + "');");
 				} catch (SQLException e) { /**/
 				}
@@ -173,11 +173,11 @@ public class EditController extends AbstractExceptionController {
 				 * specific treatment
 				 */
 				try {
-					dc.executeUpdate("DELETE FROM nutritionPreferences WHERE USERNAME='"
+					this.dc.executeUpdate("DELETE FROM nutritionPreferences WHERE USERNAME='"
 							+ userLogin
 							+ "' AND  NUTRITIONCODE='"
 							+ code[i]
-							+ "';");
+									+ "';");
 				} catch (SQLException e) { /**/
 				}
 
@@ -192,9 +192,9 @@ public class EditController extends AbstractExceptionController {
 			ActionRequest request,
 			ActionResponse response,
 			@RequestParam(value = "chkArea[]", required = false) String[] listAreas)
-			throws Exception {
+					throws Exception {
 
-		User user = authenticator.getUser();
+		User user = this.authenticator.getUser();
 
 		String areanames = "";
 
@@ -206,7 +206,7 @@ public class EditController extends AbstractExceptionController {
 			}
 
 			try {
-				ResultSet results = dc
+				ResultSet results = this.dc
 						.executeQuery("SELECT * FROM USERAREA WHERE USERNAME='"
 								+ user.getLogin() + "';");
 				results.next();
@@ -214,7 +214,7 @@ public class EditController extends AbstractExceptionController {
 				results.updateRow();
 				results.close();
 			} catch (SQLException e) {
-				dc.executeUpdate("INSERT INTO USERAREA (USERNAME, AREANAME) VALUES ('"
+				this.dc.executeUpdate("INSERT INTO USERAREA (USERNAME, AREANAME) VALUES ('"
 						+ user.getLogin() + "', '" + areanames + "');");
 			}
 

@@ -12,16 +12,16 @@ import org.esupportail.dining.web.dao.DatabaseConnector;
 import org.esupportail.dining.web.models.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class RestaurantData {
+public class DiningData {
 
 	@Autowired
-	private RestaurantFeed feed;
+	private DiningFeed feed;
 	@Autowired
-	RestaurantCache cache;
+	DiningCache cache;
 	@Autowired
 	private DatabaseConnector dc;
 
-	public RestaurantData() {
+	public DiningData() {
 
 	}
 
@@ -29,12 +29,12 @@ public class RestaurantData {
 		List<Restaurant> favorites = new ArrayList<Restaurant>();
 
 		try {
-			ResultSet favList = dc
+			ResultSet favList = this.dc
 					.executeQuery("SELECT RESTAURANTID FROM FAVORITERESTAURANT WHERE USERNAME='"
 							+ user.getLogin() + "';");
 
 			if (favList.next()) {
-				for (Restaurant r : feed.getFlux().getRestaurants()) {
+				for (Restaurant r : this.feed.getFeed().getRestaurants()) {
 
 					do {
 						if (r.getId() == favList.getInt("RESTAURANTID")) {
@@ -58,7 +58,7 @@ public class RestaurantData {
 	public List<Restaurant> getRestaurantList(String zone) {
 		List<Restaurant> dininghallList = new ArrayList<Restaurant>();
 		try {
-			for (Restaurant restaurant : feed.getFlux().getRestaurants()) {
+			for (Restaurant restaurant : this.feed.getFeed().getRestaurants()) {
 				if (restaurant.getArea().equalsIgnoreCase(zone)) {
 					dininghallList.add(restaurant);
 				}
@@ -74,7 +74,7 @@ public class RestaurantData {
 
 		try {
 
-			ResultSet prefUser = dc
+			ResultSet prefUser = this.dc
 					.executeQuery("SELECT NUTRITIONCODE FROM nutritionPreferences WHERE USERNAME='"
 							+ user.getLogin() + "';");
 

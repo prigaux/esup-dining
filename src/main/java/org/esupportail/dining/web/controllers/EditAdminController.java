@@ -16,7 +16,7 @@ import javax.portlet.RenderResponse;
 import org.esupportail.dining.domain.beans.User;
 import org.esupportail.dining.domainservices.services.auth.Authenticator;
 import org.esupportail.dining.web.dao.DatabaseConnector;
-import org.esupportail.dining.web.feed.RestaurantFeed;
+import org.esupportail.dining.web.feed.DiningFeed;
 import org.esupportail.dining.web.models.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,7 +34,7 @@ public class EditAdminController extends AbstractExceptionController {
 	@Autowired
 	private DatabaseConnector dc;
 	@Autowired
-	private RestaurantFeed flux;
+	private DiningFeed feed;
 
 	@RequestMapping(params = { "action=adminSettings" })
 	public ModelAndView renderEditAdminView(RenderRequest request,
@@ -42,7 +42,7 @@ public class EditAdminController extends AbstractExceptionController {
 
 		ModelMap model = new ModelMap();
 
-		User user = authenticator.getUser();
+		User user = this.authenticator.getUser();
 		model.put("user", user);
 
 		// try {
@@ -51,7 +51,7 @@ public class EditAdminController extends AbstractExceptionController {
 
 		try {
 			Set<String> areaList = new HashSet<String>();
-			for (Restaurant r : flux.getFlux().getRestaurants()) {
+			for (Restaurant r : this.feed.getFeed().getRestaurants()) {
 				areaList.add(r.getArea());
 			}
 			model.put("areaList", areaList);
@@ -63,7 +63,7 @@ public class EditAdminController extends AbstractExceptionController {
 		String[] areanames = null;
 		ResultSet results = null;
 		try {
-			results = dc.executeQuery("SELECT URLFLUX, AREANAME FROM PATHFLUX");
+			results = this.dc.executeQuery("SELECT URLFLUX, AREANAME FROM PATHFLUX");
 			results.next();
 		} catch (SQLException e) {
 			// URL isn't set yet...
@@ -85,16 +85,16 @@ public class EditAdminController extends AbstractExceptionController {
 
 		// } catch (NullPointerException e) { e.printStackTrace(); }
 
-		/* Action urlFlux set urlError if form URL was not well-formed */
+		/* Action urlFeed set urlError if form URL was not well-formed */
 		String hasError = request.getParameter("urlError");
 		if (hasError != null) {
 			model.put("urlError", hasError);
 		}
 
 		/* Action setDefaultArea set urlError if form URL was not well-formed */
-		String zoneSubmit = request.getParameter("zoneSubmit");
-		if (zoneSubmit != null) {
-			model.put("zoneSubmit", zoneSubmit);
+		String areaSubmit = request.getParameter("areaSubmit");
+		if (areaSubmit != null) {
+			model.put("areaSubmit", areaSubmit);
 		}
 
 		/* From ForceFeedUpdate */
@@ -117,31 +117,31 @@ public class EditAdminController extends AbstractExceptionController {
 
 		/* Favorite Restaurants stats */
 
-		ResultSet results = dc
+		ResultSet results = this.dc
 				.executeQuery("SELECT RESTAURANTID FROM FAVORITERESTAURANT");
 
 		HashMap<Integer, Integer> nbRestaurant = new HashMap<Integer, Integer>();
 
 		while (results.next()) {
-			int currentValue = (nbRestaurant
+			int currentValue = nbRestaurant
 					.get(results.getInt("RESTAURANTID")) == null ? 0
-					: nbRestaurant.get(results.getInt("RESTAURANTID")));
+							: nbRestaurant.get(results.getInt("RESTAURANTID"));
 			if (currentValue == 0) {
 				nbRestaurant.put(results.getInt("RESTAURANTID"), 1);
 			} else {
 				nbRestaurant
-						.put(results.getInt("RESTAURANTID"), ++currentValue);
+				.put(results.getInt("RESTAURANTID"), ++currentValue);
 			}
 		}
 
 		HashMap<Integer, String> restaurantsName = new HashMap<Integer, String>();
-		for (Restaurant r : flux.getFlux().getRestaurants()) {
+		for (Restaurant r : this.feed.getFeed().getRestaurants()) {
 			restaurantsName.put(r.getId(), r.getTitle());
 		}
 
 		/* Nutrition preferences stats */
 
-		ResultSet resultsNutrit = dc
+		ResultSet resultsNutrit = this.dc
 				.executeQuery("SELECT NUTRITIONCODE, COUNT(*) FROM NUTRITIONPREFERENCES GROUP BY NUTRITIONCODE");
 		Map<Integer, Integer> prefCodeList = new HashMap<Integer, Integer>();
 
@@ -156,23 +156,23 @@ public class EditAdminController extends AbstractExceptionController {
 		return new ModelAndView("stats", model);
 	}
 
-	@RequestMapping(params = { "action=urlFlux" })
-	public void setURLFlux(ActionRequest request, ActionResponse response,
+	@RequestMapping(params = { "action=urlFeed" })
+	public void setURLFeed(ActionRequest request, ActionResponse response,
 			@RequestParam(value = "url", required = true) String url)
-			throws Exception {
+					throws Exception {
 		response.setRenderParameter("action", "adminSettings");
 		try {
-			URL urlFlux = new URL(url);
-			flux.setPath(urlFlux);
+			URL urlFeed = new URL(url);
+			this.feed.setPath(urlFeed);
 			response.setRenderParameter("urlError", "false");
 			// If URL is correct, then we can insert this into the database.
-			ResultSet results = dc.executeQuery("SELECT * FROM PATHFLUX");
+			ResultSet results = this.dc.executeQuery("SELECT * FROM PATHFLUX");
 			results.next();
 			results.updateString("URLFLUX", url);
 			results.updateRow();
 		} catch (SQLException e) {
 			// We get a SQLException if the row doesn't exist in the table
-			dc.executeUpdate("INSERT INTO PATHFLUX (URLFLUX) VALUES ('" + url
+			this.dc.executeUpdate("INSERT INTO PATHFLUX (URLFLUX) VALUES ('" + url
 					+ "')");
 		} catch (Exception e) {
 			response.setRenderParameter("urlError", "true");
@@ -184,7 +184,7 @@ public class EditAdminController extends AbstractExceptionController {
 			ActionRequest request,
 			ActionResponse response,
 			@RequestParam(value = "chkArea[]", required = false) String[] listAreas)
-			throws Exception {
+					throws Exception {
 		String areanames = "";
 		if (listAreas != null) {
 			for (int i = 0; i < listAreas.length; i++) {
@@ -194,9 +194,9 @@ public class EditAdminController extends AbstractExceptionController {
 		}
 
 		response.setRenderParameter("action", "adminSettings");
-		response.setRenderParameter("zoneSubmit", "true");
+		response.setRenderParameter("areaSubmit", "true");
 
-		ResultSet results = dc.executeQuery("SELECT * FROM PATHFLUX");
+		ResultSet results = this.dc.executeQuery("SELECT * FROM PATHFLUX");
 		results.next();
 		results.updateString("AREANAME", areanames);
 		results.updateRow();
@@ -206,7 +206,7 @@ public class EditAdminController extends AbstractExceptionController {
 	public void feedUpdate(ActionRequest request, ActionResponse response)
 			throws Exception {
 
-		Boolean isUpdated = flux.update();
+		Boolean isUpdated = this.feed.update();
 
 		response.setRenderParameter("action", "adminSettings");
 		response.setRenderParameter("update", isUpdated.toString());

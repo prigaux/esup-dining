@@ -10,7 +10,6 @@ public class DatabaseConnector {
 
 	private Connection connection;
 	private Statement statement;
-	private String dbInitType;
 
 	// db connection infos in src/main/resources/defaults.properties
 	public DatabaseConnector(String db_driver, String db_infos, String db_user,
@@ -20,7 +19,7 @@ public class DatabaseConnector {
 			this.connection = DriverManager.getConnection(db_infos, db_user,
 					db_pwd);
 			this.connection.setAutoCommit(true);
-			this.statement = connection.createStatement(
+			this.statement = this.connection.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE);
 		} catch (Exception e) {
@@ -30,11 +29,11 @@ public class DatabaseConnector {
 	}
 
 	public ResultSet executeQuery(String query) throws SQLException {
-		return statement.executeQuery(query);
+		return this.statement.executeQuery(query);
 	}
 
 	public void executeUpdate(String update) throws SQLException {
-		statement.executeUpdate(update);
+		this.statement.executeUpdate(update);
 	}
 
 }

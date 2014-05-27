@@ -23,17 +23,17 @@ import org.esupportail.dining.web.models.Restaurant;
 import org.esupportail.dining.web.models.RestaurantFeedRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class RestaurantFeed implements Serializable {
+public class DiningFeed implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1367711775088961505L;
 	@Autowired
-	RestaurantCache cache;
+	DiningCache cache;
 	private DatabaseConnector dc;
 	private String jsonStringified;
-	private RestaurantFeedRoot flux;
+	private RestaurantFeedRoot feed;
 	private ObjectMapper mapper;
 	private URL path;
 
@@ -43,28 +43,23 @@ public class RestaurantFeed implements Serializable {
 		this.mapper = new ObjectMapper();
 
 		try {
-			ResultSet results = dc.executeQuery("SELECT URLFLUX FROM PATHFLUX");
-			results.next(); // Move the cursor to the first line.
-			// results.getUrl... throw an exception : This function is not
-			// supported
-			// When we'll update to postgre or something, try this out :
-			// URL urlFlux = results.getURL("URLFLUX");
-			// Should be better.
-			URL urlFlux = null;
+			ResultSet results = this.dc.executeQuery("SELECT URLFLUX FROM PATHFLUX");
+			results.next();
+			URL urlfeed = null;
 			try {
-				urlFlux = new URL(results.getString("URLFLUX"));
+				urlfeed = new URL(results.getString("URLFLUX"));
 			} catch (MalformedURLException e) {
 				// Nothing to do because normally, we check the URL validity
 				// before the inserting this row.
 			}
-			this.setPath(urlFlux);
+			this.setPath(urlfeed);
 		} catch (Exception e) { /* */
 		}
 	}
 
 	private RestaurantFeedRoot mapJson() throws JsonParseException,
-			JsonMappingException, IOException {
-		return mapper.readValue(this.jsonStringified, RestaurantFeedRoot.class);
+	JsonMappingException, IOException {
+		return this.mapper.readValue(this.jsonStringified, RestaurantFeedRoot.class);
 	}
 
 	public URL getPath() {
@@ -72,7 +67,7 @@ public class RestaurantFeed implements Serializable {
 	}
 
 	public void setPath(URL path) throws JsonParseException,
-			JsonMappingException, IOException {
+	JsonMappingException, IOException {
 		this.path = path;
 		// If the user sets a new path, we have to update json string and re-map
 		// the all json file.
@@ -84,7 +79,7 @@ public class RestaurantFeed implements Serializable {
 	}
 
 	public void updateJson() throws JsonParseException, JsonMappingException,
-			IOException {
+	IOException {
 		URLConnection yc = null;
 		try {
 			yc = this.path.openConnection();
@@ -101,7 +96,7 @@ public class RestaurantFeed implements Serializable {
 			e.printStackTrace();
 		}
 
-		// get a stringified version of the flux to help equality comparison
+		// get a stringified version of the feed to help equality comparison
 		this.jsonStringified = this.getJsonContent(br);
 
 		try {
@@ -110,8 +105,8 @@ public class RestaurantFeed implements Serializable {
 			e.printStackTrace();
 		}
 
-		// Init flux by mapping JSON to POJO
-		this.flux = this.mapJson();
+		// Init feed by mapping JSON to POJO
+		this.feed = this.mapJson();
 	}
 
 	private String getJsonContent(BufferedReader in) {
@@ -131,12 +126,12 @@ public class RestaurantFeed implements Serializable {
 		return jsonText;
 	}
 
-	public RestaurantFeedRoot getFlux() {
-		return this.flux;
+	public RestaurantFeedRoot getFeed() {
+		return this.feed;
 	}
 
-	public void setFlux(RestaurantFeedRoot flux) {
-		this.flux = flux;
+	public void setFeed(RestaurantFeedRoot feed) {
+		this.feed = feed;
 	}
 
 	public boolean update() {
@@ -172,17 +167,14 @@ public class RestaurantFeed implements Serializable {
 		if (!this.jsonStringified.equals(tempJson)) {
 			this.jsonStringified = tempJson;
 			try {
-				this.flux = this.mapJson();
-				cache.cacheReset(RestaurantCache.RESTAURANT_CACHE_NAME);
-				cache.cacheRestaurant();
+				this.feed = this.mapJson();
+				this.cache.cacheReset(DiningCache.DINING_CACHE_NAME);
+				this.cache.cacheDining();
 			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -190,15 +182,6 @@ public class RestaurantFeed implements Serializable {
 		} else {
 			return false;
 		}
-	}
-
-	public Restaurant getRestaurantById(int id) {
-		for (Restaurant r : flux.getRestaurants()) {
-			if (r.getId() == id) {
-				return r;
-			}
-		}
-		return null;
 	}
 
 	public boolean isClosed(Restaurant r) {
@@ -227,8 +210,8 @@ public class RestaurantFeed implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((jsonStringified == null) ? 0 : jsonStringified.hashCode());
-		result = prime * result + ((path == null) ? 0 : path.hashCode());
+				+ (this.jsonStringified == null ? 0 : this.jsonStringified.hashCode());
+		result = prime * result + (this.path == null ? 0 : this.path.hashCode());
 		return result;
 	}
 
@@ -243,19 +226,19 @@ public class RestaurantFeed implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		RestaurantFeed other = (RestaurantFeed) obj;
-		if (jsonStringified == null) {
+		DiningFeed other = (DiningFeed) obj;
+		if (this.jsonStringified == null) {
 			if (other.jsonStringified != null) {
 				return false;
 			}
-		} else if (!jsonStringified.equals(other.jsonStringified)) {
+		} else if (!this.jsonStringified.equals(other.jsonStringified)) {
 			return false;
 		}
-		if (path == null) {
+		if (this.path == null) {
 			if (other.path != null) {
 				return false;
 			}
-		} else if (!path.equals(other.path)) {
+		} else if (!this.path.equals(other.path)) {
 			return false;
 		}
 		return true;

@@ -40,7 +40,7 @@
 			</c:forEach>
 			
 			<br/>
-			<c:if test="${zoneSubmit}">
+			<c:if test="${areaSubmit}">
 				<label class="is-valid icn-fam icn-fam-valid">
 					<spring:message code="edit.msg.success"/>
 				</label>
