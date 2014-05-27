@@ -1,5 +1,4 @@
-# Created by http://www.gitignore.io
-
+logs/
 .classpath
 
 ### OSX ###

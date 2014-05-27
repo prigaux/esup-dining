@@ -21,7 +21,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.esupportail.dining.web.dao.DatabaseConnector;
 import org.esupportail.dining.web.models.Restaurant;
 import org.esupportail.dining.web.models.RestaurantFeedRoot;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class DiningFeed implements Serializable {
 
@@ -29,7 +28,6 @@ public class DiningFeed implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -1367711775088961505L;
-	@Autowired
 	DiningCache cache;
 	private DatabaseConnector dc;
 	private String jsonStringified;
@@ -39,6 +37,7 @@ public class DiningFeed implements Serializable {
 
 	@PostConstruct
 	public void init() {
+		this.cache = new DiningCache(this);
 		this.jsonStringified = new String();
 		this.mapper = new ObjectMapper();
 
