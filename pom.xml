@@ -56,6 +56,33 @@
                     </licenseMapping>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <version>1.9.0</version>
+                <configuration>
+                    <header>src/etc/header.txt</header>
+                    <includes>
+                        <include>src/main/java/**/*.java</include>
+                        <include>src/main/resources/**</include>
+                        <include>src/main/webapp/css/esup-dining-portlet.css</include>
+                        <include>src/main/webapp/properties/**</include>
+                        <include>src/main/webapp/WEB-INF</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*.json</exclude>
+                    </excludes>
+                    <strictCheck>true</strictCheck>
+                </configuration>                
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
