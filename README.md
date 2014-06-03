@@ -56,7 +56,7 @@ Configure your database as said in the Testing chapter.
 You can perform multiple actions on the database using a maven goal,
 
 ```
-mvn exec:java -Dexec.args="[arg]"
+mvn exec:java -Dexec.args="database" -Dexec.args="[arg]"
 ```
 
 `[arg]` can take this values `create`, `update`, `delete`, `drop`

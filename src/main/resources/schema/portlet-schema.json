@@ -29,6 +29,11 @@
 							"id": "/restaurants/0/wifi",
 							"required":false
 						},
+						"capacity": {
+							"type":"integer",
+							"id": "/restaurants/0/capacity",
+							"required":false
+						},
 						"address": {
 							"type":"string",
 							"id": "/restaurants/0/address",
@@ -97,6 +102,29 @@
 									}
 								}
 							}
+						},
+						"extras" : {
+							"type":"array",
+							"id": "/restaurants/0/extras",
+							"required":false,
+							"items":
+								{
+									"type":"object",
+									"id": "/restaurants/0/extras/0",
+									"required":false,
+									"properties" : {
+										"name" : {
+											"type" : "string",
+											"id" : "/restaurants/0/extras/0/name",
+											"required" : true
+										},
+										"value" : {
+											"type" : "string",
+											"id" : "/restaurants/0/extras/0/value",
+											"required" : true
+										}
+									}
+								}
 						},
 						"menus": {
 							"type":"array",

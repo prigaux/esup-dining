@@ -15,32 +15,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.esupportail.dining.web.feed;
-
-import java.io.File;
-import java.net.URL;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.esupportail.dining.batch;
 
 import com.googlecode.jsonschema2pojo.SchemaMapper;
 import com.sun.codemodel.JCodeModel;
+import java.io.File;
+import java.net.URL;
 
-public class DiningPojoGenerator {
+public class POJOGenerator {
 
-	private final File jsonSchema = new File(
-			"src/main/resources/schema/portlet-schema.json");
-	private final File outputFolder = new File("src/main/java");
+        private static final File jsonSchema = new File("src/main/resources/schema/portlet-schema.json");
+        private static final File outputFolder = new File("src/main/java");
+    
+        private static final String packageName = "org.esupportail.dining.web.models";
+        
+	public static void exec(String [] args) {
+            
+            try {
+                POJOGenerator.deleteFilesFromFolder(new File("src/main/java/org/esupportail/dining/web/models"));
+            } catch (Exception e) { /* */ }
+            
+            POJOGenerator.generate();
+            
+	} 
 
-	private final boolean generateInit = false;
-
-	public DiningPojoGenerator() throws Exception {
-		if(this.generateInit) {
-			if(this.outputFolder.listFiles().length > 0) {
-				this.deleteFilesFromFolder(this.outputFolder);
-			}
-			this.generatePOJO();
-		}
-	}
-
-	private void deleteFilesFromFolder(File folder) {
+	private static void deleteFilesFromFolder(File folder) {
 		for (File f : folder.listFiles()) {
 			boolean success = f.delete();
 			if (!success) {
@@ -50,17 +53,21 @@ public class DiningPojoGenerator {
 	}
 
 	// Create Java Class based on the JSON Schema
-	private void generatePOJO() {
+	private static void generate() {
 		JCodeModel codeModel = new JCodeModel();
 		// method give in the javadoc, looks dirty but recommanded
 		URL jsonSchemaUrl;
 		try {
-			jsonSchemaUrl = this.jsonSchema.toURI().toURL();
+			jsonSchemaUrl = POJOGenerator.jsonSchema.toURI().toURL();
 			new SchemaMapper().generate(codeModel, "RestaurantFeedRoot",
 					"org.esupportail.dining.web.models", jsonSchemaUrl);
-			codeModel.build(this.outputFolder);
+			codeModel.build(POJOGenerator.outputFolder);
 		} catch (Exception e) {
-			e.printStackTrace();
+                    e.printStackTrace();
 		}
 	}
+        
+        
+        
+
 }

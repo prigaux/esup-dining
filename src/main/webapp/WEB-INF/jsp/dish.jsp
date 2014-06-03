@@ -42,11 +42,11 @@
 		<p>
 			<strong><spring:message code="meal.nutritionitems"/> :</strong>
 			<ul>
-			<c:forEach var="nutritionitem" items="${nutritionitems}">
-				<li>
-					<strong>${nutritionitem.name}</strong> : ${nutritionitem.value}
-				</li>
-			</c:forEach>
+				<c:forEach var="nutritionitem" items="${nutritionitems}">
+					<li>
+						<strong>${nutritionitem.name}</strong> : ${nutritionitem.value}
+					</li>
+				</c:forEach>
 			</ul>
 		</p>
 	</c:if>

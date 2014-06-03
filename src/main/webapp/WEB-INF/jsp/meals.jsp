@@ -82,7 +82,7 @@
 					</li>
 					</c:if>
 				</ul>
-			<div>
+			</div>
 		</nav>
 		
 		<div class="menus">
@@ -153,14 +153,13 @@
 
 												<c:if test="${not empty dish.code or not empty dish.ingredients or not empty dish.nutritionitems}">
 												<a href="${viewDish}">
-												</c:if>
-													${dish.name}
-												<c:if test="${not empty dish.code or not empty dish.ingredients or not empty dish.nutritionitems}">
+													</c:if>
+														${dish.name}
+													<c:if test="${not empty dish.code or not empty dish.ingredients or not empty dish.nutritionitems}">
 													<c:forEach var="codeNumber" items="${dish.code}">
 														<img src="<%= renderRequest.getContextPath() %><spring:message code="meal.code.${codeNumber}.img" />"
 														     alt="<spring:message code="meal.code.${codeNumber}.description" />"
-															 title="<spring:message code="meal.code.${codeNumber}.name" />"
-														/>									
+															 title="<spring:message code="meal.code.${codeNumber}.name" />"/>									
 													</c:forEach>
 												</a>
 												</c:if>				

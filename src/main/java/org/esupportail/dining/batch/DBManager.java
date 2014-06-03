@@ -54,7 +54,7 @@ public class DBManager {
 	private static final String FILE_DELETE = "database/delete.sql";
 	private static final String FILE_DROP = "database/drop.sql";
 
-	public static void main(String[] args) throws Exception {
+	public static void exec(String[] args) throws Exception {
 
 		Properties prop = new Properties();
 		InputStream is = DBManager.class.getClassLoader().getResourceAsStream(
@@ -75,7 +75,7 @@ public class DBManager {
 				DBManager.INIT_UPDATE, DBManager.INIT_DELETE,
 				DBManager.INIT_DROP, DBManager.INIT_VALIDATE);
 
-		if (args.length == 0 || !argValue.contains(args[0])) {
+		if (args.length == 0 || !argValue.contains(args[1])) {
 			System.out
 			.println("[ERROR] Incorrect argument, try again using -Dexec.args=\"...\""
 					+ ", argument can take this values : "
@@ -85,19 +85,19 @@ public class DBManager {
 
 		String returnSequence = "[INFO] All sql statements have been executed. Your tables are now ";
 
-		if (DBManager.INIT_CREATE.equals(args[0])) {
+		if (DBManager.INIT_CREATE.equals(args[1])) {
 			createTables();
 			returnSequence += "created";
 		}
-		if (DBManager.INIT_UPDATE.equals(args[0])) {
+		if (DBManager.INIT_UPDATE.equals(args[1])) {
 			updateTables();
 			returnSequence += "updated";
 		}
-		if (DBManager.INIT_DELETE.equals(args[0])) {
+		if (DBManager.INIT_DELETE.equals(args[1])) {
 			deleteTables();
 			returnSequence += "empty";
 		}
-		if (DBManager.INIT_DROP.equals(args[0])) {
+		if (DBManager.INIT_DROP.equals(args[1])) {
 			dropTables();
 			returnSequence += "deleted";
 		}

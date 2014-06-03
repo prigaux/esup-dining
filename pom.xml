@@ -6,27 +6,72 @@
     <artifactId>esup-dining-portlet</artifactId>
     <packaging>war</packaging>
     <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.1</version>
-                <configuration>
-                    <webResources>
-                        <resource>
-                            <filtering>true</filtering>
-                            <directory>src/main/webapp</directory>
-                            <includes>
-                                <include>WEB-INF/portlet.xml</include>
-                            </includes>
-                        </resource>
-                    </webResources>
-                    <warName>${project.artifactId}</warName>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+    	<pluginManagement>
+	        <plugins>
+	            <plugin>
+	                <artifactId>maven-war-plugin</artifactId>
+	                <version>2.1</version>
+	                <configuration>
+	                    <webResources>
+	                        <resource>
+	                            <filtering>true</filtering>
+	                            <directory>src/main/webapp</directory>
+	                            <includes>
+	                                <include>WEB-INF/portlet.xml</include>
+	                            </includes>
+	                        </resource>
+	                    </webResources>
+	                    <warName>${project.artifactId}</warName>
+	                </configuration>
+	            </plugin>
+	            <plugin>
+	                <groupId>net.jlehtinen.portlet</groupId>
+	                <artifactId>portlet-prototyping-maven-plugin</artifactId>
+	                <version>0.6</version>
+	            </plugin>
+	            <plugin>
+	                <groupId>org.jasig.maven</groupId>
+	                <artifactId>maven-notice-plugin</artifactId>
+	                <version>1.0.4</version>
+	                <configuration>
+	                    <noticeTemplate>src/etc/NOTICE.template</noticeTemplate>
+	                    <licenseMapping>
+	                        <param>https://source.jasig.org/licenses/license-mappings.xml</param>
+	                        <param>src/etc/license-mappings.xml</param>
+	                    </licenseMapping>
+	                </configuration>
+	            </plugin>
+	            <plugin>
+	                <groupId>com.mycila.maven-license-plugin</groupId>
+	                <artifactId>maven-license-plugin</artifactId>
+	                <version>1.9.0</version>
+	                <configuration>
+	                    <header>src/etc/header.txt</header>
+	                    <includes>
+	                        <include>src/main/java/**/*.java</include>
+	                        <include>src/main/resources/**</include>
+	                        <include>src/main/webapp/css/esup-dining-portlet.css</include>
+	                        <include>src/main/webapp/properties/**</include>
+	                        <include>src/main/webapp/WEB-INF</include>
+	                    </includes>
+	                    <excludes>
+	                        <exclude>**/*.json</exclude>
+	                    </excludes>
+	                    <strictCheck>true</strictCheck>
+	                </configuration>                
+	                <executions>
+	                    <execution>
+	                        <phase>process-sources</phase>
+	                        <goals>
+	                            <goal>format</goal>
+	                        </goals>
+	                    </execution>
+	                </executions>
+	            </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
-                    <version>1.2.1</version>
+                    <version>1.3</version>
                     <executions>
                         <execution>
                             <goals>
@@ -36,54 +81,11 @@
                     </executions>
                     <configuration>
                         <executable>java</executable>
-                        <mainClass>org.esupportail.dining.batch.DBManager</mainClass>
+                        <mainClass>org.esupportail.dining.batch.BatchHandler</mainClass>
                     </configuration>
-            </plugin>
-            <plugin>
-                <groupId>net.jlehtinen.portlet</groupId>
-                <artifactId>portlet-prototyping-maven-plugin</artifactId>
-                <version>0.6</version>
-            </plugin>
-            <plugin>
-                <groupId>org.jasig.maven</groupId>
-                <artifactId>maven-notice-plugin</artifactId>
-                <version>1.0.4</version>
-                <configuration>
-                    <noticeTemplate>src/etc/NOTICE.template</noticeTemplate>
-                    <licenseMapping>
-                        <param>https://source.jasig.org/licenses/license-mappings.xml</param>
-                        <param>src/etc/license-mappings.xml</param>
-                    </licenseMapping>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.mycila.maven-license-plugin</groupId>
-                <artifactId>maven-license-plugin</artifactId>
-                <version>1.9.0</version>
-                <configuration>
-                    <header>src/etc/header.txt</header>
-                    <includes>
-                        <include>src/main/java/**/*.java</include>
-                        <include>src/main/resources/**</include>
-                        <include>src/main/webapp/css/esup-dining-portlet.css</include>
-                        <include>src/main/webapp/properties/**</include>
-                        <include>src/main/webapp/WEB-INF</include>
-                    </includes>
-                    <excludes>
-                        <exclude>**/*.json</exclude>
-                    </excludes>
-                    <strictCheck>true</strictCheck>
-                </configuration>                
-                <executions>
-                    <execution>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>format</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+                </plugin>         
+	        </plugins>    	
+    	</pluginManagement>
     </build>
     <dependencies>
         <dependency>
@@ -121,7 +123,7 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
-            <version>2.4</version>
+            <version>2.5</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>

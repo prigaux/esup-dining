@@ -27,7 +27,7 @@
 					<xsl:for-each select="//restaurant">
 						{
 							<xsl:variable name="restaurantId" select="@id"/>
-							"id" : <xsl:value-of select="substring('r6', 2)"/>,
+							"id" : <xsl:value-of select="substring($restaurantId, 2)"/>,
 							"title" : "<xsl:value-of select='@nom'/>",
 							"lat" : <xsl:value-of select='@lat'/>,
 							"lon" : <xsl:value-of select='@lon'/>,
@@ -43,6 +43,9 @@
 							</xsl:if>
 							<xsl:if test="@accessibilite">
 							"accessibility" : <xsl:value-of select="@accessibilite"/>,
+							</xsl:if>
+							<xsl:if test="@capacite">
+							"capacity" : <xsl:value-of select="@capacite"/>,
 							</xsl:if>
 							<xsl:if test="@wifi">
 							"wifi" : <xsl:value-of select="@wifi"/>,
@@ -77,6 +80,16 @@
 									{
 										"name" : "<xsl:value-of select="@nom"/>"
 									}<xsl:if test="position() != last()">,</xsl:if>
+								</xsl:for-each>
+							],
+							</xsl:if>
+							<xsl:if test="./extras">
+							"extras" : [	
+								<xsl:for-each select="./extras/item">
+								{
+									"name" : <xsl:value-of select="@name" />,
+									"value" : <xsl:value-of select="@value" />
+								}<xsl:if test="position() != last()">,</xsl:if>
 								</xsl:for-each>
 							],
 							</xsl:if>

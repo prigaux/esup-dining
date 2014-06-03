@@ -1,9 +1,7 @@
 
 package org.esupportail.dining.web.models;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -18,68 +16,30 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "code",
-    "ingredients",
     "name",
-    "nutritionitems"
+    "value"
 })
-public class Dish {
+public class Extra {
 
     /**
      * 
-     */
-    @JsonProperty("code")
-    private List<Integer> code = new ArrayList<Integer>();
-    /**
-     * 
-     */
-    @JsonProperty("ingredients")
-    private String ingredients;
-    /**
+     * (Required)
      * 
      */
     @JsonProperty("name")
     private String name;
     /**
      * 
+     * (Required)
+     * 
      */
-    @JsonProperty("nutritionitems")
-    private List<Nutritionitem> nutritionitems = new ArrayList<Nutritionitem>();
+    @JsonProperty("value")
+    private String value;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      * 
-     */
-    @JsonProperty("code")
-    public List<Integer> getCode() {
-        return code;
-    }
-
-    /**
-     * 
-     */
-    @JsonProperty("code")
-    public void setCode(List<Integer> code) {
-        this.code = code;
-    }
-
-    /**
-     * 
-     */
-    @JsonProperty("ingredients")
-    public String getIngredients() {
-        return ingredients;
-    }
-
-    /**
-     * 
-     */
-    @JsonProperty("ingredients")
-    public void setIngredients(String ingredients) {
-        this.ingredients = ingredients;
-    }
-
-    /**
+     * (Required)
      * 
      */
     @JsonProperty("name")
@@ -89,6 +49,8 @@ public class Dish {
 
     /**
      * 
+     * (Required)
+     * 
      */
     @JsonProperty("name")
     public void setName(String name) {
@@ -97,18 +59,22 @@ public class Dish {
 
     /**
      * 
+     * (Required)
+     * 
      */
-    @JsonProperty("nutritionitems")
-    public List<Nutritionitem> getNutritionitems() {
-        return nutritionitems;
+    @JsonProperty("value")
+    public String getValue() {
+        return value;
     }
 
     /**
      * 
+     * (Required)
+     * 
      */
-    @JsonProperty("nutritionitems")
-    public void setNutritionitems(List<Nutritionitem> nutritionitems) {
-        this.nutritionitems = nutritionitems;
+    @JsonProperty("value")
+    public void setValue(String value) {
+        this.value = value;
     }
 
     @Override

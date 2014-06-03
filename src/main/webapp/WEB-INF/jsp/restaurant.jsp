@@ -36,7 +36,7 @@
 				    <span class="icon-bar"></span>
 				    <span class="icon-bar"></span>
 		    	</span>
-		    	<span class="navbar-brand">${restaurant.title}</spanspan>
+		    	<span class="navbar-brand">${restaurant.title}</span>
 		    </div>
 
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -95,7 +95,7 @@
 		
 		<%-- start short desc --%>
 		<c:if test="${not empty restaurant.shortdesc}">
-			<p c>
+			<p>
 				${restaurant.shortdesc}
 			</p>
 		</c:if>		
@@ -117,6 +117,14 @@
 					</p>
 				</c:if>		
 				<%-- end description --%>
+				<%-- start capacity --%>
+				<c:if test="${not empty restaurant.capacity}">
+					<p>
+						<strong><spring:message code="restaurant.msg.capacity"/></strong> : 
+						${restaurant.capacity}
+					</p>
+				</c:if>
+				<%-- end capacity --%>
 				<%-- start operational hours --%>
 				<c:if test="${not empty restaurant.operationalhours}">
 					<p>
@@ -170,7 +178,17 @@
 						</c:forEach>
 					</ul>
 				</c:if>	
-				<%-- end payment method --%>			
+				<%-- end payment method --%>	
+
+				<%-- start extras --%>
+				<c:if test="${not empty restaurant.extras}">
+					<c:forEach var="extra" items="${restaurant.extras}">
+						<p>
+							<strong>${extra.name}</strong> : ${extra.value}
+						</p>
+					</c:forEach>
+				</c:if>
+
 			</div>
 
 			<%-- start table opening --%>			
@@ -213,9 +231,9 @@
 					<table id="opening" class="table table-striped">
 						<tr>
 							<th></th>
-							<th><spring:message code="restaurant.msg.opening.morning"/></strong></th>
-							<th><spring:message code="restaurant.msg.opening.midday"/></strong></th>
-							<th><spring:message code="restaurant.msg.opening.evening"/></strong></th>
+							<th><strong><spring:message code="restaurant.msg.opening.morning"/></strong></th>
+							<th><strong><spring:message code="restaurant.msg.opening.midday"/></strong></th>
+							<th><strong><spring:message code="restaurant.msg.opening.evening"/></strong></th>
 					</table>
 					<script type="text/javascript">
 						var opening = "${restaurant.opening}";

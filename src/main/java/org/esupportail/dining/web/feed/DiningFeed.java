@@ -210,7 +210,6 @@ public class DiningFeed implements Serializable {
 		try {
 			reopenningDate = sf.parse(r.getClosing());
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -278,4 +277,5 @@ public class DiningFeed implements Serializable {
 	public void run() {
 		this.update();
 	}
+
 }

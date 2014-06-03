@@ -130,8 +130,6 @@ public class ViewController extends AbstractExceptionController {
 
 			this.dinings = this.feed.getFeed();
 
-			List<Restaurant> dininghallList = new ArrayList<Restaurant>();
-
 			Map<String, List<Restaurant>> areasToDisplayList = new HashMap<String, List<Restaurant>>();
 
 			for (int i = 0; i < areaToDisplay.length; i++) {
