@@ -20,8 +20,10 @@ package org.esupportail.dining.web.controllers;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,6 +36,7 @@ import org.esupportail.dining.domain.beans.User;
 import org.esupportail.dining.domainservices.services.auth.Authenticator;
 import org.esupportail.dining.web.dao.DatabaseConnector;
 import org.esupportail.dining.web.feed.DiningFeed;
+import org.esupportail.dining.web.feed.FeedInformation;
 import org.esupportail.dining.web.models.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -78,30 +81,37 @@ public class EditAdminController extends AbstractExceptionController {
 
 		String urlflux = null;
 		String[] areanames = null;
+		List<FeedInformation> feedInfoList = new ArrayList<FeedInformation>();
 		ResultSet results = null;
 		try {
-			results = this.dc.executeQuery("SELECT URLFLUX, AREANAME FROM PATHFLUX");
-			results.next();
+			results = this.dc.executeQuery("SELECT * FROM PATHFLUX");
+			
+			while(results.next()) {
+				FeedInformation feedInfo = new FeedInformation(
+					results.getInt("id"),
+					results.getString("name"),
+					results.getString("areaname"),
+					results.getString("urlflux"),
+					results.getBoolean("is_default"));
+				feedInfoList.add(feedInfo);
+			}
+			
 		} catch (SQLException e) {
 			// URL isn't set yet...
 		}
 
 		try {
-			areanames = results.getString("AREANAME").split(",");
+			for(FeedInformation fi : feedInfoList) {
+				if(fi.isDefault()) {
+					areanames = fi.getAreaname().split(",");
+				}
+			}
 		} catch (Exception e) {
 			// URL may be set be default area is not
 		}
-		try {
-			urlflux = results.getString("URLFLUX");
-		} catch (Exception e) {
-			// same issue as before
-		}
-
-		model.put("urlfluxdb", urlflux);
+		model.put("feedList", feedInfoList);
 		model.put("defaultArea", areanames);
-
-		// } catch (NullPointerException e) { e.printStackTrace(); }
-
+		
 		/* Action urlFeed set urlError if form URL was not well-formed */
 		String hasError = request.getParameter("urlError");
 		if (hasError != null) {
@@ -175,23 +185,25 @@ public class EditAdminController extends AbstractExceptionController {
 
 	@RequestMapping(params = { "action=urlFeed" })
 	public void setURLFeed(ActionRequest request, ActionResponse response,
-			@RequestParam(value = "url", required = true) String url)
+			@RequestParam(value = "feedId", required = true) int feedId)
 					throws Exception {
+		
 		response.setRenderParameter("action", "adminSettings");
+		
 		try {
-			URL urlFeed = new URL(url);
-			this.feed.setPath(urlFeed);
+			this.dc.executeUpdate("UPDATE PATHFLUX SET is_default=false WHERE is_default=true");
+			
+			ResultSet result = this.dc.executeQuery("SELECT * FROM PATHFLUX WHERE ID=" + feedId);
+			result.next();
+			result.updateBoolean("is_default", true);
+			result.updateRow();
+			URL urlFeed = new URL(result.getString("URLFLUX"));
 			response.setRenderParameter("urlError", "false");
-			// If URL is correct, then we can insert this into the database.
-			ResultSet results = this.dc.executeQuery("SELECT * FROM PATHFLUX");
-			results.next();
-			results.updateString("URLFLUX", url);
-			results.updateRow();
-		} catch (SQLException e) {
-			// We get a SQLException if the row doesn't exist in the table
-			this.dc.executeUpdate("INSERT INTO PATHFLUX (URLFLUX) VALUES ('" + url
-					+ "')");
+			
+			this.feed.setPath(urlFeed);
+			
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setRenderParameter("urlError", "true");
 		}
 	}

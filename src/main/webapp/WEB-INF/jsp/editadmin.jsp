@@ -20,60 +20,75 @@
 	</a>
 
 <br/>
-
-<c:if test="${not empty urlfluxdb}">	
-		<portlet:actionURL var="setAreas">
-		  <portlet:param name="action" value="setDefaultArea"/>
-		</portlet:actionURL>
-
-		<form method="post" action="${setAreas}"> 
-		
-			<c:forEach var="areaValue" items="${areaList}" varStatus="status">
-				<label for="field-areas-${status.index}">
-					<input type="checkbox" value="${areaValue}" name="chkArea[]" id="field-areas-${status.index}"
-						<c:forEach var="areaDb" items="${defaultArea}">
-							<c:if test="${areaDb == areaValue}">checked="checked"</c:if>
-						</c:forEach>
-					>
-					${areaValue}
-				</label>
-			</c:forEach>
-			
-			<br/>
-			<c:if test="${areaSubmit}">
-				<label class="is-valid icn-fam icn-fam-valid">
-					<spring:message code="edit.msg.success"/>
-				</label>
-			</c:if>
-			
-			<input type="submit"/>
-		</form>
-</c:if>
-
-		<portlet:actionURL var="urlFlux">
-		  <portlet:param name="action" value="urlFlux"/>
-		</portlet:actionURL>
 	
-		<form method="post" action="${urlFlux}">
-			<fieldset>
-				<legend><spring:message code="edit.admin.form.legend"/></legend>
-				<label for="field-url"><spring:message code="edit.admin.form.label"/></label>
-				<input type="text" id="field-url" name="url" value="${urlfluxdb}"/>
-				<c:if test="${not empty urlError}">
-					<label class="icn-fam <c:if test="${urlError == 'true'}">is-invalid icn-fam-invalid</c:if><c:if test="${urlError == 'false'}">is-valid icn-fam-valid</c:if>">
+<portlet:actionURL var="setAreas">
+  <portlet:param name="action" value="setDefaultArea"/>
+</portlet:actionURL>
+
+<h1>
+Choose your feed
+</h1>		
+		<portlet:actionURL var="urlFlux">
+		  <portlet:param name="action" value="urlFeed"/>
+		</portlet:actionURL>
+
+		<form method="post" action="${urlFlux}" class="clearfix">		
+			<c:if test="${not empty feedList}">
+				
+				<label>
+					Feed to choose :
+				</label>
+				
+				<select id="field-feed" name="feedId">
+					<c:forEach var="feedInfo" items="${feedList}">
 						<c:choose>
-							<c:when test="${urlError == 'true'}">
-								<spring:message code="edit.msg.urlerror"/>
+							<c:when test="${feedInfo.isDefault == true}">
+								<c:set var="selected" value="selected=\"selected\""/>
 							</c:when>
 							<c:otherwise>
-								<spring:message code="edit.msg.success"/>
+								<c:set var="selected" value=""/>
 							</c:otherwise>
 						</c:choose>
-					</label>
-				</c:if>				
-				<input type="submit" value="<spring:message code="edit.form.submit"/>" />
-			</fieldset>
+						<option value="${feedInfo.id}" ${selected}>
+							${feedInfo.name}
+						</option>
+					</c:forEach>
+				</select>
+				
+				<input type="submit"/>
+												
+			</c:if>
+			
+				
 		</form>
+		<hr/>
+		
+		<div>
+	<form method="post" action="${setAreas}" class="clearfix"> 
+	
+		<c:forEach var="areaValue" items="${areaList}" varStatus="status">
+			<label for="field-areas-${status.index}">
+				<input type="checkbox" value="${areaValue}" name="chkArea[]" id="field-areas-${status.index}"
+					<c:forEach var="areaDb" items="${defaultArea}">
+						<c:if test="${areaDb == areaValue}">checked="checked"</c:if>
+					</c:forEach>
+				>
+				${areaValue}
+			</label>
+		</c:forEach>
+		
+		<br/>
+		<c:if test="${areaSubmit}">
+			<label class="is-valid icn-fam icn-fam-valid">
+				<spring:message code="edit.msg.success"/>
+			</label>
+		</c:if>
+		
+		<input type="submit"/>
+	</form>
+</div>
+
+<hr/>
 		
 		<portlet:actionURL var="forceFeedUpdate">
 		  <portlet:param name="action" value="forceFeedUpdate"/>
