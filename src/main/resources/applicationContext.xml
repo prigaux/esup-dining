@@ -89,8 +89,41 @@
 		<property name="configLocation" value="classpath:/cache/ehcache.xml" />
 	</bean>
 
+	<util:list id="messageConvertersList">
+		<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+			<property name="supportedMediaTypes">
+				<util:list>
+					<bean class="org.springframework.http.MediaType">
+						<constructor-arg value="application" />
+                        <constructor-arg value="json" />
+					</bean>
+					<bean class="org.springframework.http.MediaType">
+						<constructor-arg value="application" />
+                        <constructor-arg value="json" />
+                        <constructor-arg value="#{T(java.nio.charset.Charset).forName('UTF-8')}"/>
+					</bean>
+					<bean class="org.springframework.http.MediaType">
+						<constructor-arg value="text" />
+                        <constructor-arg value="html" />
+					</bean>
+					<bean class="org.springframework.http.MediaType">
+						<constructor-arg value="text" />
+                        <constructor-arg value="html" />
+                        <constructor-arg value="#{T(java.nio.charset.Charset).forName('UTF-8')}"/>
+					</bean>
+				</util:list>
+			</property>
+		</bean>
+	</util:list>
+
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<property name="messageConverters" ref="messageConvertersList" />
+	</bean>
+
     <bean id="flux" class="org.esupportail.dining.web.feed.DiningFeed">
     	<property name="dc" ref="DatabaseConnector" />
+    	<property name="restTemplate" ref="restTemplate" />
+    	<property name="feedListUrl" value="${feed.list.url}" />
     </bean>
 
 	<bean id="restaurantCache" class="org.esupportail.dining.web.feed.DiningCache">

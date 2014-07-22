@@ -29,6 +29,7 @@ import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -38,6 +39,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.esupportail.dining.web.dao.DatabaseConnector;
 import org.esupportail.dining.web.models.Restaurant;
 import org.esupportail.dining.web.models.RestaurantFeedRoot;
+import org.springframework.web.client.RestTemplate;
 
 public class DiningFeed implements Serializable {
 
@@ -51,6 +53,8 @@ public class DiningFeed implements Serializable {
 	private RestaurantFeedRoot feed;
 	private ObjectMapper mapper;
 	private URL path;
+	private RestTemplate restTemplate;
+	private String feedListUrl;
 
 	@PostConstruct
 	public void init() {
@@ -59,7 +63,7 @@ public class DiningFeed implements Serializable {
 		this.mapper = new ObjectMapper();
 
 		try {
-			ResultSet results = this.dc.executeQuery("SELECT URLFLUX FROM PATHFLUX");
+			ResultSet results = this.dc.executeQuery("SELECT URLFLUX FROM PATHFLUX WHERE IS_DEFAULT=true");
 			results.next();
 			URL urlfeed = null;
 			try {
@@ -70,6 +74,29 @@ public class DiningFeed implements Serializable {
 			}
 			this.setPath(urlfeed);
 		} catch (Exception e) { /* */
+
+			// The database isn't populated
+			// Grab the content from the server.
+
+			FeedResponse response = this.restTemplate.getForObject(this.feedListUrl, FeedResponse.class);
+			
+			try {
+				List<FeedInformation> feedList = response.getFeedInformationList();
+				
+				for(FeedInformation fi : feedList) {
+					
+					this.dc.executeUpdate("INSERT INTO PATHFLUX(ID, NAME, URLFLUX, IS_DEFAULT)"
+					+ "VALUES(" + fi.getId() + ", '" + fi.getName() + "', '" + fi.getPath() + "', " + fi.isDefault() + ")");
+					
+					if(fi.isDefault() == true) {
+						URL urlFeed = new URL(fi.getPath());
+						this.setPath(urlFeed);
+					}
+				}
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+				
 		}
 	}
 
@@ -272,6 +299,14 @@ public class DiningFeed implements Serializable {
 		return this.dc;
 	}
 
+	public void setFeedListUrl(String feedListUrl) {
+		this.feedListUrl = feedListUrl;
+	}
+	
+	public void setRestTemplate(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+	}
+	
 	/* automated task */
 
 	public void run() {
