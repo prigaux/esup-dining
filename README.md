@@ -1,4 +1,4 @@
-# Esup-Dining-Portlet
+# Esup-Dining
 
 This portlet aims to deliver to student the meals available in dining halls.
 
@@ -10,7 +10,7 @@ You will be able to :
 
 ## Datas
 
-You will need to insert JSON data for this portlet to work, you can watch the [JSON schema](https://github.com/gsouquet/esup-dining-portlet/blob/master/src/main/resources/schema/portlet-schema.json) to see how you will need to format your datas.
+You will need to insert JSON data for this portlet to work, you can watch the [JSON schema](https://github.com/gsouquet/esup-dining/blob/master/src/main/resources/schema/portlet-schema.json) to see how you will need to format your datas.
 
 ## Testing
 
@@ -44,7 +44,7 @@ The server will be launched and available at `http://localhost:8080/pluto`
 This portlet is made to run in uPortal 4, to do so just run in your portal
 
 ```
-ant deployPortletApp -DportletApp=path/to/[...]/target/esup-dining-portlet.war
+ant deployPortletApp -DportletApp=path/to/[...]/target/esup-dining.war
 ```
 
 And then register the portlet

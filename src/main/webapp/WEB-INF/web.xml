@@ -5,11 +5,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	
-    <display-name>esup-dining-portlet</display-name>
+    <display-name>esup-dining</display-name>
     
     <context-param>
         <param-name>webAppRootKey</param-name>
-        <param-value>esup-dining-portlet</param-value>
+        <param-value>esup-dining</param-value>
     </context-param>
     <context-param>
         <param-name>log4jExposeWebAppRoot</param-name>

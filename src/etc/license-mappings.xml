@@ -26,7 +26,7 @@
     </artifact>
     <artifact>
         <groupId>org.esupportail</groupId>
-        <artifactId>esup-dining-portlet</artifactId>
+        <artifactId>esup-dining</artifactId>
         <version>1.0-RC2</version>
         <license>Apache License, Version 2.0</license>
     </artifact>

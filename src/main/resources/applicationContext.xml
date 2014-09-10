@@ -41,10 +41,10 @@
 
         <bean id="app_context" class="org.esupportail.commons.context.ApplicationContextHolder"/>
 
-	<import resource="classpath*:META-INF/esup-dining-portlet-domain-services-domain.xml" />
-	<import resource="classpath*:META-INF/esup-dining-portlet-domain-services-abstractBeans.xml" />
-	<import resource="classpath*:META-INF/esup-dining-portlet-domain-services-application.xml" />
-	<import resource="classpath*:META-INF/esup-dining-portlet-domain-services-auth.xml" />
+	<import resource="classpath*:META-INF/esup-dining-domain-services-domain.xml" />
+	<import resource="classpath*:META-INF/esup-dining-domain-services-abstractBeans.xml" />
+	<import resource="classpath*:META-INF/esup-dining-domain-services-application.xml" />
+	<import resource="classpath*:META-INF/esup-dining-domain-services-auth.xml" />
 	
 	<!-- | Message source for this context, loaded from localized "messages_xx" 
 		files + -->
