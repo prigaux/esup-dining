@@ -35,6 +35,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.esupportail.dining.domain.beans.User;
 import org.esupportail.dining.domainservices.services.auth.Authenticator;
 import org.esupportail.dining.web.dao.DatabaseConnector;
@@ -80,7 +81,7 @@ public class ViewController extends AbstractExceptionController {
 		try {
 			ResultSet results = this.dc
 					.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='"
-							+ user.getLogin() + "';");
+							+ StringEscapeUtils.escapeSql(user.getLogin()) + "';");
 			results.next();
 			areaToDisplay = results.getString("AREANAME").split(",");
 		} catch (Exception e) {
@@ -102,7 +103,7 @@ public class ViewController extends AbstractExceptionController {
 		try {
 			ResultSet favList = this.dc
 					.executeQuery("SELECT RESTAURANTID FROM FAVORITERESTAURANT WHERE USERNAME='"
-							+ user.getLogin() + "';");
+							+ StringEscapeUtils.escapeSql(user.getLogin()) + "';");
 			List<Restaurant> favorites = new ArrayList<Restaurant>();
 
 			if (favList.next()) {
@@ -172,7 +173,7 @@ public class ViewController extends AbstractExceptionController {
 
 			ResultSet results = this.dc
 					.executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='"
-							+ user.getLogin()
+							+ StringEscapeUtils.escapeSql(user.getLogin())
 							+ "' AND RESTAURANTID='"
 							+ id
 							+ "';");
@@ -206,7 +207,7 @@ public class ViewController extends AbstractExceptionController {
 
 			ResultSet prefUser = this.dc
 					.executeQuery("SELECT NUTRITIONCODE FROM nutritionPreferences WHERE USERNAME='"
-							+ user.getLogin() + "';");
+							+ StringEscapeUtils.escapeSql(user.getLogin()) + "';");
 
 			Set<String> nutritionPrefs = new HashSet<String>();
 
@@ -250,7 +251,7 @@ public class ViewController extends AbstractExceptionController {
 		try {
 			ResultSet results = this.dc
 					.executeQuery("SELECT * FROM FAVORITERESTAURANT WHERE USERNAME='"
-							+ user.getLogin()
+							+ StringEscapeUtils.escapeSql(user.getLogin())
 							+ "' AND RESTAURANTID='"
 							+ id
 							+ "';");
@@ -275,7 +276,7 @@ public class ViewController extends AbstractExceptionController {
 
 		try {
 			this.dc.executeUpdate("INSERT INTO FAVORITERESTAURANT VALUES ('"
-					+ user.getLogin() + "', '" + id + "');");
+					+ StringEscapeUtils.escapeSql(user.getLogin()) + "', '" + StringEscapeUtils.escapeSql(id) + "');");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (NullPointerException e) { /*
@@ -331,7 +332,7 @@ public class ViewController extends AbstractExceptionController {
 
 			ResultSet prefUser = this.dc
 					.executeQuery("SELECT NUTRITIONCODE FROM nutritionPreferences WHERE USERNAME='"
-							+ user.getLogin() + "';");
+							+ StringEscapeUtils.escapeSql(user.getLogin()) + "';");
 			Set<String> nutritionPrefs = new HashSet<String>();
 
 			while (prefUser.next()) {

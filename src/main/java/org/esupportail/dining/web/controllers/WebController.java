@@ -20,6 +20,7 @@ package org.esupportail.dining.web.controllers;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.esupportail.dining.domainservices.services.auth.Authenticator;
 import org.esupportail.dining.web.dao.DatabaseConnector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,8 @@ public class WebController {
 			throws Exception {
 		try {
 			dc.executeUpdate("DELETE FROM FAVORITERESTAURANT "
-					+ "WHERE RESTAURANTID=" + id + "AND USERNAME='"
-					+ authenticator.getUser().getLogin() + "'");
+					+ "WHERE RESTAURANTID=" + StringEscapeUtils.escapeSql(id) + "AND USERNAME='"
+					+ StringEscapeUtils.escapeSql(authenticator.getUser().getLogin()) + "'");
 		} catch (NullPointerException e) { /*
 											 * Useful is the user isn't logged
 											 * in

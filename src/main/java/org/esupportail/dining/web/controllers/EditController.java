@@ -30,6 +30,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.esupportail.dining.domain.beans.User;
 import org.esupportail.dining.domainservices.services.auth.Authenticator;
 import org.esupportail.dining.web.dao.DatabaseConnector;
@@ -72,7 +73,7 @@ public class EditController extends AbstractExceptionController {
 
 			ResultSet prefUser = this.dc
 					.executeQuery("SELECT NUTRITIONCODE FROM nutritionPreferences WHERE USERNAME='"
-							+ user.getLogin() + "';");
+							+ StringEscapeUtils.escapeSql(user.getLogin()) + "';");
 
 			Set<String> nutritionPrefs = new HashSet<String>();
 
@@ -179,7 +180,7 @@ public class EditController extends AbstractExceptionController {
 
 				try {
 					this.dc.executeUpdate("INSERT INTO nutritionPreferences (USERNAME, NUTRITIONCODE) VALUES ('"
-							+ userLogin + "', '" + code[i] + "');");
+							+ StringEscapeUtils.escapeSql(userLogin) + "', '" + code[i] + "');");
 				} catch (SQLException e) { /**/
 				}
 
@@ -191,7 +192,7 @@ public class EditController extends AbstractExceptionController {
 				 */
 				try {
 					this.dc.executeUpdate("DELETE FROM nutritionPreferences WHERE USERNAME='"
-							+ userLogin
+							+ StringEscapeUtils.escapeSql(userLogin)
 							+ "' AND  NUTRITIONCODE='"
 							+ code[i]
 									+ "';");
@@ -232,7 +233,7 @@ public class EditController extends AbstractExceptionController {
 				results.close();
 			} catch (SQLException e) {
 				this.dc.executeUpdate("INSERT INTO USERAREA (USERNAME, AREANAME) VALUES ('"
-						+ user.getLogin() + "', '" + areanames + "');");
+						+ StringEscapeUtils.escapeSql(user.getLogin()) + "', '" + StringEscapeUtils.escapeSql(areanames) + "');");
 			}
 
 			response.setRenderParameter("zoneSubmit", "true");

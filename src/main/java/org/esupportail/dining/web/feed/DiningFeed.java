@@ -33,6 +33,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -86,7 +87,7 @@ public class DiningFeed implements Serializable {
 				for(FeedInformation fi : feedList) {
 					
 					this.dc.executeUpdate("INSERT INTO PATHFLUX(ID, NAME, URLFLUX, IS_DEFAULT)"
-					+ "VALUES(" + fi.getId() + ", '" + fi.getName() + "', '" + fi.getPath() + "', " + fi.isDefault() + ")");
+					+ "VALUES(" + fi.getId() + ", '" + StringEscapeUtils.escapeSql(fi.getName()) + "', '" + StringEscapeUtils.escapeSql(fi.getPath()) + "', " + fi.isDefault() + ")");
 					
 					if(fi.isDefault() == true) {
 						URL urlFeed = new URL(fi.getPath());
