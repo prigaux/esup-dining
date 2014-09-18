@@ -52,5 +52,9 @@ public class DatabaseConnector {
 	public void executeUpdate(String update) throws SQLException {
 		this.statement.executeUpdate(update);
 	}
+	
+	public void execute(String state) throws SQLException {
+		this.statement.execute(state);
+	}
 
 }

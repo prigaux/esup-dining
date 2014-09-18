@@ -68,38 +68,28 @@ public class ViewController extends AbstractExceptionController {
 	private DiningCache cache;
 
 	@RequestMapping
-	public ModelAndView renderMainView(RenderRequest request,
-			RenderResponse response) throws Exception {
-
+	public ModelAndView renderMain() throws Exception {
 		ModelMap model = new ModelMap();
-
 		User user = this.authenticator.getUser();
-
+		
+		
+		/* Get Area To Display */
 		String[] areaToDisplay = null;
-
-		// get area to display
 		try {
-			ResultSet results = this.dc
-					.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='"
-							+ StringEscapeUtils.escapeSql(user.getLogin()) + "';");
+			// Check if user has a special options that overrides default config
+			ResultSet results = this.dc.executeQuery("SELECT AREANAME FROM USERAREA WHERE USERNAME='" + StringEscapeUtils.escapeSql(user.getLogin()) + "';");
 			results.next();
 			areaToDisplay = results.getString("AREANAME").split(",");
 		} catch (Exception e) {
-			// we are here if the user doesn't set a specific area for himself
-			ResultSet results = this.dc
-					.executeQuery("SELECT AREANAME FROM PATHFLUX");
+			
+			// If not we just fetch data from the default config
+			ResultSet results = this.dc.executeQuery("SELECT AREANAME FROM PATHFLUX WHERE IS_DEFAULT=TRUE;");
 			results.next();
-			try {
-				areaToDisplay = results.getString("AREANAME").split(",");
-			} catch (SQLException e2) {
-				// If there is no default area, then the admin must configure
-				// the portlet before.
-				return new ModelAndView("error", new ModelMap("err",
-						e2.getMessage()));
-			}
+			areaToDisplay = results.getString("AREANAME").split(",");
 		}
-
-		// Get favorite for the curent user;
+		model.addAttribute("area", areaToDisplay);
+		
+		// Get favorite for the current user
 		try {
 			ResultSet favList = this.dc
 					.executeQuery("SELECT RESTAURANTID FROM FAVORITERESTAURANT WHERE USERNAME='"
@@ -123,10 +113,10 @@ public class ViewController extends AbstractExceptionController {
 
 		} catch (Exception e) {
 			// Nothing to do here.
+			// If SQL fetch throw an exception nevermind, it means the user does not have any fav atm.
 		}
-
-		model.put("area", areaToDisplay);
-
+		
+		// Fetch data from the feed based on the fav and area settings
 		try {
 
 			this.dinings = this.feed.getFeed();
@@ -153,8 +143,8 @@ public class ViewController extends AbstractExceptionController {
 			return new ModelAndView("error",
 					new ModelMap("err", e.getMessage()));
 		}
-
-		return new ModelAndView("view", model);
+		
+		return new ModelAndView("view", model);		
 	}
 
 	@RequestMapping(params = { "action=viewRestaurant" })

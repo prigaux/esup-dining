@@ -200,6 +200,12 @@ public class EditAdminController extends AbstractExceptionController {
 			URL urlFeed = new URL(result.getString("URLFLUX"));
 			response.setRenderParameter("urlError", "false");
 			
+			// We just avoid problem this way
+			// Favorite are feed related
+			// If admin update default feed then fav are not relevant anymore.
+			this.dc.execute("DELETE FROM USERAREA");
+			this.dc.execute("DELETE FROM FAVORITERESTAURANT");
+			
 			this.feed.setPath(urlFeed);
 			
 		} catch (Exception e) {
