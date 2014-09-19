@@ -130,6 +130,7 @@ public class ViewController extends AbstractExceptionController {
 
 			for (Restaurant restaurant : this.dinings.getRestaurants()) {
 				if (areasToDisplayList.containsKey(restaurant.getArea())) {
+				    // update "isClosed" with current date
 					restaurant.setAdditionalProperties("isClosed",
 							this.feed.isClosed(restaurant));
 					areasToDisplayList.get(restaurant.getArea())
