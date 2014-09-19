@@ -11,23 +11,6 @@
 	            <plugin>
 	                <artifactId>maven-war-plugin</artifactId>
 	                <version>2.1</version>
-	                <configuration>
-	                    <webResources>
-	                        <resource>
-	                            <filtering>true</filtering>
-	                            <directory>src/main/webapp</directory>
-	                            <includes>
-	                                <include>WEB-INF/portlet.xml</include>
-	                            </includes>
-	                        </resource>
-	                    </webResources>
-	                    <warName>${project.artifactId}</warName>
-	                </configuration>
-	            </plugin>
-	            <plugin>
-	                <groupId>net.jlehtinen.portlet</groupId>
-	                <artifactId>portlet-prototyping-maven-plugin</artifactId>
-	                <version>0.6</version>
 	            </plugin>
 	            <plugin>
 	                <groupId>org.jasig.maven</groupId>
@@ -105,14 +88,8 @@
           </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.esupportail</groupId>
-            <artifactId>esup-commons2-springmvc-portlet</artifactId>
-            <version>${esupcommons.version}</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc-portlet</artifactId>
+            <artifactId>spring-webmvc</artifactId>
             <version>3.0.6.RELEASE</version>
         </dependency>
         <dependency>
@@ -133,25 +110,23 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>javax.portlet</groupId>
-            <artifactId>portlet-api</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
-        </dependency>
         <!-- the other slf4j jars -->
         <!-- using log4j as backend -->
         <!-- Servlet -->
         <dependency>
-            <groupId>taglibs</groupId>
-            <artifactId>standard</artifactId>
-            <version>1.1.2</version>
+            <groupId>javax.servlet.jsp.jstl</groupId>
+            <artifactId>jstl-api</artifactId>
+            <version>1.2</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.pluto</groupId>
-            <artifactId>pluto-taglib</artifactId>
-            <version>1.1.3</version>
-            <type>jar</type>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jstl-impl</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.1</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -184,10 +159,6 @@
             </snapshots>
             <releases>
             </releases>
-        </repository>
-        <repository>
-            <id>jlehtinen.net</id>
-            <url>http://repo.jlehtinen.net/maven2/</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -228,7 +199,6 @@
 	</distributionManagement>
     <properties>
         <esupcommons.version>0.3.3</esupcommons.version>
-        <portlet.name>${project.artifactId}</portlet.name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>

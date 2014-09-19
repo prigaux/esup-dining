@@ -21,19 +21,20 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        
        xsi:schemaLocation="
             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+	    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 
-    	<!-- Annotations Configuration -->
-   		<context:annotation-config/>
     	<context:component-scan base-package="org.esupportail.dining.web.controllers"/>
     	
-    	<bean class="org.springframework.web.portlet.mvc.annotation.DefaultAnnotationHandlerMapping">
-            <property name="interceptors">
-                    <bean class="org.esupportail.dining.web.controllers.MinimizedStateHandlerInterceptor"/>
-            </property>
-        </bean>
+       <!-- needed when mvc:default-servlet-handler is activated -->
+       <mvc:annotation-driven/>
+
+       <!-- tell DispatcherServlet to only handle the urls which have a @RequestMapping -->
+       <!-- it allows access to webapp files (css, js...) -->	
+       <mvc:default-servlet-handler />
 	    
 </beans>

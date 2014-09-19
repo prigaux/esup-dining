@@ -1,18 +1,14 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
-
-	<portlet:renderURL var="renderRefreshUrl" />
 	
-	<a href="<portlet:renderURL portletMode="edit"/>" class="icn-fam icn-fam-back">
+	<a href="<spring:url value="/settings" />" class="icn-fam icn-fam-back">
 		<spring:message code="edit.admin.back"/>
 	</a> - 	
-		<portlet:renderURL var="adminSettings">
-				<portlet:param name="action" value="adminSettings"/>
-		</portlet:renderURL>
+		<spring:url value="/admin" var="adminSettings" />
 	- 
 		<a href="${adminSettings}">
 			<spring:message code="menu.editadmin"/>
 		</a> - 
-	<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
+	<a href="<spring:url value="/" />" class="icn-fam icn-fam-back">
 		<spring:message code="go.back.home"/>
 	</a> 	
 	

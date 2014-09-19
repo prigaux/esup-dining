@@ -30,11 +30,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.esupportail.dining.domain.beans.User;
 import org.esupportail.dining.domainservices.services.auth.Authenticator;
@@ -49,10 +44,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.portlet.ModelAndView;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("VIEW")
 public class ViewController extends AbstractExceptionController {
 
 	@Autowired
@@ -67,7 +61,7 @@ public class ViewController extends AbstractExceptionController {
 	@Autowired
 	private DiningCache cache;
 
-	@RequestMapping
+	@RequestMapping("/restaurants")
 	public ModelAndView renderMain() throws Exception {
 		ModelMap model = new ModelMap();
 		User user = this.authenticator.getUser();
@@ -148,9 +142,8 @@ public class ViewController extends AbstractExceptionController {
 		return new ModelAndView("view", model);		
 	}
 
-	@RequestMapping(params = { "action=viewRestaurant" })
-	public ModelAndView renderRestaurantView(RenderRequest request,
-			RenderResponse response,
+	@RequestMapping("/restaurant")
+	public ModelAndView renderRestaurantView(
 			@RequestParam(value = "id", required = true) int id)
 					throws Exception {
 		ModelMap model = new ModelMap();
@@ -185,9 +178,8 @@ public class ViewController extends AbstractExceptionController {
 		return new ModelAndView("restaurant", model);
 	}
 
-	@RequestMapping(params = { "action=viewMeals" })
-	public ModelAndView renderMealsView(RenderRequest request,
-			RenderResponse response,
+	@RequestMapping("/meals")
+	public ModelAndView renderMealsView(
 			@RequestParam(value = "id", required = true) int id)
 					throws Exception {
 
@@ -258,9 +250,8 @@ public class ViewController extends AbstractExceptionController {
 		return new ModelAndView("meals", model);
 	}
 
-	@RequestMapping(params = { "action=setFavorite" })
-	public void setFavorite(ActionRequest request, ActionResponse response,
-			@RequestParam(value = "id", required = true) String id)
+	@RequestMapping("/favorite/add")
+	public String setFavorite(@RequestParam(value = "id", required = true) String id)
 					throws Exception {
 
 		User user = this.authenticator.getUser();
@@ -276,14 +267,11 @@ public class ViewController extends AbstractExceptionController {
 		 */
 		}
 
-		response.setRenderParameter("id", id);
-		response.setRenderParameter("action", "viewRestaurant");
+		return "redirect:/restaurant?id=" + id;
 	}
 
-	@RequestMapping(params = { "action=viewDish" })
+	@RequestMapping("/dish")
 	public ModelAndView renderDish(
-			RenderRequest request,
-			RenderResponse response,
 			@RequestParam(value = "name", required = true) String name,
 			@RequestParam(value = "ingredients", required = false) String ingredients,
 			@RequestParam(value = "nutritionitems", required = false) String nutritionitems,

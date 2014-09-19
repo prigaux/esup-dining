@@ -1,18 +1,14 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 
-<portlet:renderURL var="renderRefreshUrl" />
-
 <h1><spring:message code="edit.title"/></h1>
 
-<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
+<a href="<spring:url value="/restaurants" />" class="icn-fam icn-fam-back">
 	<spring:message code="go.back.home"/>
 </a>
 
 <c:if test="${sessionScope.isAdmin}">
 	<h2>
-		<portlet:renderURL var="adminSettings">
- 				<portlet:param name="action" value="adminSettings"/>
-		</portlet:renderURL>
+		<spring:url value="/admin" var="adminSettings" />
 	
 		<a href="${adminSettings}">
 			<spring:message code="menu.editadmin"/>
@@ -22,9 +18,9 @@
 
 <c:if test="${not empty areaList}">
 	
-	<portlet:actionURL var="setUserArea">
-	  <portlet:param name="action" value="setUserArea"/>
-	</portlet:actionURL>
+	<spring:url value="/settings" var="setUserArea">
+	  <spring:param name="action" value="setUserArea"/>
+	</spring:url>
 
 	<form method="post" action="${setUserArea}">
 		<fieldset>
@@ -74,10 +70,10 @@
 				${restaurant.title}
 			</td>
 			<td class="ta-right">
-			 	<portlet:actionURL var="removeFavorite">
-				  <portlet:param name="action" value="removeFavorite"/>
-				  <portlet:param name="restaurant-id" value="${restaurant.id}"/>
-				</portlet:actionURL>
+			 	<spring:url value="/settings" var="removeFavorite">
+				  <spring:param name="action" value="removeFavorite"/>
+				  <spring:param name="restaurant-id" value="${restaurant.id}"/>
+				</spring:url>
 				<a href="${removeFavorite}" class="btn btn-danger" style="color: white;">
 					<spring:message code="edit.delete"/> <span class="glyphicon glyphicon-remove"></span>
 				</a>
@@ -89,9 +85,9 @@
 </c:if>
 
 <h3><spring:message code="edit.nutritive.prefs"/></h3>
-<portlet:actionURL var="nutritionPreferences">
-  <portlet:param name="action" value="nutritionPreferences"/>
-</portlet:actionURL>
+<spring:url value="/settings" var="nutritionPreferences">
+  <spring:param name="action" value="nutritionPreferences"/>
+</spring:url>
 <form method="POST" action="${nutritionPreferences}">
     <fieldset>
         <legend>

@@ -5,7 +5,7 @@
 	<p>
 		<spring:message code="error.page.message"/> 
 		<br/>
-		<a href="<portlet:renderURL portletMode="edit"/>" class="icn-fam icn-fam-back">
+		<a href="<spring:url value="/settings" />" class="icn-fam icn-fam-back">
 			<spring:message code="menu.edit"/>
 		</a>
 	</p>

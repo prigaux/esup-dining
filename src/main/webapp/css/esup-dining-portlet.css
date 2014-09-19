@@ -17,8 +17,7 @@
  */
 /* I. General styles */
 
-	.pc .row,
-	.portlet-container .row {
+	.pc .row {
 		margin-left: 0 !important;
 		margin-right: 0 !important;
 	}

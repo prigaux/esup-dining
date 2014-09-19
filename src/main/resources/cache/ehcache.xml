@@ -24,7 +24,7 @@
         updateCheck="false" monitoring="autodetect" 
         dynamicConfig="true"> 
     
-    <!--  default, but never used in this portlet -->
+    <!--  default, but never used in this app -->
     <defaultCache 
             eternal="false" 
             maxElementsInMemory="1000" 

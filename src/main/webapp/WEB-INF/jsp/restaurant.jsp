@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 
 	<p>
-		<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
+		<a href="<spring:url value="/" />" class="icn-fam icn-fam-back">
 			<spring:message code="go.back.home" />
 		</a>
 	</p>
@@ -19,7 +19,7 @@
 		<h1>
 			<spring:message code="restaurant.empty"/>
 		</h1>
-		<portlet:renderURL var="goToHome"/>	
+		<spring:url value="/" var="goToHome"/>	
 		<a href="${goToHome}">
 			<spring:message code="go.back.home"/>
 		</a>
@@ -44,20 +44,18 @@
 					<li>
 						<c:choose>
 							<c:when test="${isFavorite}">
-								<portlet:actionURL var="removeFromFavorite">
-									<portlet:param name="action" value="removeFavorite" />
-									<portlet:param name="restaurant-id" value="${restaurant.id}" />
-								</portlet:actionURL>
+								<spring:url value="/favorite/remove" var="removeFromFavorite">
+									<spring:param name="restaurant-id" value="${restaurant.id}" />
+								</spring:url>
 								<a href="${removeFromFavorite}" class="icn-fam icn-fam-fav">
 									<spring:message code="restaurant.link.removeFromFavorite"/>
 								</a>
 							</c:when>
 							<c:otherwise>
 
-								<portlet:actionURL var="addToFavorite">
-									<portlet:param name="action" value="setFavorite" />
-									<portlet:param name="id" value="${restaurant.id}" />
-								</portlet:actionURL>
+								<spring:url value="/favorite/add" var="addToFavorite">
+									<spring:param name="id" value="${restaurant.id}" />
+								</spring:url>
 								<a href="${addToFavorite}" class="icn-fam icn-fam-fav">
 									<spring:message code="restaurant.link.addToFavorite"/>
 								</a>
@@ -66,10 +64,9 @@
 						</c:choose>
 					</li>
 					<li>
-						<portlet:renderURL var="viewMeals">
-							<portlet:param name="action" value="viewMeals" />
-							<portlet:param name="id" value="${restaurant.id}" />
-						</portlet:renderURL>
+						<spring:url value="/meals" var="viewMeals">
+							<spring:param name="id" value="${restaurant.id}" />
+						</spring:url>
 						
 						<a href="${viewMeals}" class="icn-fam icn-fam-meal">
 							<spring:message code="restaurant.link.viewMeals"/>
@@ -213,7 +210,7 @@
 					        position: myLatlng,
 					        map: map,
 					        title:"${restaurant.title}",
-					        icon: "<%= renderRequest.getContextPath() + "/images/pin_resto.png" %>"
+					        icon: "<spring:url value="/images/pin_resto.png" />"
 					    });
 		    			window.onresize = function() {
 							map.setCenter(myLatlng);

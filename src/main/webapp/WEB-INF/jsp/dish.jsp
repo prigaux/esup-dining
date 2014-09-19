@@ -1,18 +1,16 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 
 	<p>
-		<portlet:renderURL var="viewRestaurant">
-			<portlet:param name="action" value="viewRestaurant"/>
-			<portlet:param name="id" value="${restaurantId}"/>
-		</portlet:renderURL>
+		<spring:url value="/restaurant" var="viewRestaurant">
+			<spring:param name="id" value="${restaurantId}"/>
+		</spring:url>
 		<a href="${viewRestaurant}" class="icn-fam icn-fam-back">
 			<spring:message code="restaurant.link.back"/>
 		</a>
 		 |
-		<portlet:renderURL var="viewMeals">
-			<portlet:param name="action" value="viewMeals" />
-			<portlet:param name="id" value="${restaurantId}" />
-		</portlet:renderURL>
+		<spring:url value="/meals" var="viewMeals">
+			<spring:param name="id" value="${restaurantId}" />
+		</spring:url>
 		<a href="${viewMeals}" class="icn-fam icn-fam-back">
 			<spring:message code="restaurant.link.viewMeals"/>
 		</a>
@@ -25,7 +23,7 @@
 	
 	<c:if test="${not empty code}">
 		<c:forEach var="codeNumber" items="${code}">
-			<img src="<%=renderRequest.getContextPath()%><spring:message code="meal.code.${fn:trim(codeNumber)}.img" />"
+			<img src="<spring:url value="/" /><spring:message code ="meal.code.${fn:trim(codeNumber)}.img" />"
 			     alt="<spring:message code="meal.code.${fn:trim(codeNumber)}.description" />"
 				 title="<spring:message code="meal.code.${fn:trim(codeNumber)}.name" />"
 			/>								

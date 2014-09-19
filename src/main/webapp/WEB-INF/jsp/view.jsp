@@ -1,6 +1,8 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 
-	<portlet:renderURL var="renderRefreshUrl" />
+		<a href="<spring:url value="/settings" />" class="icn-fam icn-fam-back">
+			<spring:message code="menu.edit"/>
+		</a>
 
 	<div class="row">
 		<div class="map-container col-lg-6 col-md-6 col-sm-12 col-sm-12">
@@ -24,14 +26,12 @@
 				</thead>
 				<tbody>
 					<c:forEach var="favRestaurant" items="${favorites}">
-						<portlet:renderURL var="viewMeals">
-			  				<portlet:param name="action" value="viewMeals"/>
-			  				<portlet:param name="id" value="${favRestaurant.id}"/>
-						</portlet:renderURL>
-						<portlet:renderURL var="viewRestaurant">
-			  				<portlet:param name="action" value="viewRestaurant"/>
-			  				<portlet:param name="id" value="${favRestaurant.id}"/>
-						</portlet:renderURL>
+						<spring:url value="/meals" var="viewMeals">
+			  				<spring:param name="id" value="${favRestaurant.id}"/>
+						</spring:url>
+						<spring:url value="/restaurant" var="viewRestaurant">
+			  				<spring:param name="id" value="${favRestaurant.id}"/>
+						</spring:url>
 						<tr>
 							<td>
 								<a href="${viewMeals}">
@@ -40,7 +40,7 @@
 							</td>
 							<td class="ta-right">
 								<a href="${viewRestaurant}">
-									<img src="<%= renderRequest.getContextPath() %>/images/information.png"
+									<img src="<spring:url value="/images/information.png"/>"
 										 alt="Detail" />
 								</a>
 							</td>
@@ -69,10 +69,9 @@
 						</thead>
 						<tbody>
 							<c:forEach var="dininghall" items="${dininghalls.value}">
-								<portlet:renderURL var="viewRestaurant">
-					  				<portlet:param name="action" value="viewMeals"/>
-					  				<portlet:param name="id" value="${dininghall.id}"/>
-								</portlet:renderURL>
+								<spring:url value="/meals" var="viewRestaurant">
+					  				<spring:param name="id" value="${dininghall.id}"/>
+								</spring:url>
 								<tr>
 									<td<c:if test="${dininghall.additionalProperties['isClosed']}"> data-closed="true" class="warning"</c:if><c:if test="${dininghall.additionalProperties['isClosed']}">class="warning"</c:if>>
 										<a href="${viewRestaurant}">
@@ -81,7 +80,7 @@
 									</td>							
 									<td class="ta-right">
 										<a href="${viewRestaurant}">
-											<img src="<%= renderRequest.getContextPath() %>/images/information.png"
+											<img src="<spring:url value="/images/information.png"/>"
 												 alt="Detail" />
 										</a>
 									</td>
@@ -102,10 +101,9 @@
 					<c:if test="${not empty dininghalls.value}">
 						<c:forEach var="dininghall" items="${dininghalls.value}">
 
-							<portlet:renderURL var="viewRestaurantFromMaker">
-				  				<portlet:param name="action" value="viewRestaurant"/>
-				  				<portlet:param name="id" value="${dininghall.id}"/>
-							</portlet:renderURL>
+							<spring:url value="/restaurant" var="viewRestaurantFromMaker">
+				  				<spring:param name="id" value="${dininghall.id}"/>
+							</spring:url>
 
 							diningHalls.push(["${dininghall.title}", ${dininghall.lat}, ${dininghall.lon}, "${viewRestaurantFromMaker}", "${dininghalls.key}"]);
 
@@ -115,10 +113,9 @@
 
 				// Data access
 				<c:forEach var="dininghall" items="${dininghalls}">
-					<portlet:renderURL var="viewRestaurantFromMaker">
-		  				<portlet:param name="action" value="viewRestaurant"/>
-		  				<portlet:param name="id" value="${dininghall.id}"/>
-					</portlet:renderURL>
+					<spring:url value="/restaurant" var="viewRestaurantFromMaker">
+		  				<spring:param name="id" value="${dininghall.id}"/>
+					</spring:url>
 					diningHalls.push(["${dininghall.title}", ${dininghall.lat}, ${dininghall.lon}, "${viewRestaurantFromMaker}"]);
 				</c:forEach>
 
@@ -167,7 +164,7 @@
 					        position: diningHallPosition,
 					        map: map,
 					        title:diningHalls[i][0],
-					        icon: "<%= renderRequest.getContextPath() + "/images/pin_resto.png" %>"
+					        icon: "<spring:url value="/images/pin_resto.png" />"
 					    });
 
 				    	// Event Listeners

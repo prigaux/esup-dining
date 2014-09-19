@@ -17,21 +17,17 @@
  */
 package org.esupportail.dining.web.controllers;
 
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.portlet.ModelAndView;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("HELP")
 public class HelpController extends AbstractExceptionController {
 
 	@RequestMapping
-	public ModelAndView renderHelpView(RenderRequest request,
-			RenderResponse response) throws Exception {
+	public ModelAndView renderHelpView() throws Exception {
 		/*
 		 * Send nutrition code to the view in order to display them to the user
 		 * with definitions

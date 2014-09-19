@@ -1,36 +1,32 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 
-<portlet:renderURL var="renderRefreshUrl" />
-
 <c:if test="${not empty user}">
 
 	<h1><spring:message code="edit.title"/></h1>
 
-	<a href="<portlet:renderURL portletMode="edit"/>" class="icn-fam icn-fam-back">
+	<a href="<spring:url value="/settings" />" class="icn-fam icn-fam-back">
 		<spring:message code="edit.admin.back"/>
 	</a> - 	
-	<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
+	<a href="<spring:url value="/" />" class="icn-fam icn-fam-back">
 		<spring:message code="go.back.home"/>
 	</a> - 	
-	<portlet:renderURL var="statsAdmin" portletMode="edit">
-	  <portlet:param name="action" value="adminStats"/>
-	</portlet:renderURL>
+	<spring:url value="/admin/stats" var="statsAdmin" />
 	<a href="${statsAdmin}" class="icn-fam icn-fam-stats">
 		Stats
 	</a>
 
 <br/>
 	
-<portlet:actionURL var="setAreas">
-  <portlet:param name="action" value="setDefaultArea"/>
-</portlet:actionURL>
+<spring:url value="/admin" var="setAreas">
+  <spring:param name="action" value="setDefaultArea"/>
+</spring:url>
 
 <h1>
 Choose your feed
 </h1>		
-		<portlet:actionURL var="urlFlux">
-		  <portlet:param name="action" value="urlFeed"/>
-		</portlet:actionURL>
+		<spring:url value="/admin" var="urlFlux">
+		  <spring:param name="action" value="urlFeed"/>
+		</spring:url>
 
 		<form method="post" action="${urlFlux}" class="clearfix">		
 			<c:if test="${not empty feedList}">
@@ -90,9 +86,9 @@ Choose your feed
 
 <hr/>
 		
-		<portlet:actionURL var="forceFeedUpdate">
-		  <portlet:param name="action" value="forceFeedUpdate"/>
-		</portlet:actionURL>
+		<spring:url value="/admin" var="forceFeedUpdate">
+		  <spring:param name="action" value="forceFeedUpdate"/>
+		</spring:url>
 		
 		<p>
 			<a href="${forceFeedUpdate}" class="btn btn-primary">

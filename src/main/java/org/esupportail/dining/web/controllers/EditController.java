@@ -25,10 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.esupportail.dining.domain.beans.User;
@@ -41,10 +38,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.portlet.ModelAndView;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("EDIT")
+@RequestMapping("/settings")
 public class EditController extends AbstractExceptionController {
 
 	@Autowired
@@ -55,9 +52,7 @@ public class EditController extends AbstractExceptionController {
 	private DiningFeed feed;
 
 	@RequestMapping
-	public ModelAndView renderEditView(RenderRequest request,
-			RenderResponse response) throws Exception {
-
+	    public ModelAndView renderEditView(HttpServletRequest request) throws Exception {
 		ModelMap model = new ModelMap();
 
 		User user = this.authenticator.getUser();
@@ -112,8 +107,7 @@ public class EditController extends AbstractExceptionController {
 				try {
 					userArea = results.getString("AREANAME").split(",");
 				} catch (SQLException e2) {
-					// No default area for all user, admin must configure the
-					// portlet.
+					// No default area for all user, admin must configure the app.
 					// No need to throw an exception
 				}
 				results.close();
@@ -164,9 +158,8 @@ public class EditController extends AbstractExceptionController {
 		return new ModelAndView("edit", model);
 	}
 
-	@RequestMapping(value = { "EDIT" }, params = { "action=nutritionPreferences" })
-	public void setUserNutritionPreferences(ActionRequest request,
-			ActionResponse response) throws Exception {
+	@RequestMapping(params = { "action=nutritionPreferences" })
+	public String setUserNutritionPreferences(HttpServletRequest request) throws Exception {
 
 		String userLogin = this.authenticator.getUser().getLogin();
 
@@ -201,14 +194,11 @@ public class EditController extends AbstractExceptionController {
 
 			}
 		}
-
-		response.setRenderParameter("nutritSubmit", "true");
+		return "redirect:/settings?nutritSubmit=true";
 	}
 
 	@RequestMapping(params = { "action=setUserArea" })
-	public void setUserArea(
-			ActionRequest request,
-			ActionResponse response,
+	public String setUserArea(
 			@RequestParam(value = "chkArea[]", required = false) String[] listAreas)
 					throws Exception {
 
@@ -236,7 +226,8 @@ public class EditController extends AbstractExceptionController {
 						+ StringEscapeUtils.escapeSql(user.getLogin()) + "', '" + StringEscapeUtils.escapeSql(areanames) + "');");
 			}
 
-			response.setRenderParameter("zoneSubmit", "true");
+			return "redirect:/settings?zoneSubmit=true";
 		}
+		return "redirect:/settings";
 	}
 }

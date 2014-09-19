@@ -28,24 +28,6 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:p="http://www.springframework.org/schema/p">
 
-	<bean id="defaultExceptionHandlerTemplate" class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver" abstract="true">
-	    <property name="defaultErrorView" value="error" />
-	    <!-- 
-	    	For specific exception handler please use the tag below.
-	     -->
-	    <!-- 
-	    <property name="exceptionMappings">
-	        <props>
-	            <prop key="org.springframework.web.portlet.bind.MissingPortletRequestParameterException">
-	                error/error-missing-parameter
-	            </prop>
-	        </props>
-	    </property>
-	 	-->
-	</bean>
-
-	<bean id="defaultExceptionHandler" parent="defaultExceptionHandlerTemplate" />
-
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>

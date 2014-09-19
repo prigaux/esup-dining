@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 	
 	<p>
-		<a href="<portlet:renderURL portletMode="view"/>" class="icn-fam icn-fam-back">
+		<a href="<spring:url value="/" />" class="icn-fam icn-fam-back">
 			<spring:message code="go.back.home" />
 		</a>
 	</p>
@@ -36,20 +36,18 @@
 					<li>
 						<c:choose>
 							<c:when test="${isFavorite}">
-								<portlet:actionURL var="removeFromFavorite">
-									<portlet:param name="action" value="removeFavorite" />
-									<portlet:param name="restaurant-id" value="${restaurant.id}" />
-								</portlet:actionURL>
+								<spring:url value="/favorite/remove" var="removeFromFavorite">
+									<spring:param name="restaurant-id" value="${restaurant.id}" />
+								</spring:url>
 								<a href="${removeFromFavorite}" class="icn-fam icn-fam-fav">
 									<spring:message code="restaurant.link.removeFromFavorite"/>
 								</a>
 							</c:when>
 							<c:otherwise>
 
-								<portlet:actionURL var="addToFavorite">
-									<portlet:param name="action" value="setFavorite" />
-									<portlet:param name="id" value="${restaurant.id}" />
-								</portlet:actionURL>
+								<spring:url value="/favorite/add" var="addToFavorite">
+									<spring:param name="id" value="${restaurant.id}" />
+								</spring:url>
 								<a href="${addToFavorite}" class="icn-fam icn-fam-fav">
 									<spring:message code="restaurant.link.addToFavorite"/>
 								</a>
@@ -58,10 +56,9 @@
 						</c:choose>
 					</li>
 					<li>
-						<portlet:renderURL var="viewRestaurant">
-							<portlet:param name="action" value="viewRestaurant" />
-							<portlet:param name="id" value="${restaurant.id}" />
-						</portlet:renderURL>
+						<spring:url value="/restaurant" var="viewRestaurant">
+							<spring:param name="id" value="${restaurant.id}" />
+						</spring:url>
 						
 						<a href="${viewRestaurant}" class="icn-fam icn-fam-meal">
 							<spring:message code="restaurant.link.viewRestaurant"/>
@@ -142,14 +139,13 @@
 											</c:if>
 											<li class="${elementClassName}">
 
-												<portlet:renderURL var="viewDish">
-													<portlet:param name="action" value="viewDish"/>
-													<portlet:param name="id" value="${restaurant.id}"/>
-													<portlet:param name="name" value="${dish.name}"/>
-													<portlet:param name="ingredients" value="${dish.ingredients}"/>
-													<portlet:param name="nutritionitems" value="${dish.nutritionitems}"/>
-													<portlet:param name="code" value="${dish.code}"/>
-												</portlet:renderURL>
+												<spring:url value="/dish" var="viewDish">
+													<spring:param name="id" value="${restaurant.id}"/>
+													<spring:param name="name" value="${dish.name}"/>
+													<spring:param name="ingredients" value="${dish.ingredients}"/>
+													<spring:param name="nutritionitems" value="${dish.nutritionitems}"/>
+													<spring:param name="code" value="${dish.code}"/>
+												</spring:url>
 
 												<c:if test="${not empty dish.code or not empty dish.ingredients or not empty dish.nutritionitems}">
 												<a href="${viewDish}">
@@ -157,7 +153,7 @@
 														${dish.name}
 													<c:if test="${not empty dish.code or not empty dish.ingredients or not empty dish.nutritionitems}">
 													<c:forEach var="codeNumber" items="${dish.code}">
-														<img src="<%= renderRequest.getContextPath() %><spring:message code="meal.code.${codeNumber}.img" />"
+														<img src="<spring:url value="/" /><spring:message code="meal.code.${codeNumber}.img" />"
 														     alt="<spring:message code="meal.code.${codeNumber}.description" />"
 															 title="<spring:message code="meal.code.${codeNumber}.name" />"/>									
 													</c:forEach>

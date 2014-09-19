@@ -40,20 +40,19 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
     
-    <!-- 
-     | This servlet is needed by the spring DispatcherPortlet for rendering.
-     +-->
     <servlet>
-        <servlet-name>ViewRendererServlet</servlet-name>
-        <servlet-class>org.springframework.web.servlet.ViewRendererServlet</servlet-class>
+        <servlet-name>webmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+          <param-name>contextConfigLocation</param-name>
+          <param-value>classpath:servletContext.xml</param-value>
+        </init-param>		
         <load-on-startup>1</load-on-startup>
     </servlet>
     
-    <!-- [INSERT JSPC FRAGMENT HERE] -->
-
     <servlet-mapping>
-        <servlet-name>ViewRendererServlet</servlet-name>
-        <url-pattern>/WEB-INF/servlet/view</url-pattern>
+        <servlet-name>webmvc</servlet-name>
+	<url-pattern>/</url-pattern>
     </servlet-mapping>
  
 </web-app>

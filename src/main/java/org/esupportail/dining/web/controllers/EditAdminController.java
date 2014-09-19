@@ -27,10 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.esupportail.dining.domain.beans.User;
 import org.esupportail.dining.domainservices.services.auth.Authenticator;
@@ -43,10 +40,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.portlet.ModelAndView;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("EDIT")
+@RequestMapping("/admin")
 public class EditAdminController extends AbstractExceptionController {
 
 	@Autowired
@@ -56,9 +53,8 @@ public class EditAdminController extends AbstractExceptionController {
 	@Autowired
 	private DiningFeed feed;
 
-	@RequestMapping(params = { "action=adminSettings" })
-	public ModelAndView renderEditAdminView(RenderRequest request,
-			RenderResponse response) throws Exception {
+	@RequestMapping
+	public ModelAndView renderEditAdminView(HttpServletRequest request) throws Exception {
 
 		ModelMap model = new ModelMap();
 
@@ -136,9 +132,8 @@ public class EditAdminController extends AbstractExceptionController {
 		return new ModelAndView("editadmin", model);
 	}
 
-	@RequestMapping(params = { "action=adminStats" })
-	public ModelAndView renderStatsAdminView(RenderRequest request,
-			RenderResponse response) throws Exception {
+	@RequestMapping("/stats")
+	public ModelAndView renderStatsAdminView() throws Exception {
 
 		ModelMap model = new ModelMap();
 
@@ -184,12 +179,11 @@ public class EditAdminController extends AbstractExceptionController {
 	}
 
 	@RequestMapping(params = { "action=urlFeed" })
-	public void setURLFeed(ActionRequest request, ActionResponse response,
-			@RequestParam(value = "feedId", required = true) int feedId)
+	public String setURLFeed(@RequestParam(value = "feedId", required = true) int feedId)
 					throws Exception {
 		
-		response.setRenderParameter("action", "adminSettings");
 		
+		boolean urlError;
 		try {
 			this.dc.executeUpdate("UPDATE PATHFLUX SET is_default=false WHERE is_default=true");
 			
@@ -198,7 +192,7 @@ public class EditAdminController extends AbstractExceptionController {
 			result.updateBoolean("is_default", true);
 			result.updateRow();
 			URL urlFeed = new URL(result.getString("URLFLUX"));
-			response.setRenderParameter("urlError", "false");
+			urlError = false;
 			
 			// We just avoid problem this way
 			// Favorite are feed related
@@ -210,14 +204,14 @@ public class EditAdminController extends AbstractExceptionController {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			response.setRenderParameter("urlError", "true");
+			urlError = true;
 		}
+		return "redirect:/admin?urlError=" + urlError;
+
 	}
 
 	@RequestMapping(params = { "action=setDefaultArea" })
-	public void setDefaultArea(
-			ActionRequest request,
-			ActionResponse response,
+	public String setDefaultArea(
 			@RequestParam(value = "chkArea[]", required = false) String[] listAreas)
 					throws Exception {
 		String areanames = "";
@@ -228,22 +222,19 @@ public class EditAdminController extends AbstractExceptionController {
 			}
 		}
 
-		response.setRenderParameter("action", "adminSettings");
-		response.setRenderParameter("areaSubmit", "true");
-
 		ResultSet results = this.dc.executeQuery("SELECT * FROM PATHFLUX");
 		results.next();
 		results.updateString("AREANAME", areanames);
 		results.updateRow();
+
+		return "redirect:/admin/?areaSubmit=true";
 	}
 
 	@RequestMapping(params = { "action=forceFeedUpdate" })
-	public void feedUpdate(ActionRequest request, ActionResponse response)
+	public String feedUpdate()
 			throws Exception {
 
 		Boolean isUpdated = this.feed.update();
-
-		response.setRenderParameter("action", "adminSettings");
-		response.setRenderParameter("update", isUpdated.toString());
+		return "redirect:/admin?update=" + isUpdated;
 	}
 }

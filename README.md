@@ -1,6 +1,6 @@
 # Esup-Dining
 
-This portlet aims to deliver to student the meals available in dining halls.
+This app aims to deliver to student the meals available in dining halls.
 
 You will be able to :
 + Display dining hall in differents area
@@ -10,11 +10,11 @@ You will be able to :
 
 ## Datas
 
-You will need to insert JSON data for this portlet to work, you can watch the [JSON schema](https://github.com/gsouquet/esup-dining/blob/master/src/main/resources/schema/portlet-schema.json) to see how you will need to format your datas.
+You will need to insert JSON data for this app to work, you can watch the [JSON schema](https://github.com/gsouquet/esup-dining/blob/master/src/main/resources/schema/portlet-schema.json) to see how you will need to format your datas.
 
 ## Testing
 
-You can test this portlet with Pluto portlet prototyping which is a jetty plugin.
+You can test this app with the jetty plugin.
 
 Please use HSQL for test purpose, in `src/main/resources/defaults.properties` use this configuration
 
@@ -32,22 +32,12 @@ db.password=
 Then just type in a command line interface 
 
 ```
-mvn clean package portlet-prototyping:run
+mvn clean package jetty:run
 ```
 
 The server will be launched and available at `http://localhost:8080/pluto`
 
 ## Deployment and configuration
-
-### Deployment
-
-This portlet is made to run in uPortal 4, to do so just run in your portal
-
-```
-ant deployPortletApp -DportletApp=path/to/[...]/target/esup-dining.war
-```
-
-And then register the portlet
 
 ### Database
 
@@ -65,14 +55,8 @@ Each of these arguments refers to a `*.sql` file located in `src/main/resources/
 
 ### Configuration
 
-Add you portlet to the dashboard and go in *EDIT mode* , to configure the portlet the user will to have `diningPortletAdmin` role. Default Everyone has this role, you can update this by changing the following lines in `src/main/webapp/WEB-INF/portlet.xml`
-
-```
-<security-role-ref>
-    <role-name>diningPortletAdmin</role-name>
-    <role-link>Everyone</role-link>
-</security-role-ref>
-```
+Click on EDIT. To configure the app the user will to have `diningPortletAdmin` role. 
+TODO
 
 Then you will see an `Administrator configuration` link, just click it and type in the input your feed URL.
 After that select the default area for your users, and that's it. All done.
