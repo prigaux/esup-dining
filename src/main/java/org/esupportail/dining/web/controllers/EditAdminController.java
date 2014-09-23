@@ -102,7 +102,8 @@ public class EditAdminController extends AbstractExceptionController {
 		try {
 			for(FeedInformation fi : feedInfoList) {
 				if(fi.isDefault()) {
-					areanames = fi.getAreaname().split(",");
+					String areaname = fi.getAreaname();
+					areanames = (areaname == null ? "" : areaname).split(",");
 				}
 			}
 		} catch (Exception e) {
