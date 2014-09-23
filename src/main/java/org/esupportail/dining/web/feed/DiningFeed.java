@@ -238,7 +238,8 @@ public class DiningFeed implements Serializable {
 		try {
 			reopenningDate = sf.parse(r.getClosing());
 		} catch (ParseException e) {
-			e.printStackTrace();
+			return false;
+			//e.printStackTrace();
 		}
 
 		if (todayDate.before(reopenningDate)) {
