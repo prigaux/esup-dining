@@ -79,7 +79,6 @@ public class EditAdminController extends AbstractExceptionController {
 			// Here we go if the URL isn't set.
 		}
 
-		String urlflux = null;
 		String[] areanames = null;
 		List<FeedInformation> feedInfoList = new ArrayList<FeedInformation>();
 		ResultSet results = null;
