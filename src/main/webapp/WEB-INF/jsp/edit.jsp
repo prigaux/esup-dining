@@ -2,13 +2,13 @@
 
 <h1><spring:message code="edit.title"/></h1>
 
-<a href="<spring:url value="/restaurants" />" class="icn-fam icn-fam-back">
+<a href="${baseURL}/restaurants" class="icn-fam icn-fam-back">
 	<spring:message code="go.back.home"/>
 </a>
 
 <c:if test="${sessionScope.isAdmin}">
 	<h2>
-		<spring:url value="/admin" var="adminSettings" />
+		<c:set value="${baseURL}/admin" var="adminSettings" />
 	
 		<a href="${adminSettings}">
 			<spring:message code="menu.editadmin"/>
@@ -18,9 +18,7 @@
 
 <c:if test="${not empty areaList}">
 	
-	<spring:url value="/settings" var="setUserArea">
-	  <spring:param name="action" value="setUserArea"/>
-	</spring:url>
+	<c:set value="${baseURL}/settings?action=setUserArea" var="setUserArea"/>
 
 	<form method="post" action="${setUserArea}">
 		<fieldset>
@@ -70,10 +68,7 @@
 				${restaurant.title}
 			</td>
 			<td class="ta-right">
-			 	<spring:url value="/settings" var="removeFavorite">
-				  <spring:param name="action" value="removeFavorite"/>
-				  <spring:param name="restaurant-id" value="${restaurant.id}"/>
-				</spring:url>
+			 	<c:set value="${baseURL}/settings?action=removeFavorite&restaurant-id=${restaurant.id}" var="removeFavorite" />
 				<a href="${removeFavorite}" class="btn btn-danger" style="color: white;">
 					<spring:message code="edit.delete"/> <span class="glyphicon glyphicon-remove"></span>
 				</a>
@@ -85,9 +80,7 @@
 </c:if>
 
 <h3><spring:message code="edit.nutritive.prefs"/></h3>
-<spring:url value="/settings" var="nutritionPreferences">
-  <spring:param name="action" value="nutritionPreferences"/>
-</spring:url>
+<c:set value="${baseURL}/settings?action=nutritionPreferences" var="nutritionPreferences"/>
 <form method="POST" action="${nutritionPreferences}">
     <fieldset>
         <legend>

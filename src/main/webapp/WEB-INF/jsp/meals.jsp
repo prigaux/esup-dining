@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 	
 	<p>
-		<a href="<spring:url value="/" />" class="icn-fam icn-fam-back">
+		<a href="${baseURL}/restaurants" class="icn-fam icn-fam-back">
 			<spring:message code="go.back.home" />
 		</a>
 	</p>
@@ -36,18 +36,14 @@
 					<li>
 						<c:choose>
 							<c:when test="${isFavorite}">
-								<spring:url value="/favorite/remove" var="removeFromFavorite">
-									<spring:param name="restaurant-id" value="${restaurant.id}" />
-								</spring:url>
+								<c:set value="${baseURL}/favorite/remove?restaurant-id=${restaurant.id}" var="removeFromFavorite" />
 								<a href="${removeFromFavorite}" class="icn-fam icn-fam-fav">
 									<spring:message code="restaurant.link.removeFromFavorite"/>
 								</a>
 							</c:when>
 							<c:otherwise>
 
-								<spring:url value="/favorite/add" var="addToFavorite">
-									<spring:param name="id" value="${restaurant.id}" />
-								</spring:url>
+								<c:set value="${baseURL}/favorite/add?id=${restaurant.id}" var="addToFavorite" />
 								<a href="${addToFavorite}" class="icn-fam icn-fam-fav">
 									<spring:message code="restaurant.link.addToFavorite"/>
 								</a>
@@ -56,9 +52,7 @@
 						</c:choose>
 					</li>
 					<li>
-						<spring:url value="/restaurant" var="viewRestaurant">
-							<spring:param name="id" value="${restaurant.id}" />
-						</spring:url>
+						<c:set value="${baseURL}/restaurant?id=${restaurant.id}" var="viewRestaurant" />
 						
 						<a href="${viewRestaurant}" class="icn-fam icn-fam-meal">
 							<spring:message code="restaurant.link.viewRestaurant"/>
@@ -139,13 +133,7 @@
 											</c:if>
 											<li class="${elementClassName}">
 
-												<spring:url value="/dish" var="viewDish">
-													<spring:param name="id" value="${restaurant.id}"/>
-													<spring:param name="name" value="${dish.name}"/>
-													<spring:param name="ingredients" value="${dish.ingredients}"/>
-													<spring:param name="nutritionitems" value="${dish.nutritionitems}"/>
-													<spring:param name="code" value="${dish.code}"/>
-												</spring:url>
+												<c:set value="${baseURL}/dish?id=${restaurant.id}&name={dish.name}&ingredients=${dish.ingredients}&nutritionitems=${dish.nutritionitems}&code=${dish.code}" var="viewDish" />
 
 												<c:if test="${not empty dish.code or not empty dish.ingredients or not empty dish.nutritionitems}">
 												<a href="${viewDish}">
@@ -153,7 +141,7 @@
 														${dish.name}
 													<c:if test="${not empty dish.code or not empty dish.ingredients or not empty dish.nutritionitems}">
 													<c:forEach var="codeNumber" items="${dish.code}">
-														<img src="<spring:url value="/" /><spring:message code="meal.code.${codeNumber}.img" />"
+														<img src="${baseURL}/<spring:message code="meal.code.${codeNumber}.img" />"
 														     alt="<spring:message code="meal.code.${codeNumber}.description" />"
 															 title="<spring:message code="meal.code.${codeNumber}.name" />"/>									
 													</c:forEach>

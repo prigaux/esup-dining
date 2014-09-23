@@ -61,6 +61,11 @@ public class ViewController extends AbstractExceptionController {
 	@Autowired
 	private DiningCache cache;
 
+	@RequestMapping("/")
+	public String app() throws Exception {
+		return "app";
+	}
+
 	@RequestMapping("/restaurants")
 	public ModelAndView renderMain() throws Exception {
 		ModelMap model = new ModelMap();

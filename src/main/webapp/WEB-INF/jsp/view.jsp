@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 
-		<a href="<spring:url value="/settings" />" class="icn-fam icn-fam-back">
+		<a href="${baseURL}/settings" class="icn-fam icn-fam-back">
 			<spring:message code="menu.edit"/>
 		</a>
 
@@ -26,12 +26,8 @@
 				</thead>
 				<tbody>
 					<c:forEach var="favRestaurant" items="${favorites}">
-						<spring:url value="/meals" var="viewMeals">
-			  				<spring:param name="id" value="${favRestaurant.id}"/>
-						</spring:url>
-						<spring:url value="/restaurant" var="viewRestaurant">
-			  				<spring:param name="id" value="${favRestaurant.id}"/>
-						</spring:url>
+						<c:set value="${baseURL}/meals?id=${favRestaurant.id}" var="viewMeals" />
+						<c:set value="${baseURL}/restaurant?id={favRestaurant.id}" var="viewRestaurant" />
 						<tr>
 							<td>
 								<a href="${viewMeals}">
@@ -40,7 +36,7 @@
 							</td>
 							<td class="ta-right">
 								<a href="${viewRestaurant}">
-									<img src="<spring:url value="/images/information.png"/>"
+									<img src="${baseURL}/images/information.png"
 										 alt="Detail" />
 								</a>
 							</td>
@@ -69,9 +65,7 @@
 						</thead>
 						<tbody>
 							<c:forEach var="dininghall" items="${dininghalls.value}">
-								<spring:url value="/meals" var="viewRestaurant">
-					  				<spring:param name="id" value="${dininghall.id}"/>
-								</spring:url>
+								<c:set value="${baseURL}/meals?id=${dininghall.id}" var="viewRestaurant" />
 								<tr>
 									<td<c:if test="${dininghall.additionalProperties['isClosed']}"> data-closed="true" class="warning"</c:if><c:if test="${dininghall.additionalProperties['isClosed']}">class="warning"</c:if>>
 										<a href="${viewRestaurant}">
@@ -80,7 +74,7 @@
 									</td>							
 									<td class="ta-right">
 										<a href="${viewRestaurant}">
-											<img src="<spring:url value="/images/information.png"/>"
+											<img src="${baseURL}/images/information.png"
 												 alt="Detail" />
 										</a>
 									</td>
@@ -101,9 +95,7 @@
 					<c:if test="${not empty dininghalls.value}">
 						<c:forEach var="dininghall" items="${dininghalls.value}">
 
-							<spring:url value="/restaurant" var="viewRestaurantFromMaker">
-				  				<spring:param name="id" value="${dininghall.id}"/>
-							</spring:url>
+							<c:set value="${baseURL}/restaurant?id=${dininghall.id}" var="viewRestaurantFromMaker" />
 
 							diningHalls.push(["${dininghall.title}", ${dininghall.lat}, ${dininghall.lon}, "${viewRestaurantFromMaker}", "${dininghalls.key}"]);
 
@@ -113,9 +105,7 @@
 
 				// Data access
 				<c:forEach var="dininghall" items="${dininghalls}">
-					<spring:url value="/restaurant" var="viewRestaurantFromMaker">
-		  				<spring:param name="id" value="${dininghall.id}"/>
-					</spring:url>
+					<c:set value="${baseURL}/restaurant?id=${dininghall.id}" var="viewRestaurantFromMaker" />
 					diningHalls.push(["${dininghall.title}", ${dininghall.lat}, ${dininghall.lon}, "${viewRestaurantFromMaker}"]);
 				</c:forEach>
 
@@ -161,7 +151,7 @@
 					        position: diningHallPosition,
 					        map: map,
 					        title:diningHalls[i][0],
-					        icon: "<spring:url value="/images/pin_resto.png" />"
+					        icon: "${baseURL}/images/pin_resto.png"
 					    });
 
 				    	// Event Listeners

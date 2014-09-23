@@ -25,10 +25,21 @@ import org.esupportail.commons.services.logging.LoggerImpl;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.esupportail.smsu.services.UrlGenerator;
+import javax.servlet.http.HttpServletRequest;
 
 public abstract class AbstractExceptionController {
 
 	private final Logger logger = new LoggerImpl(this.getClass());
+
+	@Autowired UrlGenerator urlGenerator;
+	
+        @ModelAttribute("baseURL")
+	public String getBaseURL(HttpServletRequest request) {
+	    return urlGenerator.baseURL(request);
+        }	
 
 	@ExceptionHandler(Exception.class)
 	public final ModelAndView handleException(final Exception ex) {

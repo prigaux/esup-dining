@@ -4,29 +4,25 @@
 
 	<h1><spring:message code="edit.title"/></h1>
 
-	<a href="<spring:url value="/settings" />" class="icn-fam icn-fam-back">
+	<a href="${baseURL}/settings" class="icn-fam icn-fam-back">
 		<spring:message code="edit.admin.back"/>
 	</a> - 	
-	<a href="<spring:url value="/" />" class="icn-fam icn-fam-back">
+	<a href="${baseURL}/restaurants" class="icn-fam icn-fam-back">
 		<spring:message code="go.back.home"/>
 	</a> - 	
-	<spring:url value="/admin/stats" var="statsAdmin" />
+	<c:set value="${baseURL}/admin/stats" var="statsAdmin" />
 	<a href="${statsAdmin}" class="icn-fam icn-fam-stats">
 		Stats
 	</a>
 
 <br/>
 	
-<spring:url value="/admin" var="setAreas">
-  <spring:param name="action" value="setDefaultArea"/>
-</spring:url>
+<c:set value="${baseURL}/admin?action=setDefaultArea" var="setAreas"/>
 
 <h1>
 Choose your feed
 </h1>		
-		<spring:url value="/admin" var="urlFlux">
-		  <spring:param name="action" value="urlFeed"/>
-		</spring:url>
+		<c:set value="${baseURL}/admin?action=urlFeed" var="urlFlux"/>
 
 		<form method="post" action="${urlFlux}" class="clearfix">		
 			<c:if test="${not empty feedList}">
@@ -86,9 +82,7 @@ Choose your feed
 
 <hr/>
 		
-		<spring:url value="/admin" var="forceFeedUpdate">
-		  <spring:param name="action" value="forceFeedUpdate"/>
-		</spring:url>
+		<c:set value="${baseURL}/admin?action=forceFeedUpdate" var="forceFeedUpdate" />
 		
 		<p>
 			<a href="${forceFeedUpdate}" class="btn btn-primary">

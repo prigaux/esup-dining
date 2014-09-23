@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 
 	<p>
-		<a href="<spring:url value="/" />" class="icn-fam icn-fam-back">
+		<a href="${baseURL}/restaurants" class="icn-fam icn-fam-back">
 			<spring:message code="go.back.home" />
 		</a>
 	</p>
@@ -19,7 +19,7 @@
 		<h1>
 			<spring:message code="restaurant.empty"/>
 		</h1>
-		<spring:url value="/" var="goToHome"/>	
+		<c:set value="${baseURL}/restaurants" var="goToHome"/>	
 		<a href="${goToHome}">
 			<spring:message code="go.back.home"/>
 		</a>
@@ -44,18 +44,14 @@
 					<li>
 						<c:choose>
 							<c:when test="${isFavorite}">
-								<spring:url value="/favorite/remove" var="removeFromFavorite">
-									<spring:param name="restaurant-id" value="${restaurant.id}" />
-								</spring:url>
+								<c:set value="${baseURL}/favorite/remove?restaurant-id=${restaurant.id}" var="removeFromFavorite" />
 								<a href="${removeFromFavorite}" class="icn-fam icn-fam-fav">
 									<spring:message code="restaurant.link.removeFromFavorite"/>
 								</a>
 							</c:when>
 							<c:otherwise>
 
-								<spring:url value="/favorite/add" var="addToFavorite">
-									<spring:param name="id" value="${restaurant.id}" />
-								</spring:url>
+								<c:set value="${baseURL}/favorite/add?id=${restaurant.id}" var="addToFavorite" />
 								<a href="${addToFavorite}" class="icn-fam icn-fam-fav">
 									<spring:message code="restaurant.link.addToFavorite"/>
 								</a>
@@ -64,9 +60,7 @@
 						</c:choose>
 					</li>
 					<li>
-						<spring:url value="/meals" var="viewMeals">
-							<spring:param name="id" value="${restaurant.id}" />
-						</spring:url>
+						<c:set value="${baseURL}/meals?id=${restaurant.id}" var="viewMeals" />
 						
 						<a href="${viewMeals}" class="icn-fam icn-fam-meal">
 							<spring:message code="restaurant.link.viewMeals"/>
@@ -210,7 +204,7 @@
 					        position: myLatlng,
 					        map: map,
 					        title:"${restaurant.title}",
-					        icon: "<spring:url value="/images/pin_resto.png" />"
+					        icon: "${baseURL}/images/pin_resto.png"
 					    });
 		    			window.onresize = function() {
 							map.setCenter(myLatlng);

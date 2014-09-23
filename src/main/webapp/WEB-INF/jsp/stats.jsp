@@ -1,14 +1,14 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 	
-	<a href="<spring:url value="/settings" />" class="icn-fam icn-fam-back">
+	<a href="${baseURL}/settings" class="icn-fam icn-fam-back">
 		<spring:message code="edit.admin.back"/>
 	</a> - 	
-		<spring:url value="/admin" var="adminSettings" />
+		<c:set value="${baseURL}/admin" var="adminSettings" />
 	- 
 		<a href="${adminSettings}">
 			<spring:message code="menu.editadmin"/>
 		</a> - 
-	<a href="<spring:url value="/" />" class="icn-fam icn-fam-back">
+	<a href="${baseURL}/restaurants" class="icn-fam icn-fam-back">
 		<spring:message code="go.back.home"/>
 	</a> 	
 	

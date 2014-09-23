@@ -69,9 +69,14 @@
       </property>
     </bean>
 
-    <!--bean id="CrossOriginFilter"
+    <bean id="CrossOriginFilter"
           class="org.esupportail.smsu.web.CrossOriginFilter">
       <property name="allowedOrigins" value="${portal.urls}" />
-    </bean-->
+    </bean>
+
+   <bean id="urlGenerator" class="org.esupportail.smsu.services.UrlGenerator">
+  	  <property name="serverURL" value="${server.url}" />
+  	  <property name="contextPath" value="${contextPath}" />
+	</bean>
 
 </beans>

@@ -1,16 +1,13 @@
 <%@ include file="/WEB-INF/jsp/header.jsp"%>
 
 	<p>
-		<spring:url value="/restaurant" var="viewRestaurant">
-			<spring:param name="id" value="${restaurantId}"/>
-		</spring:url>
+		<c:set value="${baseURL}/restaurant?id=${restaurantId}" var="viewRestaurant" />
 		<a href="${viewRestaurant}" class="icn-fam icn-fam-back">
 			<spring:message code="restaurant.link.back"/>
 		</a>
 		 |
-		<spring:url value="/meals" var="viewMeals">
-			<spring:param name="id" value="${restaurantId}" />
-		</spring:url>
+		<c:set value="${baseURL}/meals?id=${restaurantId}" var="viewMeals" />
+			
 		<a href="${viewMeals}" class="icn-fam icn-fam-back">
 			<spring:message code="restaurant.link.viewMeals"/>
 		</a>
@@ -23,7 +20,7 @@
 	
 	<c:if test="${not empty code}">
 		<c:forEach var="codeNumber" items="${code}">
-			<img src="<spring:url value="/" /><spring:message code ="meal.code.${fn:trim(codeNumber)}.img" />"
+			<img src="${baseURL}<spring:message code ="meal.code.${fn:trim(codeNumber)}.img" />"
 			     alt="<spring:message code="meal.code.${fn:trim(codeNumber)}.description" />"
 				 title="<spring:message code="meal.code.${fn:trim(codeNumber)}.name" />"
 			/>								
