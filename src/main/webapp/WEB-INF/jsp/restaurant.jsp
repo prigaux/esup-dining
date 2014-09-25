@@ -216,7 +216,7 @@
 							map.setCenter(myLatlng);
 						}
 					  }
-					  google.maps.event.addDomListener(window, 'load', initialize);
+					  $(document).ready(initialize);
 					</script>
 				</c:if>			
 			</div>

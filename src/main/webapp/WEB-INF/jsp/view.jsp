@@ -123,9 +123,6 @@
 				<c:forEach var="fav" items="${favorites}">
 					favoriteListLatLng.push(new google.maps.LatLng(parseFloat(${fav.lat}, 10).toFixed(6), parseFloat(${fav.lon}, 10).toFixed(6)));
 				</c:forEach>
-
-				// Event Listener
-				google.maps.event.addDomListener(window, 'load', initialize);
 				
 				var map;
 				var diningHallsLatLng = new Array();
@@ -331,6 +328,9 @@
 				function positionUndefined(err) {
 					console.error(err);
 				}
+
+				$(document).ready(initialize);
+
 		</script>
 	</div>
 

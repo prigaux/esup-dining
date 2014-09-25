@@ -174,7 +174,7 @@
 	</c:if>	
 
 <script type="text/javascript">
-	$(window).load(function() {
+	$(window).ready(function() {
 
 		var $menus = $(".menus").tabs();
 		var $meals = $(".meals-accordion").accordion();
