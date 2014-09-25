@@ -12,7 +12,7 @@
 			<div class="alert alert-warning">
 				<a class="close" data-dismiss="alert">×</a>
 				<fmt:parseDate value="${restaurant.closing}" var="parsedDate" pattern="yyyy-MM-dd" />
-				<fmt:formatDate value="${parsedDate}" var="localeDate" pattern="${sessionScope.dateLocalePattern}" />
+				<fmt:formatDate value="${parsedDate}" var="localeDate" pattern="yyyy-MM-dd" />
 				${localeDate}
 				<spring:message code="restaurant.closed" arguments="${localeDate}"/>
 			</div>
@@ -82,7 +82,7 @@
 					<li>
 						<a href="#menu-${menu.date}">
 							<fmt:parseDate value="${menu.date}" var="parsedDate" pattern="yyyy-MM-dd" />
-							<fmt:formatDate value="${parsedDate}" pattern="${sessionScope.dateLocalePattern}" />
+							<fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd" />
 						</a>
 					</li>
 				</c:forEach>
@@ -92,7 +92,7 @@
 				<div id="menu-${menu.date}">
 					<h2>
 						<fmt:parseDate value="${menu.date}" var="parsedDate" pattern="yyyy-MM-dd" />
-						<fmt:formatDate value="${parsedDate}" pattern="${sessionScope.dateLocalePattern}" />
+						<fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd" />
 					</h2>
 					<div class="meals-accordion">
 						
