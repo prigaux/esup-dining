@@ -64,11 +64,6 @@
 	</bean>
 
 	<bean id="requiredAnnotationBeanPostProcessor" class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
-
-	<bean id="sessionSetup" class="org.esupportail.dining.web.dao.SessionSetupInitializationService">
-		<constructor-arg index="0" type="java.lang.String" value="${user.admin.role}"/>
-		<constructor-arg index="1" type="java.lang.String" value="${date.locale.pattern}"/>
-	</bean>
 	
 	<!-- Added -->
     
