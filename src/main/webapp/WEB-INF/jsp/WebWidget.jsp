@@ -3,6 +3,7 @@
 <%-- Inclusion CSS --%>
 <link type="text/css" rel="stylesheet" href="${baseURL}/css/bootstrap.min.css">
 <link type="text/css" rel="stylesheet" href="${baseURL}/css/esup-dining-portlet.css">
+<link type="text/css" rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 
 <%-- Inclusion JS --%>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
