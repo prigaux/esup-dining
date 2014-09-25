@@ -275,6 +275,26 @@ public class ViewController extends AbstractExceptionController {
 		return "redirect:/restaurant?id=" + id;
 	}
 
+	/*
+	 * this method is used in user edit param and in the restaurant and meal
+	 * view
+	 */
+	@RequestMapping("/favorite/remove")
+	public final String removeFavorite(
+			@RequestParam(value = "restaurant-id", required = true) final String id)
+			throws Exception {
+		try {
+			dc.executeUpdate("DELETE FROM FAVORITERESTAURANT "
+					+ "WHERE RESTAURANTID=" + StringEscapeUtils.escapeSql(id) + "AND USERNAME='"
+					+ StringEscapeUtils.escapeSql(authenticator.getUser().getLogin()) + "'");
+		} catch (NullPointerException e) { /*
+											 * Useful is the user isn't logged
+											 * in
+											 */
+		}
+		return "redirect:/restaurant?id=" + id;
+	}
+
 	@RequestMapping("/dish")
 	public ModelAndView renderDish(
 			@RequestParam(value = "name", required = true) String name,
